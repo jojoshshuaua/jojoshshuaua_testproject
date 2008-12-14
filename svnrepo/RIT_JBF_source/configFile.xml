@@ -1,0 +1,16 @@
+<jbframework>
+	<panels num="3">
+		<class name="Electro2D" title="2-Dimensional Gel Electrophoresis Simulator">
+			<!--valid colors = black, blue, cyan, dark_gray, gray, green, 
+				light_gray, magenta, orange, pink, red, white, yellow -->
+			<!-- current settings attributes are height, width, and bgcolor--> 
+			<settings height="655" width="875" bgcolor="black" />
+		</class>
+		<class name="Electrophoresis" title="1D Gel Electrophoresis">
+			<settings height="450" width="550" />
+		</class>
+		<class name="ionex" title="Ionex">
+			<settings height="450" width="820" />
+		</class>
+	</panels>
+</jbframework>
