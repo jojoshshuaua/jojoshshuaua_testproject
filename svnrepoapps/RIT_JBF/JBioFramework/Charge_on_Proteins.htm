@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Charge on proteins</TITLE>
+<META HTTP-EQUIV="Content-Type" Content="text/html; charset=unicode">
+<META content="MSHTML 6.00.2800.1458" name=GENERATOR>
+</HEAD>
+<BODY>
+
+<h2><a name="charge_on_proteins"></a>Charge on Proteins</h2>
+<p>
+The charge on proteins arises from some of the amino acid side 
+chains, as well as the carboxy- and amino-termini, some prosthetic 
+groups and bound ions.  This application is designed to calculate 
+charge based only on the side chains and carboxy - and amino-termini.   </p>
+<p>
+The charge on amino acid side chains depends on the pH of the 
+solution and the <nobr>pK<sub>A</sub></nobr> of the side chains.  It is also affected by 
+the localized environment around a side chain.  We 
+assume the following <nobr>pK<sub>A</sub></nobr> values for ionizable groups on the protein 
+and that the side chains will have these <nobr>pK<sub>A</sub></nobr> values regardless of 
+their environment within the protein.  We also assume 
+that the separation is based on the total charge on the protein, 
+not the mass-to-charge ratios.  Therefore, a protein with a charge 
+of +15 will bind more tightly to a cation exchange stationary phase 
+(CM-Sephadex, for example) than a protein with a charge of +10, 
+regardless of size.</p>
+
+<center>
+<table border=1>
+<tr align=middle>
+<th>Group</th>
+<th><nobr>pK<sub>A</sub></nobr></th>
+</tr>
+
+<tr>
+<th align=left>Acids</th>
+
+<tr align=middle>
+<td>Carboxy-terminus</td>
+
+<td>3.1</td>
+</tr>
+
+<tr align=middle>
+<td>Aspartate</td>
+<td>4.4</td>
+</tr>
+
+<tr align=middle>
+<td>Glutamate</td>
+<td>4.4</td>
+
+</tr>
+
+<tr align=middle>
+<td>Cysteine</td>
+<td>8.5</td>
+</tr>
+
+<tr align=middle>
+<td>Tyrosine</td>
+<td>10.0</td>
+</tr>
+
+<tr>
+
+<th align=left>Bases</th>
+
+</tr>
+
+<tr align=middle>
+<td>Amino-terminus</td>
+<td>8.0</td>
+</tr>
+
+<tr align=middle>
+<td>Lysine</td>
+<td>10.0</td>
+
+</tr>
+
+<tr align=middle>
+
+<td>Arginine</td>
+<td>12.0</td>
+</tr>
+
+<tr align=middle>
+<td>Histidine</td>
+<td>6.5</td>
+</tr>
+</table>
+
+</center>
+
+<p>
+The charge on these proteins can be calculated using the method 
+described in <A href="Relationship_of_charge_to_pH.html">Relationship of Charge to pH</A>.  
+In brief, when the pH is less than the <nobr>pK<sub>A</sub></nobr> of a 
+group, the protonated 
+form of the group predominates.  This leaves the acidic side chains with 
+a charge approaching 0 and the basic side chains with a charge 
+approaching a limiting value of +1.  Conversely, when the pH is 
+greater than the <nobr>pK<sub>A</sub></nobr> of a group, the 
+deprotonated form predominates, 
+giving acidic side chains a charge approaching -1 and basic side 
+chains a charge approaching 0.  </p>
+
+<p>
+
+The charge on the protein is the sum of the charges on the 
+individual amino acid side chains.  However, the charge on individual 
+amino acid side chains can vary when they are near a group of non-polar 
+or highly charged side chains.  For example the normal <nobr>pK<sub>A</sub></nobr> for glutamic 
+acid is about 4.3.  In lysozyme, two glutamic acid residues are in the 
+active site.  One is in a polar environment and has a normal <nobr>pK<sub>A</sub></nobr> value.  
+The other glutamate side chain is in a hydrophobic environment, where 
+a negative charge is energetically unfavorable. Therefore the <nobr>pK<sub>A</sub></nobr> value 
+for this glutamate side chain increases, which then decreases the extent 
+of the deprotonation of that side chain.  This is very important in the 
+mechanism of lysozyme, which requires that one of the side chains be 
+charged (deprotonated) and the other be uncharged (protonated) at the 
+same time.</p>
+<p>
+
+<b>Related Topics</b>
+<ul>
+<A href="Amino_Acids.htm">Amino acids</A>
+<p>
+<A href="Relationship_of_charge_to_pH.html">Relationship of charge to pH</A>
+<p>
+<A href="H-H_equation.html">Henderson-Hasselbalch Equation</A></p>
+</ul>
+</BODY>
+</HTML>

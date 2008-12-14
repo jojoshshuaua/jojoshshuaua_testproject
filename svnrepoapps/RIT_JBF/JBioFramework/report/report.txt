@@ -1,0 +1,21 @@
+Topic Title	Alias	Context Integer	File Path	Index Keywords	Status	Notes
+Adding proteins	IDH_Adding_proteins	Adding_proteins.htm	1011		Not Specified	 
+Amino Acids	IDH_Amino_Acids	Amino_Acids.htm	1029		Not Specified	 
+Animation Select	IDH_Animation_Select	Animation_Select.htm	1012		Not Specified	 
+Charge on Proteins	IDH_Charge_on_Proteins	Charge_on_Proteins.htm	1032		Not Specified	 
+Compare Proteins	IDH_Compare_Proteins	Compare_Proteins.htm	1017		Not Specified	 
+Display Protein List	IDH_Display_Protein_List	Display_Protein_List.htm	1016		Not Specified	 
+Electrophoresis	IDH_Electrophoresis	Electrophoresis.htm	1037		Not Specified	 
+Exploring the Separation	IDH_Exploring_the_Separation	Exploring_the_Separation.htm	1015		Not Specified	 
+Generate HTML	IDH_Generate_HTML	Generate_HTML.htm	1019		Not Specified	 
+IEF	IDH_IEF	IEF.htm	1036		Not Specified	 
+Preparing solutions	IDH_Preparing_solutions	Preparing_solutions.htm	1034		Not Specified	 
+Protein Sequence	IDH_Protein_Sequence	Protein_Sequence.htm	1030		Not Specified	 
+Protein Structure	IDH_Protein_Structure	Protein_Structure.htm	1031		Not Specified	 
+Record to CSV	IDH_Record_to_CSV	Record_to_CSV.htm	1020		Not Specified	 
+Sample preparation	IDH_Sample_preparation	Sample_preparation.htm	1033		Not Specified	 
+SDS-PAGE	IDH_SDS_PAGE	SDS_PAGE.htm	1013		Not Specified	 
+Search Proteins	IDH_Search_Proteins	Search_Proteins.htm	1018		Not Specified	 
+Separation conditions	IDH_Separation_conditions	Separation_conditions.htm	1014		Not Specified	 
+Theory	IDH_Theory	Theory.htm	1027		Not Specified	 
+Welcome	IDH_FirstTopic	FirstTopic.htm	1009		Not Specified	 

@@ -1,0 +1,25 @@
+[Settings]
+html=
+images=Images
+ccs=htmlhelp.css
+i=E2Dhelp.hhk
+last_path=C:\Program Files\HelpBreeze HTML\projects\E2Dhelp
+prefix list=IDH_,
+preview=1
+exsec_clr= 16777215
+exsec_w=100
+exsec_i= 1
+exsec_sbk= 0
+web_dhtml=1
+web_indxpg=E2DhelpWebIndex.html
+web_tocpg=E2DhelpWebTOC.html
+web_mainpg=E2Dhelp.html
+web_left=20
+web_pix=0
+web_maintitle=E2D Help
+web_toctitle=Contents
+web_idxtitle=Index
+css=C:\Program Files\HelpBreeze HTML\projects\E2Dhelp\htmlhelp.css
+t=E2Dhelp.hhc
+[IMAGE MAP]
+MapCount=26

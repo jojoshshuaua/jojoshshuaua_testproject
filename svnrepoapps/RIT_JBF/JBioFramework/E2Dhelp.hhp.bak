@@ -1,0 +1,121 @@
+[OPTIONS]
+Compatibility=1.1
+Compiled file=E2Dhelp.chm
+Full-text search=Yes
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Compiled file=E2Dhelp.chm
+Contents file=E2Dhelp.hhc
+Index file=E2Dhelp.hhk
+Title=E2D Help
+Default topic=FirstTopic.htm
+Error log file=compiler.log
+
+[FILES]
+Adding_proteins.htm
+;Title=Adding proteins
+Amino_Acids.htm
+;Title=Amino Acids
+Animation_Select.htm
+;Title=Animation Select
+Charge_on_Proteins.htm
+;Title=Charge on Proteins
+Compare_Proteins.htm
+;Title=Compare Proteins
+Display_Protein_List.htm
+;Title=Display Protein List
+Electrophoresis.htm
+;Title=Electrophoresis
+Exploring_the_Separation.htm
+;Title=Exploring the Separation
+Generate_HTML.htm
+;Title=Generate HTML
+IEF.htm
+;Title=IEF
+Preparing_solutions.htm
+;Title=Preparing solutions
+Protein_Sequence.htm
+;Title=Protein Sequence
+Protein_Structure.htm
+;Title=Protein Structure
+Record_to_CSV.htm
+;Title=Record to CSV
+Sample_preparation.htm
+;Title=Sample preparation
+SDS_PAGE.htm
+;Title=SDS-PAGE
+Search_Proteins.htm
+;Title=Search Proteins
+Separation_conditions.htm
+;Title=Separation conditions
+Theory.htm
+;Title=Theory
+FirstTopic.htm
+;Title=Welcome
+rtex.gif
+dwnex.gif
+htmlhelp.css
+master.js
+
+[ALIAS]
+#include E2Dhelp.ali
+
+[MAP]
+#include E2Dhelp.h

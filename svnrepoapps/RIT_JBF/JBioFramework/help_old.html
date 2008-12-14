@@ -1,0 +1,158 @@
+<html>
+<head>
+  <title>2D Electrophoresis Simulator Help Page</title>
+  <center>
+  <h1>Simulator Help Page</h1>
+  </center>
+</head>
+<body>
+</HR>
+<A NAME="starting">
+<u><b>Starting The Application:</b></u>
+   <p>From the command line change directories into the location where this
+   application is stored on your computer.  Change directories into the <i>
+   source code</i> directory.  Type the command <i>java Electro2D</i> and 
+   press enter and the application should start. </p>
+</HR>
+<A NAME="loadingfile">
+<u><b>Loading a File:</b></u>
+   <p>One the main screen click the <i>Add Proteins</i> button.  To view a 
+   list of available files in your directory click the red text in the 
+   instructions at the top of the new window that opened.  Copy the file name
+   and paste it into the text field labeled "Enter Filename:".  Be sure to 
+   include the extention as well.  If the file is not located in your directory
+    (the "data" folder), copy and paste the entire contents of the file into
+   the large text area below the "Enter Filename:" field.  Be sure to enter 
+   the file name and extention of this file as well.  Once this is complete,
+   click the "Load File" button.</p>
+   <b>Note:</b> Larger files may take a long time to load (ex. approx. 1 
+   minute).  Please be patient. </BR>
+   <b>Troubleshooting:</b>
+   <p> If you receive an error message saying, "Invalid Extention," please 
+   double-check that the file extention is one of the following: 
+    .e2d, .gbk, .faa, .fasta, .pdb</BR>
+   If it is not one of these file types, the application will be unable to 
+   recognize it.</p><br>
+   <p>If you receive an "Error reading from file," error message, double-check
+   that the file name you entered is in your "data" directory.  If it is not,
+    but located on your computer, move the file to the "data" directory and 
+   try again.  If the file is not located on your machine, in addition to 
+   entering the file name, be sure to copy and paste the entire contents of the
+    file into the large text area provided.</p>
+   </HR>
+<A NAME="preprocessed">
+<u><b>About Preprocessed Files (.e2d files):</b></u>
+   <p>Proteome files often take a significantly long time to load.  In order 
+   to prevent this wait from occurring each time you load a proteome file, 
+   the application generates a file containing all information relevant to the
+    program's performance.  This file may be loaded in place of the original 
+   proteome file in future runs of the program.  </p>
+   <p>The files are given the extention ".e2d" and are stored in your data 
+   folder.  If you load a file named "pseudomonas_putida.gbk" the program will
+   then create a file named "pseudomonas_putida_gbk.e2d" for you to use in the
+   future as opposed to the entire genBank file.  All information that is 
+   stored in this file will be in the same format as it was in the original
+   genBank file.</p>
+   </HR>
+<A NAME="comparing">
+<u><b> Comparing the Contents of Two Proteome Files: </u></b>
+   <p>In order to compare two proteome files, load in one proteome file and 
+   once this is complete click on the <i>Compare Proteins</i> button and follow
+   the same directions for loading a file in the screen that appears.</p>
+   <p>When you play the animation, the proteins will appear in three different 
+   colors: red, yellow, and green.  The green proteins are those whose 
+   amino acid sequences appear in both proteome files.  If the protein is red
+   it appeared only in the first file loaded, and if it is yellow it was only 
+   in the second file.</p>
+   </HR>
+<A NAME="selectanimation">
+<u><b>Selecting a Portion of the Animation to be Played</u></b>
+   <p>To select a portion of the animation to be played, make a selection in 
+   the <i>Animation Select</i> box.  If you have not yet run the IEF 
+   animation, selecting the SDS-PAGE portion of the animation will not 
+   do anything when you go to run the animation.</p>
+</HR>
+<A NAME="playing">
+<u><b>Starting the Animation</u></b>
+   <p>In order to start the animation click on the play button under animation
+    controls.  The play button is the one that has a single triangle on it 
+   pointing to the right.</p>
+   <p><b>Troubleshooting:</b> If the program is not playing when you click the 
+   play button, there may be several things that need to be done.  First, be 
+   sure you have <a href = "./help.html#loadingfile">loaded a file</a> in the 
+   application. Next, if you have not run the Isoelectric Focusing portion of 
+   the animation, be sure that the <i>Animation Select</i> option is on 
+   "IEF".</p>
+   </HR>
+<A NAME="stoppause">
+<u><b>Stopping/Pausing the Animation</u></b>
+   <p>The animation will automatically pause after ten seconds of play.  
+   However, if you wish to stop the animation while it is running you can 
+   either reclick the <a href ="./help.html#playing">play</a> button which 
+   will now appear as two rectangles, or click on the stop button.  The stop 
+   button has a single square on it and is located under <i>Animation 
+   Controls</i>.  You can then click the play button to continue the animation,
+    or press the <a href="./help.html#restart">restart</a> button to restart 
+   the animation.</p>
+</HR>
+<A NAME="restart">
+<u><b>Restarting the Animation</u><b>
+   <p>To restart the animation, click the restart button that is located under 
+   <i>Animation Controls</i>.  The restart button has a triangle that is 
+   pointing upward and is above a rectangle.</p>
+</HR>
+<A NAME="removeprotein">
+<u><b>Removing a Single Protein from the Animation</u></b>
+   <p>To remove a protein or multiple proteins from the list, simply click on 
+   their titles in the list of proteins then click the <i>Remove Proteins</i> 
+   button.  This will remove the proteins from memory and they will not appear
+    in the next run of the animation.  This must be done before you run the 
+   animation (ie. immediately after loading the file or after pressing the 
+   restart button).  Once the animation is drawn to the screen doing this 
+   will do nothing.</p>
+</HR>
+<A NAME="acrylamide">
+<u><b>Adjusting the % Acrylamide Level</u></b>
+   <p>To adjust the percent acrylamide of the gel, click on the <i>% 
+   Acrylamide </i>choice box and select the percentage desired.  This should 
+   be done before running the animation.  Both fixed and gradient gels are 
+   offered.</p>
+</HR>
+<A NAME="pI">
+<u><b>Adjusting the pI Range</u></b>
+   <p>In order to adjust the pI make a selection under the <i>Range Select</i>
+    menu.  If you select "Enter a Range", the text boxes to the right of the
+     menu should become operable.  Just enter the maximum and minimum values 
+   you want represented, and you are all set.</p>
+</HR>
+<A NAME="infoList">
+<u><b>View Information on a Protein from the List</u></b>
+   <p>To view a protein's information from the contents list, double click on 
+   any of the titles.  A window should open up displaying the title, pI, 
+   molecular weight, and function, as well as links to web pages with more 
+   information.  In addition to this, if you have already run and stopped the 
+   animation, lines will appear to pinpoint the location of this individual 
+   protein in the image.</p>
+</HR>
+<A NAME="infoImage">
+<u><b>View Information on a Protein from the Image</u></b>
+   <p>To view a protein's information from the animation image, just click on 
+   the individual dot that represents the protein you are interested in.  An 
+   information window should appear displaying the protein title, pI, molecular
+    weight, and funciton, as well as links to web pages with more information.
+    </p>
+</HR>
+<A NAME="csv">
+<u><b>Record to a Comma Separated Value File</u></b>
+   <p>Comma Separated Value files (CSV) are files that contain lines of 
+   information whose values are separated by commas.  These files are able to 
+   be opened in spreadsheet programs.  This simulator generates CSV files 
+   containing protein titles, sequences, molecular weight, and pI values, as 
+   well as the X and Y coordinates of each individual protein in the gel.  To 
+   generate a CSV file for your animation result, click on the <i>Record to 
+   CSV</i> button.  A CSV file with the same name as the proteome file that 
+   was loaded in the application will be stored in the "CSV Files" directory.
+   </p>
+</HR>
+</body>
+</html>

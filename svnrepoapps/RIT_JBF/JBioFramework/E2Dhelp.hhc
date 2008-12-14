@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+<UL>
+     <LI><OBJECT type="text/sitemap">
+         <param name="Name" value="Welcome">
+         <param name="Local" value="FirstTopic.htm">
+          </OBJECT>
+     <LI><OBJECT type="text/sitemap">
+         <param name="Name" value="Getting Started">
+          </OBJECT>
+     <UL>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Adding Proteins">
+              <param name="Local" value="Loading_files.htm">
+              <param name="ImageNumber" value="0">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Separation conditions">
+              <param name="Local" value="Separation_conditions.htm">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Isoelectric focusing">
+              <param name="Local" value="Isoelectric_focusing.htm">
+              <param name="ImageNumber" value="0">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="SDS-PAGE">
+              <param name="Local" value="SDS_PAGE.htm">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Exploring the Separation">
+              <param name="Local" value="Exploring_the_Separation.htm">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Display Protein List">
+              <param name="Local" value="Display_Protein_List.htm">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Compare Proteins">
+              <param name="Local" value="Compare_Proteins.htm">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Search Proteins">
+              <param name="Local" value="Search_Proteins.htm">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Generate HTML">
+              <param name="Local" value="Generate_HTML.htm">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Record to CSV">
+              <param name="Local" value="Record_to_CSV.htm">
+               </OBJECT>
+     </UL>
+     <LI><OBJECT type="text/sitemap">
+         <param name="Name" value="Theory">
+         <param name="Local" value="Theory.htm">
+          </OBJECT>
+     <UL>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Amino Acids">
+              <param name="Local" value="Amino_Acids.htm">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Protein Sequence">
+              <param name="Local" value="Protein_Sequence.htm">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Protein Structure">
+              <param name="Local" value="Protein_Structure.htm">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Charge on Proteins">
+              <param name="Local" value="Charge_on_Proteins.htm">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Sample preparation">
+              <param name="Local" value="Sample_preparation.htm">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Preparing solutions">
+              <param name="Local" value="Preparing_solutions.htm">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Isoelectric focusing">
+              <param name="Local" value="IEF.htm">
+               </OBJECT>
+          <LI><OBJECT type="text/sitemap">
+              <param name="Name" value="Electrophoresis">
+              <param name="Local" value="Electrophoresis.htm">
+               </OBJECT>
+     </UL>
+</UL>
+</BODY></HTML>
