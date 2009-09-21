@@ -1,202 +1,335 @@
-import javax.swing.*;
+// Decompiled by DJ v3.10.10.93 Copyright 2007 Atanas Neshkov  Date: 4/29/2009 2:30:00 PM
+// Home Page: http://members.fortunecity.com/neshkov/dj.html  http://www.neshkov.com/dj.html - Check often for new version!
+// Decompiler options: packimports(3) 
+// Source File Name:   D:\Dave\Java\Electrophoresis\Electrophoresis.java
+
+import java.applet.*;
 import java.awt.*;
-import java.nio.Buffer;
+import java.io.PrintStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-
-/*
-*
-* Electrophoresis
-*
-*/
-
-/* Method Electrophoresis
-* Purpose Class constructor
-* Allocate the necessary panels for the application
-* Maintain communication between them
-* Author D. Mix 08/15/1996
-* Modified
-*/
-public class Electrophoresis extends Panel
+public class Electrophoresis extends Applet
 {
-Parameters paramPanel;
-Simulation simPanel;
-ProteinData dataPanel;
-Plot plotPanel;
 
-CardLayout leftLayout;
-CardLayout rightLayout;
+    public void addStandard()
+    {
+        simPanel.addStandard();
+    }
 
-Panel buttonPanel = new Panel();
-Panel masterPanel = new Panel();
-Panel leftPanel = new Panel();
-Panel rightPanel = new Panel();
+    public void stopRun()
+    {
+        playClick1();
+        simPanel.stopRun();
+    }
 
-//Protein stdsArray[];
-//Protein sample, dye1, dye2;
+    public void displaySim()
+    {
+        rightLayout.show(rightPanel, "simulation");
+    }
 
-public static void main( String args[] ){
-	Frame f = new Frame();
-	f.setBounds(0, 0, 550, 450);
-	
-	Electrophoresis el = new Electrophoresis();
-	el.init();
-	f.add(el);
-	f.show();
-}
+    public void playClick1()
+    {
+        click1.play();
+    }
 
-public Electrophoresis(){
-	this.init();
-}
+    public void playHarp()
+    {
+        harp.play();
+    }
 
-public void init()
-{
-this.setBounds( 0, 0, 550, 450);
-paramPanel = new Parameters(this);
-paramPanel.setBackground(Color.gray);
-simPanel = new Simulation(this);
+    public void playTone6()
+    {
+        tone6.play();
+    }
 
-dataPanel = new ProteinData(this);
-dataPanel.setBackground(Color.white);
+    public void playTone2()
+    {
+        tone2.play();
+    }
 
-plotPanel = new Plot(this);
+    public void playDrip()
+    {
+        drip.play();
+    }
 
-buttonPanel.setBackground(Color.white);
-masterPanel.setBackground(Color.gray);
-rightPanel.setBackground(Color.black);
-leftPanel.setBackground(Color.black);
+    public boolean action(Event event, Object obj)
+    {
+        if(event.target instanceof Button)
+            return handleButton(obj);
+        else
+            return false;
+    }
 
-buttonPanel.add(new Button("Set Parameters"));
-buttonPanel.add(new Button("Plot Results"));
-buttonPanel.add(new Button("Simulation"));
-buttonPanel.add(new Button("Display Info"));
+    public boolean handleButton(Object obj)
+    {
+        if("Set Parameters".equals(obj))
+        {
+            leftLayout.show(leftPanel, "parameters");
+            playThinBeep();
+            return true;
+        }
+        if("Protein Info".equals(obj))
+        {
+            rightLayout.show(rightPanel, "data");
+            playThinBeep();
+            return true;
+        }
+        if("Simulation".equals(obj))
+        {
+            rightLayout.show(rightPanel, "simulation");
+            playThinBeep();
+            return true;
+        }
+        if("Plot Results".equals(obj))
+        {
+            leftLayout.show(leftPanel, "dataplot");
+            playThinBeep();
+            return true;
+        }
+        if("How To...".equals(obj))
+        {
+            playSpaceMusic();
+            try
+            {
+                howURL = new URL(getCodeBase(), "Electro_How.html");
+            }
+            catch(MalformedURLException _ex)
+            {
+                System.out.println("Bad URL: " + howURL);
+                return true;
+            }
+            if(howURL != null)
+                getAppletContext().showDocument(howURL);
+            return true;
+        }
+        if("Definitions".equals(obj))
+        {
+            playCrunch();
+            try
+            {
+                defURL = new URL(getCodeBase(), "Electro_Def.html");
+            }
+            catch(MalformedURLException _ex)
+            {
+                System.out.println("Bad URL: " + defURL);
+                return true;
+            }
+            if(defURL != null)
+                getAppletContext().showDocument(defURL);
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
 
-rightLayout = new CardLayout();
-rightPanel.setLayout(rightLayout);
-rightPanel.add("simulation",simPanel);
-rightPanel.add("data",dataPanel);
+    public void init()
+    {
+        LoadSounds();
+        hiThere.play();
+        paramPanel = new Parameters(this);
+        paramPanel.setBackground(Color.gray);
+        simPanel = new Simulation(this);
+        dataPanel = new ProteinData(this);
+        dataPanel.setBackground(Color.white);
+        plotPanel = new Plot(this);
+        buttonPanel.setBackground(Color.white);
+        masterPanel.setBackground(Color.gray);
+        rightPanel.setBackground(Color.black);
+        leftPanel.setBackground(Color.black);
+        buttonPanel.add(new Button("How To..."));
+        buttonPanel.add(new Button("Set Parameters"));
+        buttonPanel.add(new Button("Plot Results"));
+        buttonPanel.add(new Button("Simulation"));
+        buttonPanel.add(new Button("Protein Info"));
+        buttonPanel.add(new Button("Definitions"));
+        rightLayout = new CardLayout();
+        rightPanel.setLayout(rightLayout);
+        rightPanel.add("simulation", simPanel);
+        rightPanel.add("data", dataPanel);
+        leftLayout = new CardLayout();
+        leftPanel.setLayout(leftLayout);
+        leftPanel.add("parameters", paramPanel);
+        leftPanel.add("dataplot", plotPanel);
+        masterPanel.setLayout(new GridLayout(1, 2, 5, 5));
+        masterPanel.add(leftPanel);
+        masterPanel.add(rightPanel);
+        setLayout(new BorderLayout());
+        add("North", buttonPanel);
+        add("Center", masterPanel);
+        paramPanel.setDefaults();
+    }
 
-leftLayout = new CardLayout();
-leftPanel.setLayout(leftLayout);
-leftPanel.add("parameters",paramPanel);
-leftPanel.add("dataplot",plotPanel);
+    public void playTone5()
+    {
+        tone5.play();
+    }
 
-masterPanel.setLayout(new GridLayout(1,2,5,5));
-masterPanel.add(leftPanel);
-masterPanel.add(rightPanel);
+    public void playTrain()
+    {
+        train.play();
+    }
 
-setLayout(new BorderLayout());
-add("North",buttonPanel);
-add("Center",masterPanel);
-}
+    public void playDing()
+    {
+        ding.play();
+    }
 
-/* Method action
-* Purpose Catch keyboard or mouse events and pass them
-* them to a handler
-* Author D. Mix 08/15/1996
-* Modified
-*/
-public boolean action(Event evt, Object arg)
-{
-if(evt.target instanceof Button)
-return handleButton(arg);
+    public void setAcrylaminde(Acrylamide acrylamide)
+    {
+        simPanel.setAcrylamide(acrylamide);
+    }
 
-return false;
-}
+    public void playTone7()
+    {
+        tone7.play();
+    }
 
-/* Method handleButton
-* Purpose Determine which button was pressed
-* and call the corresponding layout
-* Author D. Mix 08/15/1996
-* Modified
-*/
-public boolean handleButton(Object arg)
-{
-if("Set Parameters".equals (arg))
-{
-leftLayout.show(leftPanel,"parameters");
-return true;
-}
-else if("Display Info".equals (arg))
-{
-rightLayout.show(rightPanel,"data");
-return true;
-}
-else if("Simulation".equals (arg))
-{
-rightLayout.show(rightPanel,"simulation");
-return true;
-}
-else if("Plot Results".equals (arg))
-{
-leftLayout.show(leftPanel,"dataplot");
-return true;
-}
+    public void playClick2()
+    {
+        click2.play();
+    }
 
-return false;
-}
+    public void playTone3()
+    {
+        tone3.play();
+    }
 
-/* Method addStandard
-* Purpose call the addStandard method in the Simulation class
-* runs the animation to add the standard
-* Author D. Mix 08/15/1996
-* Modified
-*/
-public void addStandard()
-{
-//System.out.println("Electro.addSample");
-simPanel.addStandard();
-}
+    public void playCrunch()
+    {
+        crunch.play();
+    }
 
-/* Method addSample
-* Purpose call the addSample method in the Simulation class
-* runs the animation to add the sample
-* Author D. Mix 08/15/1996
-* Modified
-*/
-public void addSample()
-{
-//System.out.println("Electro.addSample");
-simPanel.addSample();
-}
+    public void startRun(Protein aprotein[], Protein protein, Protein protein1, Protein protein2)
+    {
+        simPanel.startRun(aprotein, protein, protein1, protein2);
+    }
 
-/* Method startRun
-* Purpose call the startRun method in the Simulation class
-* Author D. Mix 08/15/1996
-* Modified
-*/
-public void startRun(Protein stdsArray[],Protein sample, Protein dye1,
-Protein dye2) {
-// maintain a copy of the Proteins
-//System.out.println("Electro.startRun");
-simPanel.startRun(stdsArray, sample, dye1, dye2);
-}
-public void stopRun()
-{
-//System.out.println("Electro.stopRun");
-simPanel.stopRun();
-}
+    public void setPlotData(Protein aprotein[], Protein protein, Protein protein1)
+    {
+        plotPanel.setResults(aprotein, protein, protein1);
+    }
 
-public void setPlotData(Protein stdsArray[],Protein sample, Protein dye)
-{
-plotPanel.setResults(stdsArray, sample, dye);
-}
+    public void displayData()
+    {
+        rightLayout.show(rightPanel, "data");
+    }
 
-public void setAnimationSpeed(String setting)
-{
-//System.out.println(setting);
-simPanel.setPause(setting);
-}
+    public void playTone4()
+    {
+        tone4.play();
+    }
 
-public void displayProtein(Protein proteinToDisplay)
-{
-//System.out.println("displayProtein");
-//System.out.println(proteinToDisplay.name);
-//System.out.println(proteinToDisplay.fullName);
-//dataPanel.setColor(Color.blue);
-dataPanel.displayData(proteinToDisplay);
-}
+    public Electrophoresis()
+    {
+        buttonPanel = new Panel();
+        masterPanel = new Panel();
+        leftPanel = new Panel();
+        rightPanel = new Panel();
+    }
 
-public void playClick1(){}
-public void playTone5(){}
+    public void playClock_20__20__20__20_()
+    {
+        clock_20__20__20__20_.play();
+    }
 
+    public void play_20__20__20__20_()
+    {
+        _20__20__20__20_.play();
+    }
+
+    public void addSample()
+    {
+        simPanel.addSample();
+    }
+
+    private void LoadSounds()
+    {
+        gong = getAudioClip(getCodeBase(), "gong.au");
+        train = getAudioClip(getCodeBase(), "Train.au");
+        _20__20__20__20_ = getAudioClip(getCodeBase(), "    .au");
+        drip = getAudioClip(getCodeBase(), "Drip.au");
+        hiThere = getAudioClip(getCodeBase(), "Hello.au");
+        tone4 = getAudioClip(getCodeBase(), "0.au");
+        tone1 = getAudioClip(getCodeBase(), "1.au");
+        tone2 = getAudioClip(getCodeBase(), "2.au");
+        tone5 = getAudioClip(getCodeBase(), "3.au");
+        tone3 = getAudioClip(getCodeBase(), "4.au");
+        tone6 = getAudioClip(getCodeBase(), "7.au");
+        tone7 = getAudioClip(getCodeBase(), "8.au");
+        click1 = getAudioClip(getCodeBase(), "Button_1.au");
+        click2 = getAudioClip(getCodeBase(), "Button_2.au");
+        harp = getAudioClip(getCodeBase(), "Harp.au");
+        spaceMusic = getAudioClip(getCodeBase(), "Spacemus.au");
+        clock_20__20__20__20_ = getAudioClip(getCodeBase(), "Clock.au");
+        thinBeep = getAudioClip(getCodeBase(), "ThinBeep.au");
+        ding = getAudioClip(getCodeBase(), "Ding.au");
+        calculate = getAudioClip(getCodeBase(), "Computer.au");
+        crunch = getAudioClip(getCodeBase(), "Crunch.au");
+    }
+
+    public void setAnimationSpeed(String s)
+    {
+        simPanel.setPause(s);
+    }
+
+    public void playThinBeep()
+    {
+        thinBeep.play();
+    }
+
+    public void playTone1()
+    {
+        tone1.play();
+    }
+
+    public void playSpaceMusic()
+    {
+        spaceMusic.play();
+    }
+
+    public void displayProtein(Protein protein)
+    {
+        dataPanel.displayData(protein);
+    }
+
+    public void playCalculate()
+    {
+        calculate.play();
+    }
+
+    URL howURL;
+    URL defURL;
+    AudioClip gong;
+    AudioClip _20__20__20__20_;
+    AudioClip train;
+    AudioClip drip;
+    AudioClip hiThere;
+    AudioClip tone1;
+    AudioClip tone2;
+    AudioClip tone3;
+    AudioClip tone4;
+    AudioClip tone5;
+    AudioClip tone6;
+    AudioClip tone7;
+    AudioClip click1;
+    AudioClip click2;
+    AudioClip harp;
+    AudioClip spaceMusic;
+    AudioClip clock_20__20__20__20_;
+    AudioClip thinBeep;
+    AudioClip ding;
+    AudioClip calculate;
+    AudioClip crunch;
+    Parameters paramPanel;
+    Simulation simPanel;
+    ProteinData dataPanel;
+    Plot plotPanel;
+    CardLayout leftLayout;
+    CardLayout rightLayout;
+    Panel buttonPanel;
+    Panel masterPanel;
+    Panel leftPanel;
+    Panel rightPanel;
 }
