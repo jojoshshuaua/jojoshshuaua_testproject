@@ -51,7 +51,7 @@ public class Preprocessor{
 	String tmp = fileName.substring( 0, fileName.indexOf( "." )) + "_" + 
 					 fileName.substring( 
 					       fileName.indexOf( "." )+1 );
-	File theFile = new File( "./../data/" + tmp + EXTENTION );
+	File theFile = new File( "data" + File.separator + tmp + EXTENTION );
 	PrintWriter out = null;
 	if( !theFile.exists() ){
 	try{

@@ -220,7 +220,7 @@ public class GenomeFileParser {
 
 	if(data == null || data.equals("")) {  //read from server
 	    try {
-		File f = new File( "./../data/" + theFile );
+		File f = new File( "data"+ File.separator + theFile );
 		in = new BufferedReader
 		    (new InputStreamReader( f.toURL().openStream()));
 		String temp1;
@@ -650,7 +650,7 @@ public class GenomeFileParser {
 	if(data == null || data.equals("")) {  //read from server
 
 	    try {
-		File f = new File( "./../data/" + theFile );
+		File f = new File( "data" + File.separator + theFile );
 		in = new BufferedReader
 		    (new InputStreamReader( f.toURL().openStream()));
 		String temp1;
@@ -860,7 +860,7 @@ public class GenomeFileParser {
 
 	if(data == null || data.equals("")) {  //read from server
 	    try {
-		File f = new File( "./../data/" + theFile );
+		File f = new File( "data" + File.separator + theFile );
 		in = new BufferedReader
 		    (new InputStreamReader((/*electro2D.getCodeBase()*/ 
 						   /* "data/" + theFile*/
@@ -1226,7 +1226,7 @@ public class GenomeFileParser {
     public static int e2dParse(String theFile, Electro2D electro2D,
 				String data, int fileNum) {
 
-	File f = new File( "./../data/" + theFile );
+	File f = new File( "data" + File.separator + theFile );
 	BufferedReader in = null;
 	try{
 	    in = new BufferedReader( new InputStreamReader( f.toURL().openStream() ) );
