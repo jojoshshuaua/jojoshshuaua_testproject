@@ -5,6 +5,7 @@
 
 import java.util.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class PositionGenerator extends Thread{
     private int numSeconds;
@@ -48,7 +49,7 @@ public class PositionGenerator extends Thread{
     }
     
     public void /*generateDots()*/ run(){
-	Canvas gel = electro2D.getGel();
+	GelCanvas gel = electro2D.getGel();
 	double width = gel.getWidth();
 	double pI = 0;
 	double MW = 0;
@@ -119,7 +120,7 @@ public class PositionGenerator extends Thread{
 	    
 	    //add dot to vector and reset values for next dot
 
-	    dots.add( new ProteinDot( color, gel, xLoc, yLoc, electro2D ) );
+	    dots.add( new ProteinDot(color, gel, xLoc, yLoc, electro2D) );
 	    color = null;
 	    xLoc = 0;
 	    yLoc = 48;

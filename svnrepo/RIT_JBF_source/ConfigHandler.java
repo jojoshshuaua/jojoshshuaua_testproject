@@ -157,7 +157,7 @@ public class ConfigHandler extends DefaultHandler {
 		}
 	}
 
-	public static void main( String args[] ){
+	public static void main( String args[] ) {
 		try{
 			XMLReader rmReader = XMLReaderFactory.createXMLReader();
 			ConfigHandler ch = new ConfigHandler();

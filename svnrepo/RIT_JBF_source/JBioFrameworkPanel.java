@@ -3,7 +3,7 @@
  *   images/middle.gif. 
  */
 
-import java.awt.Panel;
+import java.awt.Container;
 
 import java.util.HashMap;
 import java.awt.Color;
@@ -34,7 +34,7 @@ public class JBioFrameworkPanel extends JPanel {
 	public void setPanels( HashMap[] config ){
 		
 		ClassLoader cld = ClassLoader.getSystemClassLoader();
-		Panel tmpClass = null;
+		Container tmpClass = null;
 		Class tmpCls = null;
 		String tmpTitle = "";
 		String tmpClassName = "";
@@ -55,14 +55,14 @@ public class JBioFrameworkPanel extends JPanel {
 			tmpTitle = (String)tmpConfigHash.get( "name" );
 			System.out.println( tmpClassName + "  " + tmpTitle );
 			try{
-				tmpCls = cld.loadClass( tmpClassName );
-			    tmpClass = (Panel)(tmpCls.newInstance());
+                            tmpCls = cld.loadClass( tmpClassName );
+			    tmpClass = (Container)(tmpCls.newInstance());
 			}catch( Exception ex ){
 				System.err.println( ex.getMessage() );
 				System.exit( 1 );
 			}   
 			//set colors 
-        	if( tmpConfigHash.containsKey( "bgcolor" ) ){
+        	/*if( tmpConfigHash.containsKey( "bgcolor" ) ){
         		String bgcolor = (String)tmpConfigHash.get( "bgcolor" );
         		if( bgcolor.equals( "black" ) ){
         			tmpClass.setBackground( Color.BLACK );
@@ -103,7 +103,7 @@ public class JBioFrameworkPanel extends JPanel {
         		else if( bgcolor.equals( "yellow" ) ){
         			tmpClass.setBackground( Color.YELLOW );
         		}	
-        	}
+        	}*/
         	
         	if( tmpConfigHash.containsKey( "width" ) ){
         		int width = Integer.parseInt( (String)tmpConfigHash.get( "width" ) );

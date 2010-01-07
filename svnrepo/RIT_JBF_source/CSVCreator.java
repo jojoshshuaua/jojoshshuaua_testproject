@@ -17,7 +17,7 @@ public class CSVCreator{
     //private Vector piVals;
     private Vector proteins;
     private Electro2D electro2D;
-    private final String directoryString = "./../CSV Files/";
+    private final String directoryString = "CSV Files";
 
     public CSVCreator( Electro2D e ){
 	electro2D = e;
@@ -39,7 +39,7 @@ public class CSVCreator{
 			fl.mkdir();
 		}
 	    out = new PrintWriter( new BufferedWriter( new FileWriter( 
-							   directoryString + filename.substring(0,
+							   directoryString+ File.separator + filename.substring(0,
 						filename.indexOf(".")) + ".csv" )));
 	}catch( IOException e ){
 	    System.err.println( "Error writing to CSV file" );

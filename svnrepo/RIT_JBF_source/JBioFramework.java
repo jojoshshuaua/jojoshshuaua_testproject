@@ -22,7 +22,7 @@ import java.awt.MenuItem;
 import java.io.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
-
+import java.awt.*;
 
 public class JBioFramework extends JFrame {
 	JBioFrameworkPanel jbfPanel = null;
@@ -80,6 +80,8 @@ public class JBioFramework extends JFrame {
         //System.out.println( tabbedPane.getBackgroundAt( 0 ) );
         //Uncomment the following line to use scrolling tabs.
         //tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+
+
     }
 
     protected JComponent makeTextPanel(String text) {

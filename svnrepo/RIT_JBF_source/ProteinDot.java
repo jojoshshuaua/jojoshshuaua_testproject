@@ -220,17 +220,3 @@ public class ProteinDot extends Component{
 	draw( graphic );
     }
 } //ProteinDot.java
-
-
-
-
-
-
-
-
-
-
-
-
-
-

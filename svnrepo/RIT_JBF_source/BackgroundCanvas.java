@@ -1,17 +1,14 @@
-import java.awt.*;
+import javax.swing.*;
 
-public class BackgroundCanvas extends Canvas {
-    
-    private Color bgColor;
-    private Color stringColor;
-    private Color titleColor;
+public class BackgroundCanvas {
+
     private Electro2D electro2D;
-    
+    private JPanel background;
+
     public BackgroundCanvas( Electro2D e ){
 	electro2D = e;
-	this.setBounds( 0, 0, e.getWidth(), e.getHeight() );
-	bgColor = new Color(176, 196, 222);
+	background = new JPanel();
+        background.add(electro2D);
     }
 
-    public void paint( Graphics g ){}
 }

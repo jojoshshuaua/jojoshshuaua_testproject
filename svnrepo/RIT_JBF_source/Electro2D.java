@@ -7,62 +7,58 @@
  * Created 4/17/03
  */
 
-import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
 import java.net.*;
-import javax.swing.JPanel;
-import javax.swing.JFrame;
+import javax.swing.*;
+import javax.swing.border.*;
 
 /**
  * The main electro2D class.
  */
-public class Electro2D extends Panel implements ActionListener {
+public class Electro2D extends JPanel implements ActionListener {
 
     private FileFrame fileFrame;          //pop up for loading file data
     private JFrame proteinListFrame;       //pop up for displaying protein lists
     private JPanel proteinListPanel;
-    private ProteinListButton proteinListButton;
+    private ProteinListButtonSwingVersion proteinListButton;
     
     /** components of the main applet **/
     private GelCanvas gelCanvas;          //area where animation takes place
-    private HelpButton helpButton;        //brings up help page
-    private AboutButton aboutButton;      //brings up about page
-    private AddProteinButton addProteinButton;   //brings up file frame
+    private HelpButtonSwingVersion helpButton;        //brings up help page
+    private AboutButtonSwingVersion aboutButton;      //brings up about page
+    private AddProteinButtonSwingVersion addProteinButton;   //brings up file frame
     private RemoveProteinButton removeProteinButton;  //removes proteins
-    private PlayButton playButton;        //starts/pauses animation
-    private StopButton stopButton;        //stops animation
-    private RestartButton restartButton;  //restarts animation
-    private CSVButton csvButton;          //writes to csv file
-    private SecondProteomeButton secondProt; //loads second file for comparison
+    private PlayButtonSwingVersion playButton;        //starts/pauses animation
+    private StopButtonSwingVersion stopButton;        //stops animation
+    private RestartButtonSwingVersion restartButton;  //restarts animation
+    private CSVButtonSwingVersion csvButton;          //writes to csv file
+    private CompareProteinsButtonSwingVersion secondProt; //loads second file for comparison
     private java.awt.List proteinList;    //current protein list
     private int[] selectedIndexes;        //selected indexes in the list
-    private Choice voltageChooser;        //select voltage
-    private Choice animationChooser;      //select animation to control
-    private RangeChoice rangeChooser;     //select the range for IEF
+    private AnimationChooserSwingVersion animationChooser;      //select animation to control
+    private RangeChoiceSwingVersion rangeChooser;     //select the range for IEF
     private DotThread dotThread;          //thread controlling the SDS-PAGE
                                           //animation
-    private ColorKeyButton colorkey;      //protein color key
+    private ColorKeyButtonSwingVersion colorkey;      //protein color key
     private IEFThread iefThread;          //thread controlling IEF animation
     private boolean resetPressed;         //detects whether reset was pressed
                                           //or not 
-    private TextField maxRange;           //the maximum pH range of the IEF
-    private TextField minRange;           //the minimum pH range of the IEF
     private RangeImage rangeImage;    //the disabled image for entering a range
     private Graphics graphics;
     private boolean rangeReload;      //determines whether or not the user 
                                       //enters a pH range manually or not
-    private SearchFieldsButton searchButton; //opens a frame which allows the
+    private SearchProteinFieldButtonSwingVersion searchButton; //opens a frame which allows the
     //user to search through the proteins for specific information
 
-    private Choice percentAcrylamide;  //the Choices for entering the 
+    private PercentAcrylamideSwingVersion percentAcrylamide;  //the Choices for entering the
                                           //% acrylamide for the gel
     private Vector rangeLabels;
     private Vector mwLabels;
     private WebGenerator web;             //generates the website
-    private GenPageButton webButton;
+    private GenerateHTMLButtonSwingVersion webButton;
     
 
 
@@ -108,60 +104,30 @@ public class Electro2D extends Panel implements ActionListener {
 	fileFrame.setResizable(false);    //don't allow user to change size
 
 	web = new WebGenerator( this );
-	webButton = new GenPageButton( this );
+	webButton = new GenerateHTMLButtonSwingVersion(this);
 	
 	//read in deactivated range Image
-	rangeImage = new RangeImage( 
+	rangeImage = new RangeImage(
 		     Toolkit.getDefaultToolkit().getImage(
 					    "rangeSelectDeactivated.jpg" ) );
-
-	// initialize maxRange field and set the initial value to 1
-	maxRange = new TextField( "1", 7 );
-	maxRange.setForeground( new Color( 54, 100, 139 ) );
-	// add a mouse listener to display a message to the user at the
-	// bottom of the screen
-	maxRange.addMouseListener(new MouseAdapter() {
-		public void mouseEntered(MouseEvent e) {
-		    //showStatus("Enter a maximum pH range for the isoelectric" +
-		    //       " focusing.");
-		}
-		public void mouseExited(MouseEvent e) {
-		    //showStatus("");
-		}
-	    });
-	
-
-	
-	// init minRange field and set initial value to 0
-	minRange = new TextField( "0", 7 );
-	minRange.setForeground( new Color( 54, 100, 139 ) );
-	// add a mouse listener to display a message to the user at the
-	// bottom of the screen
-	minRange.addMouseListener(new MouseAdapter() {
-		public void mouseEntered(MouseEvent e) {
-		}
-		public void mouseExited(MouseEvent e) {
-		    //showStatus("");
-		}
-	    });
 
 	rangeLabels = new Vector();
 	mwLabels = new Vector();
 	resetPressed = false;
 	rangeReload = false;
 	gelCanvas = new GelCanvas(this);
-	secondProt = new SecondProteomeButton(this);
-	searchButton = new SearchFieldsButton(this);
-	csvButton = new CSVButton( this );
-	helpButton = new HelpButton(this);
-	aboutButton = new AboutButton(this);
-	addProteinButton = new AddProteinButton(this);
+	secondProt = new CompareProteinsButtonSwingVersion(this);
+	searchButton = new SearchProteinFieldButtonSwingVersion(this);
+	csvButton = new CSVButtonSwingVersion( this );
+	helpButton = new HelpButtonSwingVersion(this);
+	aboutButton = new AboutButtonSwingVersion(this);
+	addProteinButton = new AddProteinButtonSwingVersion(this);
 	removeProteinButton = new RemoveProteinButton(this);
-	colorkey = new ColorKeyButton();
+	colorkey = new ColorKeyButtonSwingVersion();
 	
-	playButton = new PlayButton(this);
-	stopButton = new StopButton(this);
-	restartButton = new RestartButton(this);
+	playButton = new PlayButtonSwingVersion(this);
+	stopButton = new StopButtonSwingVersion(this);
+	restartButton = new RestartButtonSwingVersion(this);
 
 	proteinListFrame = new JFrame( "Protein Lists" );
 	proteinListFrame.setBounds( 0, 0, 300, 250 );
@@ -169,9 +135,9 @@ public class Electro2D extends Panel implements ActionListener {
 	proteinListPanel = new JPanel();
 	proteinListPanel.setBounds( 0, 0, 300, 250 );
 	proteinListPanel.setLayout( null );
-	proteinListPanel.setBackground( Color.BLACK );
+//	proteinListPanel.setBackground( Color.BLACK );
 	
-	proteinListButton = new ProteinListButton( this );
+	proteinListButton = new ProteinListButtonSwingVersion( this );
 	
 	proteinList = new java.awt.List();
 	proteinList.setMultipleMode(false); //Don't allow multiple selections
@@ -213,73 +179,30 @@ public class Electro2D extends Panel implements ActionListener {
 	//	}
 	//   });
 
-	animationChooser = new Choice();
-	animationChooser.setForeground(new Color(54,100,139));
-	animationChooser.addItem("IEF");
-	animationChooser.addItem("SDS-PAGE");
-	// give animationChooser mouse listener to respond to user's actions
-	animationChooser.addMouseListener(new MouseAdapter() {
-		public void mouseEntered(MouseEvent e) {
-		    setCursor(new Cursor(Cursor.HAND_CURSOR));
-		}
-		public void mouseExited(MouseEvent e) {
-		    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-		}
-	    });
+	animationChooser = new AnimationChooserSwingVersion();
 
-	rangeChooser = new RangeChoice( this );
-	rangeChooser.setForeground( new Color( 54, 100, 139 ) );
-	rangeChooser.addItem( "3 - 10" );
-	rangeChooser.addItem( "4 - 7" );
-	rangeChooser.addItem( "Enter A Range" );
-	//give rangeChooser a mouse listener to respond to user's actions
-	rangeChooser.addMouseListener( new MouseAdapter() {
-		public void mouseEntered( MouseEvent e ){
-		    setCursor( new Cursor( Cursor.HAND_CURSOR ) );
-		}
-		public void mouseExited( MouseEvent e ) {
-		    setCursor( new Cursor( Cursor.DEFAULT_CURSOR ) );
-		}
-	    });
-
-	
+	rangeChooser = new RangeChoiceSwingVersion( this );
+		
 	// init %Acrylamide field and set initial value to 15
-	percentAcrylamide = new Choice();
-	percentAcrylamide.setForeground( new Color( 54, 100, 139 ) );
-	percentAcrylamide.addItem( "5" );
-	percentAcrylamide.addItem( "7.5" );
-	percentAcrylamide.addItem( "10" );
-	percentAcrylamide.addItem( "15" );
-	percentAcrylamide.addItem( "18" );
-	percentAcrylamide.addItem( "4 - 15" );
-	percentAcrylamide.addItem( "4 - 20" );
-	percentAcrylamide.addItem( "8 - 16" );
-	percentAcrylamide.addItem( "10 - 20" );
-	percentAcrylamide.select( "15" );
-	// add a mouse listener to display a message to the user at the
-	// bottom of the screen
-	percentAcrylamide.addMouseListener(new MouseAdapter() {
-		public void mouseEntered(MouseEvent e) {
-		    setCursor( new Cursor( Cursor.HAND_CURSOR ) );
-		}
-		public void mouseExited(MouseEvent e) {
-		    setCursor( new Cursor( Cursor.DEFAULT_CURSOR ) );
-		}
-	    });
+	percentAcrylamide = new PercentAcrylamideSwingVersion();
 	
-
 	sequences = new Vector();
 	sequenceTitles = new Vector();
 	molecularWeights = new Vector();
 	piValues = new Vector();
-
-	this.setLayout(null);
+/*
+ * The following code was commented out October of 2009 during the conversion
+ * of this application from awt components to Swing.
+ * /
+/*	this.setLayout(null);
 	//this.setBackground(new Color(176, 196, 222));
 	this.setBackground( new Color( 0, 0, 0 ) );
 	//set bounds on components (approximate, for now) (x, y, width, height)
-
-	gelCanvas.setBounds(192, 49, 670, 600);
-	helpButton.setBounds(10,47,49,20);
+/* The gelCanvas line is left uncommented until it itself is converted to swing
+ * /
+*/ 	gelCanvas.setBounds(192, 49, 670, 600);
+   //     gelCanvas.setBounds(192, 49, 100,100);
+/*	helpButton.setBounds(10,47,49,20);
 	aboutButton.setBounds(62,47,59,20);
 	addProteinButton.setBounds(10,77,109,20);//(10, 290, 109, 20);
 	removeProteinButton.setBounds(proteinListFrame.getWidth()/4 - 5, 
@@ -290,19 +213,17 @@ public class Electro2D extends Panel implements ActionListener {
 	restartButton.setBounds( 95,179,27,27 );//(218,108,27,27);
 	csvButton.setBounds( 10,536,118,20 );//( 10, 265, 118, 20 );
 	webButton.setBounds( 10,506,125,20 );//(134, 265, 125, 20 );
-	minRange.setBounds( 20,317,35,20 );//( 151, 175, 35, 20 );
-	maxRange.setBounds( 61,317,35,20 );//( 190, 175, 35, 20 );
 	percentAcrylamide.setBounds( 21,368,65,50 );//( 32, 228, 65, 50 );
 	rangeImage.setBounds( 19,315,78,24 );//( 149, 173, 78, 24 );
 	secondProt.setBounds( 10, 446, 144, 20 );//( 126, 218, 144, 20 );
 	searchButton.setBounds( 10,476,130,20);//( 126, 240, 130, 20 );
 	proteinListButton.setBounds( 10,416,152,20 );//( 20, 320, 168, 20 );
-	
+
 	proteinList.setBounds( 7, 10, 280, 155 );
 	//	voltageChooser.setBounds( 21,245,65,50 );//( 33, 107, 65, 50 );
 	animationChooser.setBounds( 15, 117, 96, 50 );//( 144,50,96,50 );
 	rangeChooser.setBounds( 15,248,82,50 );//( 24, 170, 82, 50 );
-	
+*/
 	proteinListPanel.add( proteinList );
 	proteinListPanel.add( removeProteinButton );
 	proteinListFrame.getContentPane().add( proteinListPanel );
@@ -312,9 +233,11 @@ public class Electro2D extends Panel implements ActionListener {
 		}
 	    }
 					    );
-
+/* These add lines are commented out, October 2009, to allow for structured
+ * Swing GUI building in the lines of code following these
+ * /
 	//add components to applet panel
-	this.add(colorkey);
+/*	this.add(colorkey);
 	this.add(helpButton);
 	this.add(aboutButton);
 	this.add(addProteinButton);
@@ -333,81 +256,97 @@ public class Electro2D extends Panel implements ActionListener {
 	this.add( searchButton );
 	this.add( proteinListButton );
 	this.setBackground( Color.BLACK );
+*/
+
+       /*
+        * new code for designing a Swing GUI; uses JPanels and layout managers
+        * to arrange the buttons and labels to look similar to how the old awt
+        * code did it
+        */
+       BoxLayout topLevelLayout = new BoxLayout(this, BoxLayout.X_AXIS);
+       topLevelLayout.maximumLayoutSize(this);
+       this.setLayout(topLevelLayout);
+
+       JPanel leftPanel = new JPanel();
+       leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+
+       this.add(leftPanel);
+       this.add(gelCanvas);
+       leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+       JPanel firstPanel = new JPanel();
+       firstPanel.add(helpButton);
+       JLabel fillerOne = new JLabel();
+       firstPanel.add(fillerOne);
+       fillerOne.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+       firstPanel.add(aboutButton);
+       leftPanel.add(firstPanel);
+
+       JPanel secondPanel = new JPanel();
+       secondPanel.add(addProteinButton);
+       leftPanel.add(secondPanel);
+
+       JPanel thirdPanel = new JPanel();
+       thirdPanel.setLayout(new BoxLayout(thirdPanel, BoxLayout.Y_AXIS));
+       thirdPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), "Choose Animation", TitledBorder.CENTER, TitledBorder.TOP));
+       JLabel fillerThree = new JLabel();
+       fillerThree.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+       thirdPanel.add(fillerThree);
+       thirdPanel.add(animationChooser);
+       leftPanel.add(thirdPanel);
+
+       JPanel fourthPanel = new JPanel();
+       fourthPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), "Animation Buttons", TitledBorder.CENTER, TitledBorder.TOP));
+       fourthPanel.add(playButton);
+       fourthPanel.add(stopButton);
+       fourthPanel.add(restartButton);
+       leftPanel.add(fourthPanel);
+
+       JPanel fifthPanel = new JPanel();
+       fifthPanel.setLayout(new BoxLayout(fifthPanel, BoxLayout.Y_AXIS));
+       fifthPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), "Choose PH", TitledBorder.CENTER, TitledBorder.TOP));
+       fifthPanel.add(rangeChooser);
+       leftPanel.add(fifthPanel);
+
+       JPanel sixthPanel = new JPanel();
+       sixthPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), "Choose Acrylamide %", TitledBorder.CENTER, TitledBorder.TOP));
+       sixthPanel.add(percentAcrylamide);
+       leftPanel.add(sixthPanel);
+
+       JPanel seventhPanel = new JPanel();;
+       JLabel additionalOptions = new JLabel("Additional Options");
+       seventhPanel.add(additionalOptions);
+       leftPanel.add(seventhPanel);
+
+       JPanel eighthPanel = new JPanel();
+       eighthPanel.add(proteinListButton);
+       leftPanel.add(eighthPanel);
+
+       JPanel ninthPanel = new JPanel();
+       ninthPanel.add(secondProt);
+       leftPanel.add(ninthPanel);
+
+       JPanel tenthPanel = new JPanel();
+       tenthPanel.add(searchButton);
+       leftPanel.add(tenthPanel);
+
+       JPanel eleventhPanel = new JPanel();
+       eleventhPanel.add(webButton);
+       leftPanel.add(eleventhPanel);
+
+       JPanel twelfPanel = new JPanel();
+       twelfPanel.add(csvButton);
+       leftPanel.add(twelfPanel);
+
+       JPanel thirteenthPanel = new JPanel();
+       thirteenthPanel.add(colorkey);
+       leftPanel.add(thirteenthPanel);
+
     }
 	
 	/**
      * Any drawing on the applet panel itself is done here.
      */
-    public void paint(Graphics g) {
-	graphics = g;
-	//draw border
-	g.setColor(/*new Color(54,100,139)*/Color.LIGHT_GRAY);  //steel blue 4
-	Rectangle d = getBounds();
-	g.drawRect(0,0,d.width-1,d.height-1);
-	
-	//draw title
-	g.setColor(Color.LIGHT_GRAY/*new Color(205,102,0)*/);
-	g.setFont(new Font("Arial",Font.BOLD+Font.ITALIC,17) );
-	g.drawString("2-D Electrophoresis Simulation",13,23);
-
-	//draw a rectangle around animation controls
-	//  g.setColor(Color.LIGHT_GRAY/*new Color(54,100,139)*/);  //steel blue 4
- 	g.drawLine(10,150,116,150);/*(128,141,255,141)*/;
-  	g.drawLine(10,150,10,108);//(128,141,128,93);
-  	g.drawLine(116,150,116,108);
-  	g.drawLine(10,108,20,108);
-  	g.drawLine(116,108,105,108);
-  	g.setFont(new Font("Arial",Font.PLAIN,10));
-  	g.drawString("Animation Select",21,112);
-
-//  	//draw a rectangle around voltage select
-	//  	g.drawLine(10,279,97,279);//(15,141,113,141);
-	//	g.drawLine(10,279,10,236);//(15,141,15,93);
-	//	g.drawLine(97,279,97,236);//(113,141,113,93);
-	//	g.drawLine(10,236,16,236);//(15,93,27,93);
-	//	g.drawLine(97,236,91,236);//(113,93,101,93);
-	//	g.drawString("Voltage Select",18,240);
-
-//  	//draw a rectangle around animation select
-  	g.drawLine(10,218,127,218);//(128,78,255,78);
- 	g.drawLine(10,218,10,168);//(128,78,128,40);
-  	g.drawLine(127,218,127,168);//(255,78,255,40);
- 	g.drawLine(10,168,20,168);//(128,40,148,40);
-  	g.drawLine(127,168,116,168);//(255,40,235,40);
-  	g.drawString("Animation Controls",23,172);
-
-//  	//draw a rectangle around range select
-  	g.drawLine( 10,280,102,280 );//( 15, 204, 113, 204 );
-  	g.drawLine( 10,280,10,236 );//( 15, 204, 15, 156 );
-  	g.drawLine( 102,280,102,236 );//( 113, 204, 113, 156 );
-  	g.drawLine( 10,236,21,236 );//( 15, 156, 30, 156 );
-  	g.drawLine( 102,236,90,236 );//( 113, 156, 99, 156 );
-  	g.drawString( "Range Select", 23, 240 );
-
-//  	//draw a rectangle around the enter range box
-  	g.drawLine( 10,347,105,347 );//( 128, 204, 248, 204 );
-  	g.drawLine( 10,347,10,298 );//( 128, 204, 128, 156 );
-  	g.drawLine( 105,347,105,298 );//( 248, 204, 248, 156 );
-  	g.drawLine( 10,298,19,298 );//( 128, 156, 149, 156 );
-  	g.drawLine( 105,298,97,298 );//( 248, 156, 226, 156 );
-  	g.drawString( "Enter pH Range", 21, 301 );
-  	g.drawString( "Min", 28, 313 );
-  	g.drawString( "Max", 67, 313 );
-
-//  	//draw a rectangle around the percent acrylamide box
-  	g.drawLine( 10,400,97,400 );//( 15, 258, 113, 258 );
-  	g.drawLine( 10,400,10,359 );//( 15, 258, 15, 216 );
-  	g.drawLine( 97,400,97,359 );//( 113, 258, 113, 216 );
-  	g.drawLine( 10,359,18,359 );//( 15, 216, 30, 216 );
-  	g.drawLine( 97,359,87,359 );//( 113, 216, 99, 216 );
-  	g.drawString( "% Acrylamide", 19, 362 );
-  	
-  	
-    }    
-
-    public void update(Graphics g) { 
-	paint(g);
-    }
 
     public void displayProtList(){
 	
@@ -553,7 +492,7 @@ public class Electro2D extends Panel implements ActionListener {
     public void setSDS(){
 
 	//chose the SDS-PAGE value in animationChooser
-	animationChooser.select( "SDS-PAGE" );
+	animationChooser.setSelectedItem( "SDS-PAGE" );
 	//repaint the applet to reflect the change
 	//this.repaint();
     }
@@ -564,7 +503,7 @@ public class Electro2D extends Panel implements ActionListener {
      */
     public void setIEF(){
 	//choose the IEF value in animationChooser
-	animationChooser.select( "IEF" );
+	animationChooser.setSelectedItem( "IEF" );
 	//repaint the applet to reflect the change
 	//this.repaint;
     }
@@ -596,8 +535,6 @@ public class Electro2D extends Panel implements ActionListener {
 	    // to enter a range
 
 	    remove( rangeImage );
-	    add( minRange );
-	    add( maxRange );
 	    update( graphics );
 	    rangeReload = true;
 	}
@@ -613,8 +550,6 @@ public class Electro2D extends Panel implements ActionListener {
 	    // manual entry of a range
 
 	    add( rangeImage );
-	    remove( minRange );
-	    remove( maxRange );
 	    update( graphics );
 	    rangeReload = false;
 	}
@@ -665,7 +600,7 @@ public class Electro2D extends Panel implements ActionListener {
 	 //if no errors occurred, open a new window and display the help page
 	// if(helpPage != null){
 	     // getAppletContext().showDocument(helpPage, "_blank");
-	File f = new File( "help.html" );
+	File f = new File( "HTML Files" + File.separator + "Help" + File.separator + "help.html" );
 	try{
 	    BrowserLauncher.openURL( f.toURL().toString() );
 	} catch(IOException e ){System.err.println( e.getMessage());}
@@ -681,7 +616,7 @@ public class Electro2D extends Panel implements ActionListener {
 	//   URL aboutPage = null;
 
 	 //if no errors occurred, open a new window and display the about page
-	     File f = new File( "about.html" );
+	     File f = new File( "HTML Files" + File.separator + "about.html" );
 	     System.out.println( f.exists() );
 	     try{
 		 BrowserLauncher.openURL( f.toURL().toString() );
@@ -883,89 +818,121 @@ public class Electro2D extends Panel implements ActionListener {
     }
 
     /**
-     * this method returns the maximum range that the user selected
+     * this method returns the maximum pH range that the user selected
      *
-     * @return max
+     * @return max the maximum pH to be used in the simulation
      */
     public double getMaxRange(){
-	
-	double max = 10;
-	//get the selected item from the Choice of ranges
-	String ranges = rangeChooser.getSelectedItem();
-	
-	// If the user selected the range "3 - 10", the max is ten
+	// set up the default maximum range of 10
+	Double max = new Double(10);
+	String ranges = (String) rangeChooser.getSelectedItem();
+	// if the user selected a range from the list, supply the correct max
 	if( ranges.equals( "3 - 10" ) ){
-	    max = 10;
+	    max = 10.0;
+            return (double) max;
 	}
-	// If the user selected the range "4 - 7", the max is seven
+	
 	else if( ranges.equals( "4 - 7" ) ){
-	    max = 7;
+	    max = 7.0;
+            return (double) max;
 	}
-	// If the user selected "Enter A Range", get the values from the
-	// text fields.
-	else if( ranges.equals( "Enter A Range" ) ){
-	    //get the value from the maxRange text field.
-	    String stringMax = maxRange.getText();
-	    stringMax.trim();
-	    //try to change the value to a number
-	    try{
-		max = Double.parseDouble( stringMax );
-	    }catch( NumberFormatException e ){
-		// if the value was not a valid number, display the
-		// error message in a new frame
-		MessageFrame mess = new MessageFrame();
-		String m = stringMax + " is not a valid number.  Please " +
-		    "press restart and try again.";
-		mess.setMessage( m );
-		mess.setVisible(true);
-	    }
-	}
-	// return the max value
-	return max;
+	/**
+         * if the user chose to enter their own value, first check to make sure
+         * it is in the correct format
+	 */
+        else if (ranges.matches("\\d+.?\\d*-\\d+.?\\d*")){
+            /**
+             * split the user's range into a String array so that Scanner can
+             * find the correct Double
+             */
+            String[] lowAndHigh = ranges.split("-");
+            Scanner scan = new Scanner(lowAndHigh[1]);
+            max = scan.nextDouble();
+            /**
+             * the maximum pH cannot be below 0 or above 14 because a pH of any
+             * other value is a physical impossibility
+             */
+            if ((max < 0) || (max > 14)) {
+
+                MessageFrame mess = new MessageFrame();
+                String m = max + " is not a valid number.  Please " +
+                    "press restart and try again using values between 0" +
+                    "and 14.";
+                mess.setMessage( m );
+                mess.setVisible(true);
+
+            } else {
+                // return the user's maximum pH
+                return (double) max;
+
+            }
+
+        }
+        /**
+         * if none of the provided choices were selected and the user did not
+         * enter a value, then use the default max of 10
+         */
+        return (double) max;
     }
     
     /**
-     * this method returns the minimum range that the user selected
+     * this method returns the minimum pH range that the user selected
      *
-     * @return min
+     * @return min the minimum pH to be used in the simulation
      */
 
     public double getMinRange(){
-	double min = 3;
-	
-	//get the range the user selected from the Choice of ranges
-	String ranges = rangeChooser.getSelectedItem();
-
-	// if the user chose "3 - 10", the minimum is 3
+        // set up the default minimum pH of 3
+        Double min = new Double(3);
+	String ranges = (String) rangeChooser.getSelectedItem();
+        /**
+         * if the user selected one of the provided choices set the minimum pH
+         * to the appropriate value
+         */
 	if( ranges.equals( "3 - 10" )){
-	    min = 3;
+	    min = 3.0;
+            return (double) min;
 	}
-	//if the user chose "4 - 7", the minimum is 4
+
 	else if( ranges.equals( "4 - 7" ) ){
-	    min = 4;
+	    min = 4.0;
+            return (double) min;
 	}
-	//if the user chose "Enter A Range", get the value from the
-	// text field.
-	else if( ranges.equals( "Enter A Range" ) ){
-	    // get the value stored in the minRange text field
-	    String stringMin = minRange.getText();
-	    stringMin.trim();
-	    //try to change the value into a number
-	    try{
-		min = Double.parseDouble( stringMin );
-	    }catch( NumberFormatException e ){
-		//if the value was not a valid number, display the error
-		// message in a new frame
-		MessageFrame mess = new MessageFrame();
-		String m = stringMin + " is not a valid number.  Please " +
-		    "press restart and try again.";
-		mess.setMessage( m );
-		mess.setVisible(true);
-		
-	    }
-	}
-	//return the minimum value
-	return min;
+        /**
+         * if the user chose to enter their own value, check to make sure that
+         * it is in the correct format
+         */
+	else if (ranges.matches("\\d+.?\\d*-\\d+.?\\d*")){
+            // make the scanner object to find the correct Double
+            String[] lowAndHigh = ranges.split("-");
+            Scanner scan = new Scanner(lowAndHigh[0]);
+            min = scan.nextDouble();
+            /**
+             * the minimum pH cannot be below 0 or above 14 because a pH of any
+             * other value is a physical impossibility
+             */
+            if ((min < 0) || (min > 14)) {
+                    
+                MessageFrame mess = new MessageFrame();
+                String m = min + " is not a valid number.  Please " +
+                    "press restart and try again using values between 0" +
+                    "and 14.";
+                mess.setMessage( m );
+                mess.setVisible(true);
+                    
+            } else {
+                // return the user's minimum pH value
+                return (double) min;
+                    
+            }
+
+        }
+        /**
+        * if the user did not select any of the provided choices and did not
+        * enter their own pH value, use the default pH value of 3
+        */
+        return (double) min;
+
     }
 
     /**
@@ -975,7 +942,7 @@ public class Electro2D extends Panel implements ActionListener {
      */
     public double getLowPercent(){
 	// get the value in the text box
-	String value = percentAcrylamide.getSelectedItem();
+	String value = (String) percentAcrylamide.getSelectedItem();
 	value = value.trim();
 	//return value;
 	double percent = -1;
@@ -1008,7 +975,7 @@ public class Electro2D extends Panel implements ActionListener {
      */
     public double getHighPercent(){
 	// get the value in the text box
-	String value = percentAcrylamide.getSelectedItem();
+	String value = (String) percentAcrylamide.getSelectedItem();
 	value = value.trim();
 	//return value;
 	double percent = -1;
@@ -1042,7 +1009,7 @@ public class Electro2D extends Panel implements ActionListener {
      * @return a string
      */
     public String getAnimationChoice(){
-	return animationChooser.getSelectedItem();
+	return (String) animationChooser.getSelectedItem();
     }
 
     /**
@@ -1514,55 +1481,55 @@ public class Electro2D extends Panel implements ActionListener {
 	web.genFile( this.getLastFileLoaded() );
     }
 
-    public static void main( String[] args ){
-	if( args.length >= 5 ){
-	    Electro2D e = new Electro2D();
-	    String file = args[2];
-	    String extention = file.substring( file.indexOf( "." ) + 1 );
-	    if( extention.equals( "faa" ) ){
-		GenomeFileParser.fastaParse( file, e, "", 1 );
-	    }
-	    else if( extention.equals( "pdb" ) ){
-		GenomeFileParser.pdbParse( file, e, "", 1 );
-	    }
-	    else{
-		System.err.println( file + " is not a valid file.  Please "
-				    + "enter a .pdb or .faa file." );
-		System.exit( 1 );
-	    }
-	    int numSecs = Integer.parseInt( args[4] );
-	      e.setVisible( true );
-	      //e.setVisible(false);
-	    //e.setVisible( false );
-	    PositionGenerator posGen = new PositionGenerator( numSecs, 
-							      e );
-	    //e.setVisible( false );
-	    posGen.start();
-	    //System.exit( 0 );
-	    
-	    
-	}
-	else{
-		Frame jf = new Frame();
-		jf.addWindowListener(
-			       new WindowAdapter() {
-				 public void windowClosing( WindowEvent e ) {
-					  System.exit( 0 );
-				      }
-				  }
-			       );
-		jf.setTitle( "2D Electrophoresis Simulator" );
-		jf.setBounds( 0, 0, 875, 667 );
-		jf.setBackground( Color.BLACK );
-	    Electro2D e = new Electro2D();
-	    e.setBackground( Color.BLACK );
-	    jf.add(e);
-	    jf.setResizable( false );
-	    jf.setVisible(true);
-	}
-    }
-
-}//Electro2D
+//    public static void main( String[] args ){
+//	if( args.length >= 5 ){
+//	    Electro2D e = new Electro2D();
+//	    String file = args[2];
+//	    String extention = file.substring( file.indexOf( "." ) + 1 );
+//	    if( extention.equals( "faa" ) ){
+//		GenomeFileParser.fastaParse( file, e, "", 1 );
+//	    }
+//	    else if( extention.equals( "pdb" ) ){
+//		GenomeFileParser.pdbParse( file, e, "", 1 );
+//	    }
+//	    else{
+//		System.err.println( file + " is not a valid file.  Please "
+//				    + "enter a .pdb or .faa file." );
+//		System.exit( 1 );
+//	    }
+//	    int numSecs = Integer.parseInt( args[4] );
+//	      e.setVisible( true );
+//	      //e.setVisible(false);
+//	    //e.setVisible( false );
+//	    PositionGenerator posGen = new PositionGenerator( numSecs,
+//							      e );
+//	    //e.setVisible( false );
+//	    posGen.start();
+//	    //System.exit( 0 );
+//
+//
+//	}
+//	else{
+//		Frame jf = new Frame();
+//		jf.addWindowListener(
+//			       new WindowAdapter() {
+//				 public void windowClosing( WindowEvent e ) {
+//					  System.exit( 0 );
+//				      }
+//				  }
+//			       );
+//		jf.setTitle( "2D Electrophoresis Simulator" );
+//		jf.setBounds( 0, 0, 875, 667 );
+////		jf.setBackground( Color.BLACK );
+//	    Electro2D e = new Electro2D();
+////	    e.setBackground( Color.BLACK );
+//	    jf.add(e);
+//	    jf.setResizable( false );
+//	    jf.setVisible(true);
+//	}
+//    }
+//
+} //Electro2D
 
 
 

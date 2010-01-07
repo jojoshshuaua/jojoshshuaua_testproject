@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
  * @author Adam Bazinet
  */
 
+//public class GelCanvas extends JPanel implements ActionListener {
 public class GelCanvas extends Canvas implements MouseListener{
     private Graphics graphic = null;
     private Electro2D electro2D;  //a reference to the Electro2D class
@@ -128,7 +129,8 @@ public class GelCanvas extends Canvas implements MouseListener{
 	Vector functions = electro2D.getFunctions();
 	
 	// Make IEFProteins for the protein data in the vectors
-	
+
+//        Rectangle bounds = this.getMaximumSize();
 	Rectangle bounds = this.getBounds();
 	//Vector tempIEF = new Vector();
 	for( int i = 0; i < sequenceTitles.size(); i++ ){
@@ -168,7 +170,7 @@ public class GelCanvas extends Canvas implements MouseListener{
 		//System.out.println( ((IEFProtein)(ief.elementAt(i))).getMinPI());
 			   	 	// copy ief.get( i )'s protein to proteins.get(j)
 				
-			    	( ( IEFProtein )( ief.elementAt( i ) ) ).addProtein( 
+			    	( ( IEFProtein )( ief.elementAt( i ) ) ).addProtein(
 		   				( ( IEFProtein )( ief.elementAt( j ) ) ).getProtein() );
 						    
 			    	// remove the copied IEFProtein from the 
@@ -210,7 +212,7 @@ public class GelCanvas extends Canvas implements MouseListener{
 	    for( int j = 0; j < tempProtein.size(); j++ ){
 		//create a new ProteinDot object for each protein contained
 		//in the IEFProtein
-		dots.addElement( new ProteinDot( 
+		dots.addElement( new ProteinDot(
 		      ((E2DProtein)(tempProtein.elementAt( j )) ), this, tempx,
 						tempy + 43, electro2D ) );
 		
@@ -307,7 +309,7 @@ public class GelCanvas extends Canvas implements MouseListener{
 		
 		    // copy ief.get( i )'s protein to proteins.get(j)
 			
-		    ( ( IEFProtein )( ief2.elementAt( j ) ) ).addProtein( 
+		    ( ( IEFProtein )( ief2.elementAt( j ) ) ).addProtein(
 		   ( ( IEFProtein )( ief2.elementAt( i ) ) ).getProtein() );
 						    
 		    // remove the copied IEFProtein from the 
@@ -333,9 +335,9 @@ public class GelCanvas extends Canvas implements MouseListener{
 	    tempProtein = 
 		( (IEFProtein)(ief2.elementAt( i ) ) ).getProtein();
 	    for( int j = 0; j < tempProtein.size(); j++ ){
-		dots2.addElement( new ProteinDot( 
+		dots2.addElement( new ProteinDot(
 		      ((E2DProtein)(tempProtein.elementAt( j )) ), this, tempx,
-						tempy + 43, electro2D ) );
+						tempy + 43, electro2D) );
 		
 		((ProteinDot)dots2.elementAt( dots2.size()-1 )).changeColor(
 							       Color.yellow );
@@ -1043,7 +1045,7 @@ public class GelCanvas extends Canvas implements MouseListener{
 	for( int i = 0; i < dots.size(); i++ ){
 	    double dotX = ((ProteinDot)dots.elementAt( i)).returnX();
 	    double dotY = ((ProteinDot)dots.elementAt(i)).returnY();
-	    if(((ProteinDot)dots.elementAt(i)).getShowMe() && 
+	    if(((ProteinDot)dots.elementAt(i)).getShowMe() &&
 	       clickX <= dotX + 6 && clickX >= dotX - 1 ){
 		if( clickY <= dotY + 7 && clickY >= dotY - 1){
 		    

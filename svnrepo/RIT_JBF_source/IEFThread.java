@@ -68,7 +68,7 @@ public class IEFThread extends Thread{
 
 	    //while the current width and the values of the background colors
 	    // are less than their final values, call the animateIEF method
-	    while( IEFProtein.returnTempWidth() <= finalWidth && GelCanvas.getBlue() >= 0 && 
+	    while( IEFProtein.returnTempWidth() <= finalWidth && GelCanvas.getBlue() >= 0 &&
 		   GelCanvas.getGreen() >= 0 && GelCanvas.getRed() >=
 		   0 ){
 		gel.animateIEF();

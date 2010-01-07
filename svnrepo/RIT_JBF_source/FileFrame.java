@@ -21,7 +21,7 @@ public class FileFrame extends JFrame implements ActionListener {
     private Electro2D electro2D;          //reference to calling applet
     private WindowListener ffwl;          //listen for window closing, etc.
     private int fileNum;
-    private final String directoryString = "./../data/";
+    private final String directoryString = "." + File.separator + ".." + File.separator + "data";
     private JTextArea instructions;
     private JLabel select;
     private JComboBox choice;
