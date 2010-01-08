@@ -39,6 +39,9 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     private int twentyfiveK = 48;
     private int fiftyK = 48;
     private int hundredK = 48;
+    private boolean calculateMW = true;
+    private boolean reMWLabel = false;
+    private boolean barProteinsStillMoving = true;
     /**
      * Constructs a gel canvas and adds itself as a mouse listener
      *
@@ -451,6 +454,10 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
 	twentyfiveK = 48;
 	fiftyK = 48;
         hundredK = 48;
+        reMWLabel = false;
+        calculateMW = true;
+        redrawPHAndMWLines = false;
+        barProteinsStillMoving = true;
     }
 
     public void initiateMWLines() {
