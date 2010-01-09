@@ -23,6 +23,8 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     private Vector dotProteins2;
     private double maxPH = -1;
     private double minPH = -1;
+    private double lowAcrylamide;
+    private double highAcrylamide;
     private CompIEF comp;
     private static final int VOLTAGE = 50;
 
@@ -39,6 +41,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     private int twentyfiveK = 48;
     private int fiftyK = 48;
     private int hundredK = 48;
+    private int genDotsRepeats;
     private boolean calculateMW = true;
     private boolean reMWLabel = false;
     private boolean barProteinsStillMoving = true;
@@ -457,7 +460,20 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         reMWLabel = false;
         calculateMW = true;
         redrawPHAndMWLines = false;
+        mWLinesNeedToBeDrawn = false;
         barProteinsStillMoving = true;
+    }
+
+    /**
+     * This method is used by DotThread to let the paint method know it's time
+     * to generate the molecular weight markers.
+     *
+     * @param i Number of times the genDots() method was called.
+     */
+    public void setMWLines(int i){
+        mWLinesNeedToBeDrawn = true;
+        calculateMW = true;
+        genDotsRepeats = i;
     }
 
     public void initiateMWLines() {
@@ -465,7 +481,8 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     }
 
     public void redoMWLines() {
-
+        lowAcrylamide = electro2D.getLowPercent();
+        highAcrylamide = electro2D.getHighPercent();
     }
 
     public void drawProteinPosition() {
