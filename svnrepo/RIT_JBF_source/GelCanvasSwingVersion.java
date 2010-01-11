@@ -483,6 +483,25 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     public void redoMWLines() {
         lowAcrylamide = electro2D.getLowPercent();
         highAcrylamide = electro2D.getHighPercent();
+        int width = 0;
+        bufferImageGraphics.setColor(Color.LIGHT_GRAY);
+
+        while(width < this.getWidth()) {
+            bufferImageGraphics.drawLine(width, (int)hundredK, width + 5,
+					(int)hundredK);
+            bufferImageGraphics.drawLine(width, (int)fiftyK, width + 5,
+					(int)fiftyK);
+            bufferImageGraphics.drawLine(width, (int)twentyfiveK, width + 5,
+					(int)twentyfiveK);
+            bufferImageGraphics.drawLine(width, (int)tenK, width + 5,
+					(int)tenK);
+            width = width + 10;
+        }
+
+        electro2D.clearMW();
+    	electro2D.showMW((int)hundredK, (int)fiftyK, (int)twentyfiveK,
+			 (int)tenK, reMWLabel);
+        reMWLabel = true;
     }
 
     public void drawProteinPosition() {
