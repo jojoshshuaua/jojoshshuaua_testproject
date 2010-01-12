@@ -476,10 +476,29 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         genDotsRepeats = i;
     }
 
+    /**
+     * This method initializes the lines that denote the different ranges of
+     * molecular weight and draws them for the first time.
+     */
     public void initiateMWLines() {
+        lowAcrylamide = electro2D.getLowPercent();
+        highAcrylamide = electro2D.getHighPercent();
+        int height = this.getHeight();
 
+        if(calculateMW) {
+            if(lowAcrylamide == highAcrylamide) {
+                for(int i = 0; i < genDotsRepeats; i++) {
+                }
+            } else {
+            }
+        }
     }
 
+    /**
+     * This method redraws the lines that denote the different ranges of
+     * molecular weight after the initializeMWLines method has already been
+     * run.
+     */
     public void redoMWLines() {
         lowAcrylamide = electro2D.getLowPercent();
         highAcrylamide = electro2D.getHighPercent();
