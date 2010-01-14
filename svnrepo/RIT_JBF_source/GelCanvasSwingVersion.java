@@ -37,10 +37,10 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     private boolean redrawPHAndMWLines;
     private boolean indicateProteinPosition;
 
-    private int tenK = 48;
-    private int twentyfiveK = 48;
-    private int fiftyK = 48;
-    private int hundredK = 48;
+    private double tenK = 48;
+    private double twentyfiveK = 48;
+    private double fiftyK = 48;
+    private double hundredK = 48;
     private int genDotsRepeats;
     private boolean calculateMW = true;
     private boolean reMWLabel = false;
@@ -295,6 +295,8 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     /**
      * The paintComponent method does the actual drawing when the System calls
      * for the GelCanvas to be set up.
+     *
+     * @override overrides the paintComponent method of JPanel
      */
     public void paintComponent(Graphics g) {
         /**
@@ -395,7 +397,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      *
      * @return graphic
      */
-    public Graphics getGraphic(){
+    public Graphics getGraphic() {
 	return graphic;
     }
 
@@ -432,7 +434,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      * Use this method to say that the pH lines need to be redrawn, but not the
      * molecular weight lines.
      */
-    public void setreLine(){
+    public void setreLine() {
 	pHLinesNeedToBeDrawn = true;
 	redrawPHAndMWLines = false;
     }
@@ -488,6 +490,9 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         if(calculateMW) {
             if(lowAcrylamide == highAcrylamide) {
                 for(int i = 0; i < genDotsRepeats; i++) {
+                    hundredK = hundredK + (10 * (1/lowAcrylamide)) * (VOLTAGE/25) * .25 * (100000/100000);
+                    fiftyK = fiftyK + (10 * (1/lowAcrylamide)) * (VOLTAGE/25) * .25 * (100000/50000);
+                    twentyfiveK = twentyfiveK + (10 * (1/lowAcrylamide)) * (VOLTAGE/25) * .25 * (100000/25000);
                 }
             } else {
             }
