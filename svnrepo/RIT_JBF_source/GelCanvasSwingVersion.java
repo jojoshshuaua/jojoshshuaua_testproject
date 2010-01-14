@@ -510,7 +510,16 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
 
             while (width < this.getWidth()) {
                 bufferImageGraphics.drawLine(width, (int)hundredK, width + 5, (int)hundredK);
+                bufferImageGraphics.drawLine(width, (int)fiftyK, width + 5, (int)fiftyK);
+                bufferImageGraphics.drawLine(width, (int)twentyfiveK, width + 5, (int)twentyfiveK);
+                bufferImageGraphics.drawLine(width, (int)tenK, width + 5, (int)tenK);
+                width = width + 10;
             }
+
+            electro2D.clearMW();
+            electro2D.showMW((int)hundredK, (int)fiftyK, (int)twentyfiveK, (int)tenK, reMWLabel);
+            reMWLabel = true;
+            graphic.drawImage(bufferImage, 0, 0, this);
         }
     }
 
@@ -526,21 +535,60 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         bufferImageGraphics.setColor(Color.LIGHT_GRAY);
 
         while(width < this.getWidth()) {
-            bufferImageGraphics.drawLine(width, (int)hundredK, width + 5,
-					(int)hundredK);
-            bufferImageGraphics.drawLine(width, (int)fiftyK, width + 5,
-					(int)fiftyK);
-            bufferImageGraphics.drawLine(width, (int)twentyfiveK, width + 5,
-					(int)twentyfiveK);
-            bufferImageGraphics.drawLine(width, (int)tenK, width + 5,
-					(int)tenK);
+            bufferImageGraphics.drawLine(width, (int)hundredK, width + 5, (int)hundredK);
+            bufferImageGraphics.drawLine(width, (int)fiftyK, width + 5, (int)fiftyK);
+            bufferImageGraphics.drawLine(width, (int)twentyfiveK, width + 5, (int)twentyfiveK);
+            bufferImageGraphics.drawLine(width, (int)tenK, width + 5, (int)tenK);
             width = width + 10;
         }
 
         electro2D.clearMW();
-    	electro2D.showMW((int)hundredK, (int)fiftyK, (int)twentyfiveK,
-			 (int)tenK, reMWLabel);
+    	electro2D.showMW((int)hundredK, (int)fiftyK, (int)twentyfiveK, (int)tenK, reMWLabel);
         reMWLabel = true;
+    }
+
+    /**
+     * This method draws the IEF proteins, which appear as moving rectangles at
+     * the top of the animation, to the screen.
+     */
+    public void drawIEF() {
+        for(int i = 0; i < barProteins.size(); i++){
+            if(barProteinsStillMoving) {
+                ((IEFProtein)barProteins.elementAt(i)).changeX();
+            } else {
+                ((IEFProtein)barProteins.elementAt(i)).setX();
+            }
+            ((IEFProtein)(barProteins.elementAt(i))).draw(bufferImageGraphics);
+        }
+
+        for(int i = 0; i < barProteins2.size(); i++){
+            if(barProteinsStillMoving) {
+                ((IEFProtein)barProteins2.elementAt(i)).changeX();
+            } else {
+                ((IEFProtein)barProteins2.elementAt(i)).setX();
+            }
+            ((IEFProtein)(barProteins2.elementAt(i))).draw(bufferImageGraphics);
+        }
+
+        graphic.drawImage(bufferImage, 0, 0, this);
+        this.repaint();
+    }
+
+    /**
+     * This method gives the illusion that the barProteins are being squashed
+     * into the lower part of the animation.
+     */
+    public void shrinkIEF() {
+        clearIEF();
+        drawIEF();
+    }
+
+    /**
+     * This method clears the IEF animation area.
+     */
+    public void clearIEF() {
+        bufferImageGraphics.setColor(Color.WHITE);
+        bufferImageGraphics.clearRect(2, 2, gelCanvasRectangle.width - 3, 45);
     }
 
     public void drawProteinPosition() {
