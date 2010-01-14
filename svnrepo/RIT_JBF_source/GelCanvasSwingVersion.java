@@ -493,8 +493,23 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
                     hundredK = hundredK + (10 * (1/lowAcrylamide)) * (VOLTAGE/25) * .25 * (100000/100000);
                     fiftyK = fiftyK + (10 * (1/lowAcrylamide)) * (VOLTAGE/25) * .25 * (100000/50000);
                     twentyfiveK = twentyfiveK + (10 * (1/lowAcrylamide)) * (VOLTAGE/25) * .25 * (100000/25000);
+                    tenK = tenK + (10 * (1/lowAcrylamide)) * (VOLTAGE/25) * .25 * (100000/10000);
                 }
             } else {
+                for(int i = 0; i < genDotsRepeats; i++) {
+                    hundredK = hundredK + (10 * 1/(((hundredK - 48) * (highAcrylamide - lowAcrylamide)/(height - 48))+lowAcrylamide)) * (VOLTAGE/25)* .25 * (100000/100000);
+                    fiftyK = fiftyK + (10 * 1/(((fiftyK - 48) * (highAcrylamide - lowAcrylamide)/(height - 48))+ lowAcrylamide)) * (VOLTAGE/25) * .25 * (100000/50000);
+                    twentyfiveK = twentyfiveK + (10 * 1/(((twentyfiveK - 48) * (highAcrylamide - lowAcrylamide)/(height - 48))+ lowAcrylamide)) * (VOLTAGE/25) * .25 * (100000/25000);
+                    tenK = tenK + (10 * 1/(((tenK - 48)*(highAcrylamide - lowAcrylamide)/(height - 48)) + lowAcrylamide)) * (VOLTAGE/25) * .25 * (100000/10000);
+                }
+            }
+
+            calculateMW = false;
+            int width = 0;
+            bufferImageGraphics.setColor(Color.LIGHT_GRAY);
+
+            while (width < this.getWidth()) {
+                bufferImageGraphics.drawLine(width, (int)hundredK, width + 5, (int)hundredK);
             }
         }
     }
