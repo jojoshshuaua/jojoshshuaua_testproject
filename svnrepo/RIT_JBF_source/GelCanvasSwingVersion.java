@@ -45,6 +45,11 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     private boolean calculateMW = true;
     private boolean reMWLabel = false;
     private boolean barProteinsStillMoving = true;
+
+    private static int IEFRED = 54;
+    private static int IEFGREEN = 100;
+    private static int IEFBLUE = 139;
+
     /**
      * Constructs a gel canvas and adds itself as a mouse listener
      *
@@ -589,6 +594,41 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     public void clearIEF() {
         bufferImageGraphics.setColor(Color.WHITE);
         bufferImageGraphics.clearRect(2, 2, gelCanvasRectangle.width - 3, 45);
+    }
+
+    /**
+     * Returns the red value for the background of the IEF animation.
+     *
+     * @return IEFRED
+     */
+    public static int getRed() {
+        return IEFRED;
+    }
+
+    /**
+     * Returns the green value for the background of the IEF animation.
+     *
+     * @return IEFGREEN
+     */
+    public static int getGreen() {
+        return IEFGREEN;
+    }
+
+    /**
+     * Returns the blue value for the background of the IEF animation.
+     *
+     * @return IEFBLUE
+     */
+    public static int getBlue() {
+        return IEFBLUE;
+    }
+
+    /**
+     * Resets the red value for the IEF animation background when the reset
+     * button is pressed.
+     */
+    public static void setRed() {
+        IEFRED = 54;
     }
 
     public void drawProteinPosition() {
