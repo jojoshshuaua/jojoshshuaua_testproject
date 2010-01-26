@@ -46,9 +46,9 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     private boolean reMWLabel = false;
     private boolean barProteinsStillMoving = true;
 
-    private static int IEFRED = 54;
-    private static int IEFGREEN = 100;
-    private static int IEFBLUE = 139;
+    private static int iefRed = 54;
+    private static int iefGreen = 100;
+    private static int iefBlue = 139;
 
     /**
      * Constructs a gel canvas and adds itself as a mouse listener
@@ -602,7 +602,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      * @return IEFRED
      */
     public static int getRed() {
-        return IEFRED;
+        return iefRed;
     }
 
     /**
@@ -611,7 +611,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      * @return IEFGREEN
      */
     public static int getGreen() {
-        return IEFGREEN;
+        return iefGreen;
     }
 
     /**
@@ -620,7 +620,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      * @return IEFBLUE
      */
     public static int getBlue() {
-        return IEFBLUE;
+        return iefBlue;
     }
 
     /**
@@ -628,7 +628,53 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      * button is pressed.
      */
     public static void setRed() {
-        IEFRED = 54;
+        iefRed = 54;
+    }
+
+    /**
+     * Resets the green value for the IEF animation background when the reset
+     * button is pressed.
+     */
+    public static void setGreen() {
+        iefGreen = 100;
+    }
+
+    /**
+     * Resets the blue value for the IEF animation background when the reset
+     * button is pressed.
+     */
+    public static void setBlue() {
+        iefBlue = 139;
+    }
+
+    /**
+     * Controls the animation for the initial display of IEF proteins.
+     */
+    public void animateIEF() {
+        int finalRed = 0;
+        int finalGreen = 0;
+        int finalBlue = 0;
+
+        double width = IEFProtein.returnTempWidth();
+	double finalWidth = IEFProtein.returnWidth();
+
+        bufferImageGraphics.setColor(new Color(iefRed, iefGreen, iefBlue));
+	bufferImageGraphics.fillRect(2, 2, gelCanvasRectangle.width - 3, 45);
+
+        IEFProtein.changeWidth();
+	drawIEF();
+
+        iefRed = iefRed - 1;
+	iefGreen = iefGreen - 2;
+	iefBlue = (int)(iefBlue - 2.78);
+
+        if(iefRed <= finalRed || iefGreen <= finalGreen || iefBlue <= finalBlue || width >= finalWidth) {
+            barProteinsStillMoving = false;
+            bufferImageGraphics.setColor(new Color(finalRed, finalGreen, finalBlue));
+            IEFProtein.setWidth();
+            bufferImageGraphics.fillRect(2, 2, gelCanvasRectangle.width - 3, 45);
+	    drawIEF();
+        }
     }
 
     public void drawProteinPosition() {
