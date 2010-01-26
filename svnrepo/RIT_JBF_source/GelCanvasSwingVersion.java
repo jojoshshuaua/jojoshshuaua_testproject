@@ -50,6 +50,11 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     private static int iefGreen = 100;
     private static int iefBlue = 139;
 
+    private double xLoc;
+    private double yLoc;
+
+    private static boolean blink = false;
+
     /**
      * Constructs a gel canvas and adds itself as a mouse listener
      *
@@ -351,7 +356,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
          * the gel canvas with the protein of interest at its origin.
          */
         if (indicateProteinPosition) {
-            drawProteinPosition();
+            redrawLocation();
         }
 
         /**
@@ -677,7 +682,108 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         }
     }
 
-    public void drawProteinPosition() {
-
+    /**
+     * Returns the vector that contains the ProteinDots.
+     *
+     * @return the protein dots
+     */
+    public Vector getDots() {
+        return dotProteins;
     }
+
+    /**
+     * Returns the second vector that contains ProteinDots.
+     *
+     * @return the protein dots used for comparison
+     */
+    public Vector getDots2() {
+        return dotProteins2;
+    }
+
+    /**
+     * Increments the y values for the protein dots depending on whether the
+     * start button for the second animation has been pushed or not.
+     */
+    public void genDots() {
+        clearCanvas();
+
+        for(int i = 0; i < dotProteins.size(); i++) {
+            ((ProteinDot)(dotProteins.elementAt(i))).changeY();
+        }
+        if(dotProteins2 != null) {
+      	    for(int j = 0; j < dotProteins2.size(); j++) {
+		((ProteinDot)(dotProteins2.elementAt(j))).changeY();
+	    }
+        }
+        repaint();
+    }
+
+    /**
+     * Called with the reset button, sets the y values for the protein dots back
+     * to their original locations.
+     */
+    public void restartCanvas() {
+        for(int i = 0; i < dotProteins.size(); i++) {
+	    ((ProteinDot)(dotProteins.elementAt(i))).restart();
+	}
+        for(int i = 0; i < dotProteins2.size(); i++) {
+	    ((ProteinDot)(dotProteins2.elementAt(i))).restart();
+	}
+        update(graphic);
+	repaint();
+    }
+
+    /**
+     * Clears the canvas in preperation for more animation.
+     */
+    public void clearCanvas() {
+        graphic.setColor(new Color(54, 100, 139));
+	graphic.clearRect(1, 48, gelCanvasRectangle.width - 1, gelCanvasRectangle.height - 47);
+    }
+
+    /**
+     * Draws black axis lines over a protein on the canvas whose name has been
+     * selected from a list of proteins.
+     *
+     * @param id the title of the protein to be indicated
+     */
+    public void drawLocation(String id) {
+        xLoc = 0;
+        yLoc = 0;
+        bufferImageGraphics.setColor(Color.BLACK);
+        bufferImageGraphics.fillRect(2, 2, gelCanvasRectangle.width - 4, 45);
+        for(int i = 0; i < dotProteins.size(); i++) {
+            if((((ProteinDot)dotProteins.elementAt(i)).getPro().getID()).equals(id)) {
+                xLoc = ((ProteinDot)dotProteins.elementAt(i)).returnX();
+		yLoc = ((ProteinDot)dotProteins.elementAt(i)).returnY();
+                i = dotProteins.size();
+            }
+        }
+        indicateProteinPosition = true;
+        repaint();
+    }
+
+    /**
+     * Used by the DotThread class.
+     */
+    public void startDotBlink() {
+        blink = true;
+    }
+
+    /**
+     * Returns the statis of blink.
+     *
+     * @return blink
+     */
+    public static boolean getBlink() {
+        return blink;
+    }
+
+    /**
+     * Sets blink to false.
+     */
+     public static void stopBlink() {
+         blink = false;
+     }
+
 }
