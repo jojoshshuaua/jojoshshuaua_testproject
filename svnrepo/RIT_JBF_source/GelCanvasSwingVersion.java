@@ -55,6 +55,12 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
 
     private static boolean blink = false;
 
+    private boolean mousePress = false;
+    private int startX = -1;
+    private int startY = -1;
+    private int stopX = -1;
+    private int stopY = -1;
+
     /**
      * Constructs a gel canvas and adds itself as a mouse listener
      *
@@ -65,30 +71,6 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
 
         electro2D = e;
         addMouseListener(this);
-    }
-
-    /**
-     * The different mouse listener methods that must be overridden
-     * in order to implement mouse listener
-     */
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    public void mouseEntered(MouseEvent e) {
-
     }
 
     /**
@@ -786,4 +768,71 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
          blink = false;
      }
 
+     /**
+      * This method draws the location of a protein to the screen using its 
+      * xLoc and yLoc values.
+      */
+     public void redrawLocation() {
+	bufferImageGraphics.setColor(Color.LIGHT_GRAY);
+	bufferImageGraphics.drawLine((int)xLoc+2, (int)yLoc, 0, (int)yLoc);
+	bufferImageGraphics.drawLine((int)xLoc+2, (int)yLoc, (int)xLoc+2, 0);
+     }
+
+     /**
+      * Called during reset, sets indicateProteinPosition to false.
+      */
+     public void resetLocation(){
+	indicateProteinPosition = false;
+    }
+
+     /**
+      * Mouse listener event, called when the user presses down on the mouse.
+      * Used to select many proteins.
+      *
+      * @param e used to return the x and y location of the event
+      */
+    public void mousePressed(MouseEvent e) {
+        mousePress = true;
+        startX = e.getX();
+        startY = e.getY();
+    }
+
+    /**
+     * Mouse listener event. Works with the variables set in mousePressed to
+     * figure out where the user dragged the mouse and select the proteins
+     * within that area for zoomed display.
+     *
+     * @param e used to find where the user released the mouse
+     */
+    public void mouseReleased(MouseEvent e) {
+        if (mousePress) {
+            stopX = e.getX();
+            stopY = e.getY();
+	    if(startX != stopX && stopX > startX + 5) {
+                if(startY != stopY && stopY > startY + 5) {
+                    Vector bigDot = new Vector();
+                    ProteinDot theDot = null;
+                    double diameter = ProteinDot.getDiameter();
+                    for(int i = 0; i < dotProteins.size(); i++) {
+                        theDot = (ProteinDot)dotProteins.get(i);
+                        if((theDot.returnX() + diameter >= startX) && (theDot.returnX() <= stopX)) {
+                            if((theDot.returnY() + diameter >= startY) && (theDot.returnY() <= stopY)) {
+                                bigDot.add(theDot);
+                            }
+                        }
+                    }
+                    if(dotProteins2 != null) {
+                        for(int i = 0; i < dotProteins2.size(); i++) {
+                            theDot = (ProteinDot)dotProteins2.get(i);
+                            if((theDot.returnX() + diameter >= startX) && (theDot.returnX() <= stopX)) {
+                                if((theDot.returnY() + diameter >= startY) && (theDot.returnY() <= stopY)) {
+                                    bigDot.add(theDot);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
