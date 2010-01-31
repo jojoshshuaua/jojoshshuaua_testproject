@@ -831,8 +831,98 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
                             }
                         }
                     }
+                    ImageZoom zoom = new ImageZoom(electro2D, bufferImage.getSource(), startX, startY, stopX, stopY, bigDot);
                 }
             }
         }
     }
+
+    /**
+     * This event does nothing.
+     *
+     * @param e unused
+     */
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    /**
+     * This method sets mousePress to false, so that a user can't drag a zoom
+     * box outside of the GelCanvasSwingVersion.
+     *
+     * @param e unused
+     */
+    public void mouseExited(MouseEvent e) {
+	mousePress = false;
+    }
+
+    /**
+     * This method is called when the user clicks on the GelCanvasSwingVersion
+     * and will find the protein clicked on and bring up information about it
+     * in a different window.
+     *
+     * @param e used to get the position where the mouse was clicked
+     */
+    public void mouseClicked(MouseEvent e) {
+        double clickX = e.getX();
+	double clickY = e.getY();
+        for(int i = 0; i < dotProteins.size(); i++) {
+	    double dotX = ((ProteinDot)dotProteins.elementAt(i)).returnX();
+	    double dotY = ((ProteinDot)dotProteins.elementAt(i)).returnY();
+            if(((ProteinDot)dotProteins.elementAt(i)).getShowMe() && clickX <= dotX + 6 && clickX >= dotX - 1) {
+                if(clickY <= dotY + 7 && clickY >= dotY - 1) {
+                    ProteinFrame pFrame = new ProteinFrame(electro2D, ((ProteinDot)dotProteins.elementAt(i)).getPro().getID(), 1);
+                    pFrame.show();
+                    pFrame.updateLabel();
+                }
+            }
+        }
+
+        for(int i = 0; i < dotProteins2.size(); i++) {
+            double dotX = ((ProteinDot)dotProteins2.elementAt(i)).returnX();
+	    double dotY = ((ProteinDot)dotProteins2.elementAt(i)).returnY();
+            if(((ProteinDot)dotProteins2.elementAt(i)).getShowMe() && clickX <= dotX + 5 && clickX >= dotX - 1) {
+                if(clickY <= dotY + 5 && clickY >= dotY - 1) {
+                    ProteinFrame pFrame = new ProteinFrame(electro2D, ((ProteinDot)dotProteins2.elementAt(i)).getPro().getID(), 2);
+                    pFrame.show();
+		    pFrame.updateLabel();
+                }
+            }
+        }
+
+        Vector containsBarProteinsProteins = new Vector();
+        double iefWidth = IEFProtein.returnWidth();
+        for(int j = 0; j < barProteins.size(); j++) {
+            double iefX = ((IEFProtein)barProteins.elementAt(j)).returnX();
+	    double iefY = ((IEFProtein)barProteins.elementAt(j)).returnY();
+            if(IEFProtein.returnHeight() > 0) {
+                if(clickX >= iefX && clickX <= iefX + iefWidth) {
+                    if(clickY >= iefY && clickY <= iefY + 40) {
+                        containsBarProteinsProteins = ((IEFProtein)barProteins.elementAt(j)).getProtein();
+                        IEFFrame iFrame = new IEFFrame((IEFProtein)barProteins.elementAt(j));
+                        iFrame.setResizable(true);
+                        iFrame.pack();
+			iFrame.show();
+                    }
+                }
+            }
+        }
+
+        for(int j = 0; j < barProteins2.size(); j++) {
+            double iefX = ((IEFProtein)barProteins2.elementAt(j)).returnX();
+	    double iefY = ((IEFProtein)barProteins2.elementAt(j)).returnY();
+            if (IEFProtein.returnHeight() > 0) {
+                if(clickX >= iefX && clickX <= iefX + iefWidth) {
+                    if(clickY >= iefY && clickY <= iefY + 40) {
+                        containsBarProteinsProteins = ((IEFProtein)barProteins2.elementAt(j)).getProtein();
+                        IEFFrame iFrame = new IEFFrame((IEFProtein)barProteins2.elementAt(j));
+			iFrame.setResizable(true);
+			iFrame.pack();
+			iFrame.show();
+                    }
+                }
+            }
+        }
+
+    }
+
 }
