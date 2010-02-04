@@ -987,6 +987,7 @@ public class GelCanvas extends Canvas implements MouseListener{
 	startY = e.getY();
 	//do nothing
     }
+    
     public void mouseReleased(MouseEvent e) {
 	if( mousePress ){
 	    stopX = e.getX();

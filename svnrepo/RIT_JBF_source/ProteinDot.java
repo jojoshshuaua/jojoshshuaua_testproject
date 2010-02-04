@@ -25,7 +25,7 @@ public class ProteinDot extends Component{
                                          //dots
     private boolean showMe = true; // tells whether or not to hide this 
                                    //individual proteinDot
-    private Canvas myCanvas;  // reference to GelCanvas
+    private JPanel myCanvas;  // reference to GelCanvas
     private double myX;  // the x coordinate of this dot
     private double myY;  // the y coordinate of this dot
     private int voltage = 0;  // the voltage entered by the user
@@ -41,7 +41,7 @@ public class ProteinDot extends Component{
      * @param x the x coordinate for this dot
      * @param y the y coordinate for this dot
      */
-    public ProteinDot( E2DProtein pro, Canvas canvas, double x,
+    public ProteinDot( E2DProtein pro, JPanel canvas, double x,
 		       double y, Electro2D e ){
 	myPro = pro; //assign a protein to this dot
 	myMW = myPro.getMW();
@@ -63,7 +63,7 @@ public class ProteinDot extends Component{
 	myY = y;
     }
 
-    public ProteinDot( Color c, Canvas canvas,/* double mw,*/ double x, double y, 
+    public ProteinDot( Color c, JPanel canvas,/* double mw,*/ double x, double y,
 		       Electro2D e ){
 	//myMW = mw;
 	myCol = c;
@@ -210,7 +210,7 @@ public class ProteinDot extends Component{
 	    /*********************************************
 	     * start thread to make this blink
 	     ********************************************/
-	new BlinkThread( this, (GelCanvas)myCanvas ).start();
+	new BlinkThread( this, (GelCanvasSwingVersion)myCanvas ).start();
 	//}
     }
 

@@ -11,7 +11,7 @@ public class IEFThread extends Thread{
     
     private boolean go = false; //determines whether or not the user has
                                 //selected the IEF animation
-    private GelCanvas gel;      //a reference to GelCanvas
+    private GelCanvasSwingVersion gel;      //a reference to GelCanvas
     private Electro2D electro2D;
     
     /**
@@ -20,7 +20,7 @@ public class IEFThread extends Thread{
      * @param g a reference to the GelCanvas
      */
 
-    public IEFThread( GelCanvas g, Electro2D e ){
+    public IEFThread( GelCanvasSwingVersion g, Electro2D e ){
 	//assigns gel the value that was passed as a parameter to the method
 	gel = g;
 	electro2D = e;
@@ -68,8 +68,8 @@ public class IEFThread extends Thread{
 
 	    //while the current width and the values of the background colors
 	    // are less than their final values, call the animateIEF method
-	    while( IEFProtein.returnTempWidth() <= finalWidth && GelCanvas.getBlue() >= 0 &&
-		   GelCanvas.getGreen() >= 0 && GelCanvas.getRed() >=
+	    while( IEFProtein.returnTempWidth() <= finalWidth && GelCanvasSwingVersion.getBlue() >= 0 &&
+		   GelCanvasSwingVersion.getGreen() >= 0 && GelCanvasSwingVersion.getRed() >=
 		   0 ){
 		gel.animateIEF();
 		try{

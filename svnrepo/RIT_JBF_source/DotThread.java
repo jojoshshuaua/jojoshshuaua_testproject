@@ -10,7 +10,7 @@ import java.util.*;
 public class DotThread extends Thread{
     private static boolean go = false;
     private boolean iefdrawn = false;
-    private GelCanvas gel;
+    private GelCanvasSwingVersion gel;
     private static double percent = -1;
     private Electro2D electro2D;
 
@@ -20,7 +20,7 @@ public class DotThread extends Thread{
      * @param g a reference to the GelCanvas
      */
 
-    public DotThread( GelCanvas g, Electro2D e ){
+    public DotThread( GelCanvasSwingVersion g, Electro2D e ){
 	// assign the GelCanvas parameter to gel
 	gel = g;
 	electro2D = e; // assign a reference to Electro2D
@@ -63,7 +63,7 @@ public class DotThread extends Thread{
      */
 
     public void run(){
-	GelCanvas.stopBlink();
+	GelCanvasSwingVersion.stopBlink();
 	//send the percent acrylamide value to ProteinDot
 	//lowPercent = electro2D.getLowPercent();
 	//highPercent = electro2D.getHighPercent();

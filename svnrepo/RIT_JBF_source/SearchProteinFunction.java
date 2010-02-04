@@ -9,7 +9,7 @@ public class SearchProteinFunction implements MouseListener, ActionListener{
     
     private Vector dots1;
     private Vector dots2;
-    private GelCanvas gel;
+    private GelCanvasSwingVersion gel;
     private Electro2D electro2D;
     private Frame window;
     private SearchProteinFunctionButton search;

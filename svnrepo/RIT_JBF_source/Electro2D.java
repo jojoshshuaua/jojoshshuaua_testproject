@@ -26,7 +26,7 @@ public class Electro2D extends JPanel implements ActionListener {
     private ProteinListButtonSwingVersion proteinListButton;
     
     /** components of the main applet **/
-    private GelCanvas gelCanvas;          //area where animation takes place
+    private GelCanvasSwingVersion gelCanvas;          //area where animation takes place
     private HelpButtonSwingVersion helpButton;        //brings up help page
     private AboutButtonSwingVersion aboutButton;      //brings up about page
     private AddProteinButtonSwingVersion addProteinButton;   //brings up file frame
@@ -115,7 +115,7 @@ public class Electro2D extends JPanel implements ActionListener {
 	mwLabels = new Vector();
 	resetPressed = false;
 	rangeReload = false;
-	gelCanvas = new GelCanvas(this);
+	gelCanvas = new GelCanvasSwingVersion(this);
 	secondProt = new CompareProteinsButtonSwingVersion(this);
 	searchButton = new SearchProteinFieldButtonSwingVersion(this);
 	csvButton = new CSVButtonSwingVersion( this );
@@ -200,7 +200,7 @@ public class Electro2D extends JPanel implements ActionListener {
 	//set bounds on components (approximate, for now) (x, y, width, height)
 /* The gelCanvas line is left uncommented until it itself is converted to swing
  * /
-*/ 	gelCanvas.setBounds(192, 49, 670, 600);
+	gelCanvas.setBounds(192, 49, 670, 600);
    //     gelCanvas.setBounds(192, 49, 100,100);
 /*	helpButton.setBounds(10,47,49,20);
 	aboutButton.setBounds(62,47,59,20);
@@ -263,15 +263,19 @@ public class Electro2D extends JPanel implements ActionListener {
         * to arrange the buttons and labels to look similar to how the old awt
         * code did it
         */
-       BoxLayout topLevelLayout = new BoxLayout(this, BoxLayout.X_AXIS);
-       topLevelLayout.maximumLayoutSize(this);
-       this.setLayout(topLevelLayout);
+
+
+
+
+      // BoxLayout topLevelLayout = new BoxLayout(this, BoxLayout.X_AXIS);
+      // topLevelLayout.maximumLayoutSize(this);
+      // this.setLayout(topLevelLayout);
 
        JPanel leftPanel = new JPanel();
        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
-       this.add(leftPanel);
-       this.add(gelCanvas);
+       this.add(leftPanel, BorderLayout.CENTER);
+       this.add(gelCanvas, BorderLayout.EAST);
        leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
        JPanel firstPanel = new JPanel();
@@ -1194,7 +1198,7 @@ public class Electro2D extends JPanel implements ActionListener {
      *
      * @return gelCanvas
      */
-    public GelCanvas getGel() {
+    public GelCanvasSwingVersion getGel() {
 	return gelCanvas;
     }
 

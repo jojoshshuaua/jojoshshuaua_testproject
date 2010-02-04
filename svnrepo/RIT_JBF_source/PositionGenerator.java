@@ -49,7 +49,7 @@ public class PositionGenerator extends Thread{
     }
     
     public void /*generateDots()*/ run(){
-	GelCanvas gel = electro2D.getGel();
+	GelCanvasSwingVersion gel = electro2D.getGel();
 	double width = gel.getWidth();
 	double pI = 0;
 	double MW = 0;
@@ -129,7 +129,7 @@ public class PositionGenerator extends Thread{
 	    function = "";
 	    title = "";
 	}
-	((GelCanvas)gel).genGIFFile( dots, numSecs );
+	((GelCanvasSwingVersion)gel).genGIFFile( dots, numSecs );
 	//gel.repaint();
 	//  if( numSecs%2 != 0 || numSecs%2 == 0 ){
 //  	 ((GelCanvas)gel).genGIFFile( dots, numSecs );

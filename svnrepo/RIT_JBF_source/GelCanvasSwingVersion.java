@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 import java.awt.*;
+import java.io.*;
 
 public class GelCanvasSwingVersion extends JPanel implements MouseListener {
 
@@ -382,6 +383,30 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         // transfer the buffer image to the real canvas
 	g.drawImage(bufferImage, 0, 0, this);
 	paint(g);
+    }
+
+    /**
+     * This method is used to generate GIF files for when the user is not
+     * viewing the gel canvas.
+     * 
+     * @param dts     The vector of dots to create an image of.
+     * @param seconds Used in writing the file that stores the image. 
+     */
+    public void genGIFFile(Vector dts, int seconds) {
+        ProteinDot.setShow();
+        dotProteins = dts;
+        mWLinesNeedToBeDrawn = true;
+        maxPH = 10;
+        minPH = 3;
+        this.repaint();
+        try {
+            GIFEncoder gifEnc = new GIFEncoder(bufferImage);
+	    gifEnc.Write(new BufferedOutputStream(new FileOutputStream(electro2D.getLastFileLoaded() + seconds + ".gif")));
+        } catch(IOException ex) {
+            System.err.println(ex.getMessage());
+        } catch(AWTException ex) {
+            System.err.println(ex.getMessage());
+        }
     }
 
     /**

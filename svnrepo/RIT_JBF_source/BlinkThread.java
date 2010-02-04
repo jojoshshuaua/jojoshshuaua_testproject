@@ -3,19 +3,19 @@ import java.awt.*;
 public class BlinkThread extends Thread {
 
     private ProteinDot theDot;
-    private GelCanvas theGel;
+    private GelCanvasSwingVersion theGel;
     
-    public BlinkThread( ProteinDot p, GelCanvas g ){
+    public BlinkThread( ProteinDot p, GelCanvasSwingVersion g ){
 	theGel = g;
 	theDot = p;
     }
 
     public void run(){
 	
-	while( !GelCanvas.getBlink() ){
+	while( !GelCanvasSwingVersion.getBlink() ){
 	}
 
-	while( GelCanvas.getBlink() && !DotThread.getDotState() ){
+	while( GelCanvasSwingVersion.getBlink() && !DotThread.getDotState() ){
 	    if( theDot.getColor() == Color.RED ){
 		theDot.changeColor( Color.GREEN );
 	    }
