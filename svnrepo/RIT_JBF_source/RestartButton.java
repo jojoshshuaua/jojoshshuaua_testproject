@@ -118,7 +118,7 @@ public class RestartButton extends Canvas implements MouseListener {
 	g.clearCanvas();
 	//reset the IEFProtein thread and information
 	electro2D.resetIEF();
-	IEFProtein.resetProtein();
+	IEFProteinSwingVersion.resetProtein();
 	
 	//if the dots have been drawn, clear them from the screen and stop the
 	// thread

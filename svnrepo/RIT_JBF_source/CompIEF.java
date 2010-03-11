@@ -37,11 +37,11 @@ public class CompIEF implements Comparator{
     public int compare( Object o1, Object o2 ){
 		
 		// cast the objects to IEFProteins
-		IEFProtein i1 = (IEFProtein)o1;
-		IEFProtein i2 = (IEFProtein)o2;
+		IEFProteinSwingVersion i1 = (IEFProteinSwingVersion)o1;
+		IEFProteinSwingVersion i2 = (IEFProteinSwingVersion)o2;
 		int retVal = -1;
 		// the width of an IEFProtein bar
-		double width = IEFProtein.returnWidth();
+		double width = IEFProteinSwingVersion.returnWidth();
 		// the range each IEFProtein represents
 		double range = 1/( max - min );
 		// get the objects' pI values and x coordinates

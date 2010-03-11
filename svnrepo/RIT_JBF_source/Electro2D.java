@@ -14,6 +14,7 @@ import java.io.*;
 import java.net.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import java.awt.Font;
 
 /**
  * The main electro2D class.
@@ -55,7 +56,7 @@ public class Electro2D extends JPanel implements ActionListener {
 
     private PercentAcrylamideSwingVersion percentAcrylamide;  //the Choices for entering the
                                           //% acrylamide for the gel
-    private Vector rangeLabels;
+    private Vector<JLabel> rangeLabels;
     private Vector mwLabels;
     private WebGenerator web;             //generates the website
     private GenerateHTMLButtonSwingVersion webButton;
@@ -113,7 +114,7 @@ public class Electro2D extends JPanel implements ActionListener {
 		     Toolkit.getDefaultToolkit().getImage(
 					    "rangeSelectDeactivated.jpg" ) );
 
-	rangeLabels = new Vector();
+	rangeLabels = new Vector<JLabel>();
 	mwLabels = new Vector();
 	resetPressed = false;
 	rangeReload = false;
@@ -318,9 +319,10 @@ public class Electro2D extends JPanel implements ActionListener {
        sixthPanel.setLayout(new GridLayout(1, 1, 0, 0));
        sixthPanel.add(percentAcrylamide);
        leftPanel.add(sixthPanel);
-
+       
        JPanel seventhPanel = new JPanel();
        JLabel additionalOptions = new JLabel("Additional Options");
+       additionalOptions.setFont(new Font("SansSerif", Font.ITALIC, 18));
        seventhPanel.add(additionalOptions);
        leftPanel.add(seventhPanel);
 
@@ -385,25 +387,25 @@ public class Electro2D extends JPanel implements ActionListener {
 	//value in the range
 	if( loc == 0 ){
 	    //make a label which displays the minimum range value
-	    rangeLabels.add( new Label( Double.toString( getMinRange() ) ) );
+	    rangeLabels.add( new JLabel( Double.toString( getMinRange() ) ) );
 	    //set its location to be at the edge of the gel
-	    ((Label)rangeLabels.elementAt(
+	    ((JLabel)rangeLabels.elementAt(
 					  rangeLabels.size() - 1 ) ).setBounds(
 				loc + gelCanvas.getX() - 9, 31, 20, 15 );
 	}
 	//...otherwise
 	else{
 	    //make a label to display the value passed to this method
-	    rangeLabels.add( new Label( Integer.toString( value ) ) );
+	    rangeLabels.add( new JLabel( Integer.toString( value ) ) );
 	    //and set its location to line up with the proper spot along the
 	    //gel
-	    ((Label)rangeLabels.elementAt( 
+	    ((JLabel)rangeLabels.elementAt(
 					  rangeLabels.size() - 1 ) ).setBounds(
 				      loc + gelCanvas.getX() - 5, 31, 15, 15 );
 	}
-	((Label)rangeLabels.elementAt( rangeLabels.size() - 1 )).setForeground( Color.WHITE );
+	((JLabel)rangeLabels.elementAt( rangeLabels.size() - 1 )).setForeground( Color.WHITE );
 	//add the new label to the applet's image
-	this.add( ((Label)rangeLabels.elementAt( rangeLabels.size() - 1 ) ) );
+	this.add( ((JLabel)rangeLabels.elementAt( rangeLabels.size() - 1 ) ) );
 	//repaint the applet to reflect the change
 	this.update( graphics );
     }
@@ -416,7 +418,7 @@ public class Electro2D extends JPanel implements ActionListener {
 	
 	// remove each of the labels from the applet's image
 	for( int i = 0; i < rangeLabels.size(); i++ ){
-	    this.remove( (Label)rangeLabels.elementAt( i ) );
+	    this.remove( (JLabel)rangeLabels.elementAt( i ) );
 	}
 	
 	//remove all of the labels from the vector

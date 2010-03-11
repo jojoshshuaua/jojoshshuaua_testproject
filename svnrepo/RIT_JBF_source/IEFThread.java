@@ -58,17 +58,17 @@ public class IEFThread extends Thread{
 	if( go == true ){
 	    
 	    //get the current and final widths of the IEFProteins
-	    double width = IEFProtein.returnTempWidth();
-	    double finalWidth = IEFProtein.returnWidth();
+	    double width = IEFProteinSwingVersion.returnTempWidth();
+	    double finalWidth = IEFProteinSwingVersion.returnWidth();
 
 	    
-	    if( IEFProtein.returnTempWidth() >= finalWidth ){
+	    if( IEFProteinSwingVersion.returnTempWidth() >= finalWidth ){
 		gel.drawIEF();
 	    }
 
 	    //while the current width and the values of the background colors
 	    // are less than their final values, call the animateIEF method
-	    while( IEFProtein.returnTempWidth() <= finalWidth && GelCanvasSwingVersion.getBlue() >= 0 &&
+	    while( IEFProteinSwingVersion.returnTempWidth() <= finalWidth && GelCanvasSwingVersion.getBlue() >= 0 &&
 		   GelCanvasSwingVersion.getGreen() >= 0 && GelCanvasSwingVersion.getRed() >=
 		   0 ){
 		gel.animateIEF();

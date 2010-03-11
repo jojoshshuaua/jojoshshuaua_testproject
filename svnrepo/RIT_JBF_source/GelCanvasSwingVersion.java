@@ -598,20 +598,22 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     public void drawIEF() {
         for(int i = 0; i < barProteins.size(); i++){
             if(barProteinsStillMoving) {
-                ((IEFProtein)barProteins.elementAt(i)).changeX();
+                ((IEFProteinSwingVersion)barProteins.elementAt(i)).changeX();
             } else {
-                ((IEFProtein)barProteins.elementAt(i)).setX();
+                ((IEFProteinSwingVersion)barProteins.elementAt(i)).setX();
             }
-            ((IEFProtein)(barProteins.elementAt(i))).draw(bufferImageGraphics);
+            ((IEFProteinSwingVersion)(barProteins.elementAt(i))).draw(bufferImageGraphics);
         }
 
-        for(int i = 0; i < barProteins2.size(); i++){
-            if(barProteinsStillMoving) {
-                ((IEFProtein)barProteins2.elementAt(i)).changeX();
-            } else {
-                ((IEFProtein)barProteins2.elementAt(i)).setX();
+        if(barProteins2 != null && barProteins2.size() > 0) {
+            for(int i = 0; i < barProteins2.size(); i++){
+                if(barProteinsStillMoving) {
+                    ((IEFProteinSwingVersion)barProteins2.elementAt(i)).changeX();
+                } else {
+                    ((IEFProteinSwingVersion)barProteins2.elementAt(i)).setX();
+               }
+                ((IEFProteinSwingVersion)(barProteins2.elementAt(i))).draw(bufferImageGraphics);
             }
-            ((IEFProtein)(barProteins2.elementAt(i))).draw(bufferImageGraphics);
         }
 
         graphic.drawImage(bufferImage, 0, 0, this);
@@ -694,13 +696,13 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         int finalGreen = 0;
         int finalBlue = 0;
 
-        double width = IEFProtein.returnTempWidth();
-	double finalWidth = IEFProtein.returnWidth();
+        double width = IEFProteinSwingVersion.returnTempWidth();
+	double finalWidth = IEFProteinSwingVersion.returnWidth();
 
         bufferImageGraphics.setColor(new Color(iefRed, iefGreen, iefBlue));
 	bufferImageGraphics.fillRect(2, 2, gelCanvasRectangle.width - 3, 45);
 
-        IEFProtein.changeWidth();
+        IEFProteinSwingVersion.changeWidth();
 	drawIEF();
 
         iefRed = iefRed - 1;
@@ -710,7 +712,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         if(iefRed <= finalRed || iefGreen <= finalGreen || iefBlue <= finalBlue || width >= finalWidth) {
             barProteinsStillMoving = false;
             bufferImageGraphics.setColor(new Color(finalRed, finalGreen, finalBlue));
-            IEFProtein.setWidth();
+            IEFProteinSwingVersion.setWidth();
             bufferImageGraphics.fillRect(2, 2, gelCanvasRectangle.width - 3, 45);
 	    drawIEF();
         }
@@ -942,15 +944,15 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         }
 
         Vector containsBarProteinsProteins = new Vector();
-        double iefWidth = IEFProtein.returnWidth();
+        double iefWidth = IEFProteinSwingVersion.returnWidth();
         for(int j = 0; j < barProteins.size(); j++) {
-            double iefX = ((IEFProtein)barProteins.elementAt(j)).returnX();
-	    double iefY = ((IEFProtein)barProteins.elementAt(j)).returnY();
-            if(IEFProtein.returnHeight() > 0) {
+            double iefX = ((IEFProteinSwingVersion)barProteins.elementAt(j)).returnX();
+	    double iefY = ((IEFProteinSwingVersion)barProteins.elementAt(j)).returnY();
+            if(IEFProteinSwingVersion.returnHeight() > 0) {
                 if(clickX >= iefX && clickX <= iefX + iefWidth) {
                     if(clickY >= iefY && clickY <= iefY + 40) {
-                        containsBarProteinsProteins = ((IEFProtein)barProteins.elementAt(j)).getProtein();
-                        IEFFrame iFrame = new IEFFrame((IEFProtein)barProteins.elementAt(j));
+                        containsBarProteinsProteins = ((IEFProteinSwingVersion)barProteins.elementAt(j)).getProtein();
+                        IEFFrame iFrame = new IEFFrame((IEFProteinSwingVersion)barProteins.elementAt(j));
                         iFrame.setResizable(true);
                         iFrame.pack();
 			iFrame.show();
@@ -960,13 +962,13 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         }
 
         for(int j = 0; j < barProteins2.size(); j++) {
-            double iefX = ((IEFProtein)barProteins2.elementAt(j)).returnX();
-	    double iefY = ((IEFProtein)barProteins2.elementAt(j)).returnY();
-            if (IEFProtein.returnHeight() > 0) {
+            double iefX = ((IEFProteinSwingVersion)barProteins2.elementAt(j)).returnX();
+	    double iefY = ((IEFProteinSwingVersion)barProteins2.elementAt(j)).returnY();
+            if (IEFProteinSwingVersion.returnHeight() > 0) {
                 if(clickX >= iefX && clickX <= iefX + iefWidth) {
                     if(clickY >= iefY && clickY <= iefY + 40) {
-                        containsBarProteinsProteins = ((IEFProtein)barProteins2.elementAt(j)).getProtein();
-                        IEFFrame iFrame = new IEFFrame((IEFProtein)barProteins2.elementAt(j));
+                        containsBarProteinsProteins = ((IEFProteinSwingVersion)barProteins2.elementAt(j)).getProtein();
+                        IEFFrame iFrame = new IEFFrame((IEFProteinSwingVersion)barProteins2.elementAt(j));
 			iFrame.setResizable(true);
 			iFrame.pack();
 			iFrame.show();

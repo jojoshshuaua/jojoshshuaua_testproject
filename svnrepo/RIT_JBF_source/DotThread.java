@@ -72,9 +72,9 @@ public class DotThread extends Thread{
 
 	gel.resetReLine();
 	// while the IEFProteins are still visible...
-	while( IEFProtein.returnHeight() > 0 ){
+	while( IEFProteinSwingVersion.returnHeight() > 0 ){
 	    //...shrink them in size...
-	    IEFProtein.shrinkProtein();
+	    IEFProteinSwingVersion.shrinkProtein();
 	    // ...and redraw them to the GelCanvas
 	    gel.shrinkIEF();
 
