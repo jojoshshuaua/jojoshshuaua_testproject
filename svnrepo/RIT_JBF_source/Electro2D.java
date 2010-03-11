@@ -83,6 +83,8 @@ public class Electro2D extends JPanel implements ActionListener {
     private Vector piValues2;
     private FileFrame fileFrame2;
 
+    private JPanel leftPanel;
+
     /**
      * This method initializes all GUI components.
      */
@@ -264,25 +266,26 @@ public class Electro2D extends JPanel implements ActionListener {
         * code did it
         */
 
-
-
-
-      // BoxLayout topLevelLayout = new BoxLayout(this, BoxLayout.X_AXIS);
-      // topLevelLayout.maximumLayoutSize(this);
-      // this.setLayout(topLevelLayout);
-
-       JPanel leftPanel = new JPanel();
+       this.setLayout(new GridBagLayout());
+       GridBagConstraints constraint = new GridBagConstraints();
+       
+       leftPanel = new JPanel();
        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
-       this.add(leftPanel, BorderLayout.CENTER);
-       this.add(gelCanvas, BorderLayout.EAST);
-       leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+       constraint.gridx = 0;
+       constraint.gridy = 0;
+       constraint.insets = (new Insets(0, 10, 0, 10));
+       constraint.fill = GridBagConstraints.VERTICAL;
+       this.add(leftPanel, constraint);
+
+       constraint.gridx = 1;
+       constraint.gridy = 0;
+       constraint.weightx = 1.0;
+       constraint.fill = GridBagConstraints.BOTH;
+       this.add(gelCanvas, constraint);
 
        JPanel firstPanel = new JPanel();
        firstPanel.add(helpButton);
-       JLabel fillerOne = new JLabel();
-       firstPanel.add(fillerOne);
-       fillerOne.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
        firstPanel.add(aboutButton);
        leftPanel.add(firstPanel);
 
@@ -291,15 +294,13 @@ public class Electro2D extends JPanel implements ActionListener {
        leftPanel.add(secondPanel);
 
        JPanel thirdPanel = new JPanel();
-       thirdPanel.setLayout(new BoxLayout(thirdPanel, BoxLayout.Y_AXIS));
+       thirdPanel.setLayout(new GridLayout(1, 1, 0, 0));
        thirdPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), "Choose Animation", TitledBorder.CENTER, TitledBorder.TOP));
-       JLabel fillerThree = new JLabel();
-       fillerThree.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-       thirdPanel.add(fillerThree);
        thirdPanel.add(animationChooser);
        leftPanel.add(thirdPanel);
 
        JPanel fourthPanel = new JPanel();
+       fourthPanel.setLayout(new GridLayout(1, 3, 2, 2));
        fourthPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), "Animation Buttons", TitledBorder.CENTER, TitledBorder.TOP));
        fourthPanel.add(playButton);
        fourthPanel.add(stopButton);
@@ -307,17 +308,18 @@ public class Electro2D extends JPanel implements ActionListener {
        leftPanel.add(fourthPanel);
 
        JPanel fifthPanel = new JPanel();
-       fifthPanel.setLayout(new BoxLayout(fifthPanel, BoxLayout.Y_AXIS));
+       fifthPanel.setLayout(new GridLayout(1, 1, 0, 0));
        fifthPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), "Choose PH", TitledBorder.CENTER, TitledBorder.TOP));
        fifthPanel.add(rangeChooser);
        leftPanel.add(fifthPanel);
 
        JPanel sixthPanel = new JPanel();
        sixthPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), "Choose Acrylamide %", TitledBorder.CENTER, TitledBorder.TOP));
+       sixthPanel.setLayout(new GridLayout(1, 1, 0, 0));
        sixthPanel.add(percentAcrylamide);
        leftPanel.add(sixthPanel);
 
-       JPanel seventhPanel = new JPanel();;
+       JPanel seventhPanel = new JPanel();
        JLabel additionalOptions = new JLabel("Additional Options");
        seventhPanel.add(additionalOptions);
        leftPanel.add(seventhPanel);
@@ -347,6 +349,17 @@ public class Electro2D extends JPanel implements ActionListener {
        leftPanel.add(thirteenthPanel);
 
     }
+
+    /**
+     * Accessor method for the leftPanel instance variable so that
+     * GelCanvasSwingVersion can correctly set its getMinimumSize() method.
+     *
+     * @return the leftPanel variable that holds all of the buttons
+     */
+    public JPanel getButtonPanel() {
+        return leftPanel;
+    }
+
 	
 	/**
      * Any drawing on the applet panel itself is done here.

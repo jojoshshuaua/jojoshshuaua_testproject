@@ -75,6 +75,33 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     }
 
     /**
+     * This method is used to ensure that GelCanvasSwingVersion will take up
+     * enough space to allow the user to easily see its display.
+     *
+     * @return the dimension object used by the JFrame to allocate the space for
+     *         the component
+     */
+    public Dimension getMinimiumSize() {
+       /* JPanel buttonPanel = electro2D.getButtonPanel();
+        Dimension electro2DDimension = electro2D.getSize();
+        Dimension buttonPanelDimension = buttonPanel.getSize();
+
+        int electro2DWidth = (int) electro2DDimension.getWidth();
+        int buttonPanelWidth = (int) buttonPanelDimension.getWidth();
+        int canvasWidth = electro2DWidth - buttonPanelWidth - 5;
+
+        int electro2DHeight = (int) electro2DDimension.getHeight();
+        int canvasHeight = electro2DHeight - 10;
+
+        Dimension thisDimension = new Dimension(canvasWidth, canvasHeight);
+        return thisDimension;
+        */
+
+        return new Dimension(800, electro2D.getHeight());
+    }
+
+
+    /**
      * Sets up the gel canvas for animating the electrophoresis simulation
      */
     public void prepare() {
