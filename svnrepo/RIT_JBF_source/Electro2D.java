@@ -7,6 +7,7 @@
  * Created 4/17/03
  */
 
+import java.text.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -322,7 +323,7 @@ public class Electro2D extends JPanel implements ActionListener {
        
        JPanel seventhPanel = new JPanel();
        JLabel additionalOptions = new JLabel("Additional Options");
-       additionalOptions.setFont(new Font("SansSerif", Font.ITALIC, 18));
+       additionalOptions.setFont(new Font("SansSerif", Font.BOLD, 18));
        seventhPanel.add(additionalOptions);
        leftPanel.add(seventhPanel);
 
@@ -381,9 +382,54 @@ public class Electro2D extends JPanel implements ActionListener {
      * @param loc - the location of the label
      * @param value - the value to be placed on the label
      */
-    public void showpH( int loc, int value ){
-	
-	//if the location = 0, then this is the label for the lower pH
+    public ArrayList<Integer> showPH() {
+
+        JLayeredPane layer = ((JFrame)this.getTopLevelAncestor()).getLayeredPane();
+        double minPH = getMinRange();
+        double maxPH = getMaxRange();
+        ArrayList<Integer> linePositions = new ArrayList<Integer>();
+
+        double pHOffset = (maxPH-minPH)/7;
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        pHOffset = Double.valueOf(twoDForm.format(pHOffset));
+
+        int labelOffset = gelCanvas.getWidth()/7;
+        for(int i = 0; i < 8; i++) {
+            JLabel newLabel;
+            if(i==7) {
+                newLabel = new JLabel(twoDForm.format(maxPH));
+                newLabel.setBounds(gelCanvas.getX() + (i*labelOffset)-20, gelCanvas.getY(), 40, 15);
+            } else {
+                newLabel = new JLabel(twoDForm.format(minPH + i*pHOffset));
+                newLabel.setBounds(gelCanvas.getX() + (i*labelOffset) -9, gelCanvas.getY(), 40, 15);
+            }
+            layer.add(newLabel);
+            rangeLabels.add(newLabel);
+            layer.setLayer(newLabel, JLayeredPane.PALETTE_LAYER);
+            linePositions.add((gelCanvas.getX() +(i*labelOffset) -9));
+            
+        }
+
+        return linePositions;
+
+/**        JLayeredPane layer = ((JFrame)this.getTopLevelAncestor()).getLayeredPane();
+        int numOfLabels = (int) (getMaxRange()-getMinRange());
+        int offset = (int) (gelCanvas.getWidth()/numOfLabels);
+        
+        ArrayList<Integer> linePositions = new ArrayList<Integer>();
+
+        for(int i = 0; i < numOfLabels+2; i++) {
+            JLabel newLabel = new JLabel(Integer.toString((int)(getMinRange() + i)));
+            rangeLabels.add(newLabel);
+            newLabel.setBounds(gelCanvas.getX() + (i*offset) -9, gelCanvas.getY(), 20, 15);
+            layer.add(newLabel);
+            layer.setLayer(newLabel, JLayeredPane.PALETTE_LAYER);
+            linePositions.add((Integer) (gelCanvas.getX() +(i*offset) -9));
+        }
+
+        return linePositions;
+
+/*	//if the location = 0, then this is the label for the lower pH
 	//value in the range
 	if( loc == 0 ){
 	    //make a label which displays the minimum range value
@@ -408,6 +454,7 @@ public class Electro2D extends JPanel implements ActionListener {
 	this.add( ((JLabel)rangeLabels.elementAt( rangeLabels.size() - 1 ) ) );
 	//repaint the applet to reflect the change
 	this.update( graphics );
+ */
     }
 
     /**

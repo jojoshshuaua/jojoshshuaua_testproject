@@ -450,26 +450,31 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      * where the different pH values are on the canvas.
      */
     public void drawPHLines() {
+        ArrayList<Integer> linePositions = electro2D.showPH();
+
 	int length = 0;
 	int loc = 0;
-	
-	bufferImageGraphics.setColor(Color.GRAY);
+        int offset = (this.getTopLevelAncestor().getWidth() - this.getWidth() - 25);
+	bufferImageGraphics.setColor(Color.BLACK);
 
         /**
          * Loop through each integer that's in the range between the minPH
          * and the maxPH and use that integer to figure out the starting point
          * for the line. Then draw a dotted line down the length of the canvas.
          */
-	for(int i = (int)minPH + 1; i <= (int)maxPH; i = i + 1) {
-	    length = 0;
-	    loc =(int)((getWidth() - 4 ) * ((i - minPH)/(maxPH - minPH )));
-	    while(length < this.getHeight()) {
-		bufferImageGraphics.drawLine(loc, length, loc, length + 5);
-		length = length + 10;
-	    }
-            // Show the pH labels.
-	    electro2D.showpH(loc, i);
-	}
+	for(int i = 0; i < linePositions.size()-1; i++) {
+            length = 0;
+            loc = linePositions.get(i) - offset;
+            if(i == linePositions.size()-2) {
+                loc = loc + 10;
+            }
+            if(loc > 0 && loc < getWidth()) {
+                while(length < this.getHeight()) {
+                    bufferImageGraphics.drawLine(loc, length, loc, length + 5);
+                    length = length + 10;
+                }
+            }
+        }
 
 	pHLinesNeedToBeDrawn = false;
     }
