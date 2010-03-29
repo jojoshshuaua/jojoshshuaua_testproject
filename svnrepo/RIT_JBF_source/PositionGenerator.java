@@ -120,7 +120,7 @@ public class PositionGenerator extends Thread{
 	    
 	    //add dot to vector and reset values for next dot
 
-	    dots.add( new ProteinDot(color, gel, xLoc, yLoc, electro2D) );
+	    dots.add( new ProteinDotSwingVersion(color, gel, xLoc, yLoc) );
 	    color = null;
 	    xLoc = 0;
 	    yLoc = 48;

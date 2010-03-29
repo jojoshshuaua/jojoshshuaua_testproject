@@ -95,10 +95,10 @@ public class ImageZoom extends Frame implements MouseListener{
 
 	double x = e.getX() / 5;
 	double y = e.getY() / 5;
-	ProteinDot thedot = null;
-	double diameter = ProteinDot.getDiameter();
+	ProteinDotSwingVersion thedot = null;
+	double diameter = ProteinDotSwingVersion.getDiameter();
 	for( int i = 0; i < bigDot.size(); i++ ){
-	    thedot = (ProteinDot)bigDot.get( i );
+	    thedot = (ProteinDotSwingVersion)bigDot.get( i );
 	    if( ( thedot.returnX() + diameter >= startX + x ) && 
 		( thedot.returnX() <= startX + x ) ){
 		if( ( thedot.returnY() + diameter >= startY + y ) && 

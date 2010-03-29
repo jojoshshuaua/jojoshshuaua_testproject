@@ -67,7 +67,7 @@ public class DotThread extends Thread{
 	//send the percent acrylamide value to ProteinDot
 	//lowPercent = electro2D.getLowPercent();
 	//highPercent = electro2D.getHighPercent();
-	ProteinDot.setPercent( electro2D.getLowPercent(),
+	ProteinDotSwingVersion.setPercent( electro2D.getLowPercent(),
 			       electro2D.getHighPercent() );
 
 	gel.resetReLine();
@@ -87,8 +87,8 @@ public class DotThread extends Thread{
 	}
 	
 	// Make the ProteinDots visible
-	if( ProteinDot.getShow() == false ){
-	    ProteinDot.setShow();
+	if( ProteinDotSwingVersion.getShow() == false ){
+	    ProteinDotSwingVersion.setShow();
 	}
 	
 	int i = 0;

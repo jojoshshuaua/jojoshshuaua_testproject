@@ -420,7 +420,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      * @param seconds Used in writing the file that stores the image. 
      */
     public void genGIFFile(Vector dts, int seconds) {
-        ProteinDot.setShow();
+        ProteinDotSwingVersion.setShow();
         dotProteins = dts;
         mWLinesNeedToBeDrawn = true;
         maxPH = 10;
@@ -749,11 +749,11 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         clearCanvas();
 
         for(int i = 0; i < dotProteins.size(); i++) {
-            ((ProteinDot)(dotProteins.elementAt(i))).changeY();
+            ((ProteinDotSwingVersion)(dotProteins.elementAt(i))).changeY();
         }
         if(dotProteins2 != null) {
       	    for(int j = 0; j < dotProteins2.size(); j++) {
-		((ProteinDot)(dotProteins2.elementAt(j))).changeY();
+		((ProteinDotSwingVersion)(dotProteins2.elementAt(j))).changeY();
 	    }
         }
         repaint();
@@ -765,10 +765,10 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      */
     public void restartCanvas() {
         for(int i = 0; i < dotProteins.size(); i++) {
-	    ((ProteinDot)(dotProteins.elementAt(i))).restart();
+	    ((ProteinDotSwingVersion)(dotProteins.elementAt(i))).restart();
 	}
         for(int i = 0; i < dotProteins2.size(); i++) {
-	    ((ProteinDot)(dotProteins2.elementAt(i))).restart();
+	    ((ProteinDotSwingVersion)(dotProteins2.elementAt(i))).restart();
 	}
         update(graphic);
 	repaint();
@@ -794,9 +794,9 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         bufferImageGraphics.setColor(Color.BLACK);
         bufferImageGraphics.fillRect(2, 2, gelCanvasRectangle.width - 4, 45);
         for(int i = 0; i < dotProteins.size(); i++) {
-            if((((ProteinDot)dotProteins.elementAt(i)).getPro().getID()).equals(id)) {
-                xLoc = ((ProteinDot)dotProteins.elementAt(i)).returnX();
-		yLoc = ((ProteinDot)dotProteins.elementAt(i)).returnY();
+            if((((ProteinDotSwingVersion)dotProteins.elementAt(i)).getPro().getID()).equals(id)) {
+                xLoc = ((ProteinDotSwingVersion)dotProteins.elementAt(i)).returnX();
+		yLoc = ((ProteinDotSwingVersion)dotProteins.elementAt(i)).returnY();
                 i = dotProteins.size();
             }
         }
@@ -870,10 +870,10 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
 	    if(startX != stopX && stopX > startX + 5) {
                 if(startY != stopY && stopY > startY + 5) {
                     Vector bigDot = new Vector();
-                    ProteinDot theDot = null;
-                    double diameter = ProteinDot.getDiameter();
+                    ProteinDotSwingVersion theDot = null;
+                    double diameter = ProteinDotSwingVersion.getDiameter();
                     for(int i = 0; i < dotProteins.size(); i++) {
-                        theDot = (ProteinDot)dotProteins.get(i);
+                        theDot = (ProteinDotSwingVersion)dotProteins.get(i);
                         if((theDot.returnX() + diameter >= startX) && (theDot.returnX() <= stopX)) {
                             if((theDot.returnY() + diameter >= startY) && (theDot.returnY() <= stopY)) {
                                 bigDot.add(theDot);
@@ -882,7 +882,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
                     }
                     if(dotProteins2 != null) {
                         for(int i = 0; i < dotProteins2.size(); i++) {
-                            theDot = (ProteinDot)dotProteins2.get(i);
+                            theDot = (ProteinDotSwingVersion)dotProteins2.get(i);
                             if((theDot.returnX() + diameter >= startX) && (theDot.returnX() <= stopX)) {
                                 if((theDot.returnY() + diameter >= startY) && (theDot.returnY() <= stopY)) {
                                     bigDot.add(theDot);
@@ -925,11 +925,11 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         double clickX = e.getX();
 	double clickY = e.getY();
         for(int i = 0; i < dotProteins.size(); i++) {
-	    double dotX = ((ProteinDot)dotProteins.elementAt(i)).returnX();
-	    double dotY = ((ProteinDot)dotProteins.elementAt(i)).returnY();
-            if(((ProteinDot)dotProteins.elementAt(i)).getShowMe() && clickX <= dotX + 6 && clickX >= dotX - 1) {
+	    double dotX = ((ProteinDotSwingVersion)dotProteins.elementAt(i)).returnX();
+	    double dotY = ((ProteinDotSwingVersion)dotProteins.elementAt(i)).returnY();
+            if(((ProteinDotSwingVersion)dotProteins.elementAt(i)).getShowMe() && clickX <= dotX + 6 && clickX >= dotX - 1) {
                 if(clickY <= dotY + 7 && clickY >= dotY - 1) {
-                    ProteinFrame pFrame = new ProteinFrame(electro2D, ((ProteinDot)dotProteins.elementAt(i)).getPro().getID(), 1);
+                    ProteinFrame pFrame = new ProteinFrame(electro2D, ((ProteinDotSwingVersion)dotProteins.elementAt(i)).getPro().getID(), 1);
                     pFrame.show();
                     pFrame.updateLabel();
                 }
@@ -937,11 +937,11 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         }
 
         for(int i = 0; i < dotProteins2.size(); i++) {
-            double dotX = ((ProteinDot)dotProteins2.elementAt(i)).returnX();
-	    double dotY = ((ProteinDot)dotProteins2.elementAt(i)).returnY();
-            if(((ProteinDot)dotProteins2.elementAt(i)).getShowMe() && clickX <= dotX + 5 && clickX >= dotX - 1) {
+            double dotX = ((ProteinDotSwingVersion)dotProteins2.elementAt(i)).returnX();
+	    double dotY = ((ProteinDotSwingVersion)dotProteins2.elementAt(i)).returnY();
+            if(((ProteinDotSwingVersion)dotProteins2.elementAt(i)).getShowMe() && clickX <= dotX + 5 && clickX >= dotX - 1) {
                 if(clickY <= dotY + 5 && clickY >= dotY - 1) {
-                    ProteinFrame pFrame = new ProteinFrame(electro2D, ((ProteinDot)dotProteins2.elementAt(i)).getPro().getID(), 2);
+                    ProteinFrame pFrame = new ProteinFrame(electro2D, ((ProteinDotSwingVersion)dotProteins2.elementAt(i)).getPro().getID(), 2);
                     pFrame.show();
 		    pFrame.updateLabel();
                 }

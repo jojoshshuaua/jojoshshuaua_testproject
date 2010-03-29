@@ -2,10 +2,10 @@ import java.awt.*;
 
 public class BlinkThread extends Thread {
 
-    private ProteinDot theDot;
+    private ProteinDotSwingVersion theDot;
     private GelCanvasSwingVersion theGel;
     
-    public BlinkThread( ProteinDot p, GelCanvasSwingVersion g ){
+    public BlinkThread( ProteinDotSwingVersion p, GelCanvasSwingVersion g ){
 	theGel = g;
 	theDot = p;
     }

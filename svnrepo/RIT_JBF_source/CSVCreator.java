@@ -46,14 +46,14 @@ public class CSVCreator{
 	}
 	
 	E2DProtein p = null;
-	ProteinDot d = null;
+	ProteinDotSwingVersion d = null;
 	
 	out.println( "Title" + "," + "Sequence" + "," + "Molecular Weight" + 
 		     "," + "pI Value" + "," + "X-Coordinate" + "," + 
 		     "Y-Coordinate" );
 
 	for( int i = 0; i < proteins.size(); i++ ){
-	    d = (ProteinDot)proteins.elementAt( i );
+	    d = (ProteinDotSwingVersion)proteins.elementAt( i );
 	    p = (E2DProtein)d.getPro();
 	    
 	    out.println( "\"" + p.getID() + "\"" + "," + p.getSequence() + "," + 

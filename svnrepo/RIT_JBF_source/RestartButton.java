@@ -110,7 +110,7 @@ public class RestartButton extends Canvas implements MouseListener {
      */
     public void mouseClicked(MouseEvent e) {
 
-	GelCanvas g = electro2D.getGel(); //get a reference to GelCanvas
+	GelCanvasSwingVersion g = electro2D.getGel(); //get a reference to GelCanvas
 	g.clearIEF(); //clear the IEF space
 	g.resetLocation();
 	g.resetRanges();
@@ -122,8 +122,8 @@ public class RestartButton extends Canvas implements MouseListener {
 	
 	//if the dots have been drawn, clear them from the screen and stop the
 	// thread
-	if( ProteinDot.getShow() ){
-	    ProteinDot.setShow();
+	if( ProteinDotSwingVersion.getShow() ){
+	    ProteinDotSwingVersion.setShow();
 	    electro2D.stopThread();
 	}
 	g.restartCanvas();

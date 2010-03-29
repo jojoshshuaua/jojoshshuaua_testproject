@@ -58,7 +58,7 @@ public class Electro2D extends JPanel implements ActionListener {
     private PercentAcrylamideSwingVersion percentAcrylamide;  //the Choices for entering the
                                           //% acrylamide for the gel
     private Vector<JLabel> rangeLabels;
-    private Vector mwLabels;
+    private Vector<JLabel> mwLabels;
     private WebGenerator web;             //generates the website
     private GenerateHTMLButtonSwingVersion webButton;
     
@@ -411,50 +411,6 @@ public class Electro2D extends JPanel implements ActionListener {
         }
 
         return linePositions;
-
-/**        JLayeredPane layer = ((JFrame)this.getTopLevelAncestor()).getLayeredPane();
-        int numOfLabels = (int) (getMaxRange()-getMinRange());
-        int offset = (int) (gelCanvas.getWidth()/numOfLabels);
-        
-        ArrayList<Integer> linePositions = new ArrayList<Integer>();
-
-        for(int i = 0; i < numOfLabels+2; i++) {
-            JLabel newLabel = new JLabel(Integer.toString((int)(getMinRange() + i)));
-            rangeLabels.add(newLabel);
-            newLabel.setBounds(gelCanvas.getX() + (i*offset) -9, gelCanvas.getY(), 20, 15);
-            layer.add(newLabel);
-            layer.setLayer(newLabel, JLayeredPane.PALETTE_LAYER);
-            linePositions.add((Integer) (gelCanvas.getX() +(i*offset) -9));
-        }
-
-        return linePositions;
-
-/*	//if the location = 0, then this is the label for the lower pH
-	//value in the range
-	if( loc == 0 ){
-	    //make a label which displays the minimum range value
-	    rangeLabels.add( new JLabel( Double.toString( getMinRange() ) ) );
-	    //set its location to be at the edge of the gel
-	    ((JLabel)rangeLabels.elementAt(
-					  rangeLabels.size() - 1 ) ).setBounds(
-				loc + gelCanvas.getX() - 9, 31, 20, 15 );
-	}
-	//...otherwise
-	else{
-	    //make a label to display the value passed to this method
-	    rangeLabels.add( new JLabel( Integer.toString( value ) ) );
-	    //and set its location to line up with the proper spot along the
-	    //gel
-	    ((JLabel)rangeLabels.elementAt(
-					  rangeLabels.size() - 1 ) ).setBounds(
-				      loc + gelCanvas.getX() - 5, 31, 15, 15 );
-	}
-	((JLabel)rangeLabels.elementAt( rangeLabels.size() - 1 )).setForeground( Color.WHITE );
-	//add the new label to the applet's image
-	this.add( ((JLabel)rangeLabels.elementAt( rangeLabels.size() - 1 ) ) );
-	//repaint the applet to reflect the change
-	this.update( graphics );
- */
     }
 
     /**
@@ -485,7 +441,7 @@ public class Electro2D extends JPanel implements ActionListener {
     public void clearMW(){
 	//remove all of the labels from the applet's image
 	for( int i = 0; i < mwLabels.size(); i++ ){
-	    this.remove((Label)mwLabels.elementAt( i ) );
+	    this.remove((JLabel)mwLabels.elementAt(i));
 	}
 	//remove all of the labels from the vector
 	mwLabels.removeAllElements();
@@ -504,50 +460,25 @@ public class Electro2D extends JPanel implements ActionListener {
      * @param loc25 - the location of the 25,000 molecular weight
      * @param loc10 - the location of the 10,000 molecular weight
      */
-    public void showMW( int loc100, int loc50, int loc25, int loc10, boolean
-			reMake ){
-	
-	//make a label that displays 100K
-	mwLabels.add( new Label( "100K" ) );
-	//set it to the correct position along the gel
-	((Label)mwLabels.elementAt(
-				      mwLabels.size() - 1 ) ).setBounds(
-						     159, loc100+32, 30, 15 );
-	((Label)mwLabels.elementAt( mwLabels.size() - 1 )).setForeground( Color.WHITE );
-	//add it to the applet image
-	this.add((Label)mwLabels.elementAt(
-					      mwLabels.size() - 1 ) );
-	//make a label that displays 50K
-	mwLabels.add( new Label( " 50K" ) );
-	//set it to the correct position along the gel
-	((Label)mwLabels.elementAt(
-				      mwLabels.size() - 1 ) ).setBounds(
-						    162, loc50+32, 30, 15 );
-	((Label)mwLabels.elementAt( mwLabels.size() - 1 ) ).setForeground( Color.WHITE );
-	//add it to the applet image
-	this.add((Label)mwLabels.elementAt(
-					      mwLabels.size() - 1 ) );
-	//make a label that displays 25K
-	mwLabels.add( new Label( " 25K" ) );
-	//set it to the correct position along the gel
-	((Label)mwLabels.elementAt(
-				      mwLabels.size() - 1 ) ).setBounds( 
-						     162, loc25+32, 30, 15 );
-	((Label)mwLabels.elementAt( mwLabels.size() - 1 ) ).setForeground( Color.WHITE );
-	//add it to the applet image
-	this.add((Label)mwLabels.elementAt(
-					      mwLabels.size() - 1 ) );
-	//make a label that displays 10K
-	mwLabels.add( new Label( " 10K" ) );
-	//set it to the correct position along the gel
-	((Label)mwLabels.elementAt(
-				      mwLabels.size() - 1 ) ).setBounds(
-						     162, loc10+32, 30, 15 );
-	((Label)mwLabels.elementAt( mwLabels.size() - 1 )).setForeground( Color.WHITE );
-	//add it to the applet image
-	this.add((Label)mwLabels.elementAt( mwLabels.size() - 1 ) );
-	
-	//repaint the applet to reflect the changes made
+    public void showMW(int loc100, int loc50, int loc25, int loc10, boolean reMake) {
+
+        JLayeredPane layer = ((JFrame)this.getTopLevelAncestor()).getLayeredPane();
+	mwLabels.add(new JLabel("100K"));
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(159, loc100+32, 30, 15);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.WHITE);
+	this.add((JLabel)mwLabels.elementAt(mwLabels.size() - 1));
+	mwLabels.add(new JLabel("50K"));
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(162, loc50+32, 30, 15);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.WHITE);
+	this.add((JLabel)mwLabels.elementAt(mwLabels.size() - 1 ));
+	mwLabels.add(new JLabel("25K"));
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(162, loc25+32, 30, 15);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1 )).setForeground(Color.WHITE);
+	this.add((JLabel)mwLabels.elementAt(mwLabels.size() - 1));
+	mwLabels.add(new JLabel("10K"));
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(162, loc10+32, 30, 15);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.WHITE);
+	this.add((JLabel)mwLabels.elementAt( mwLabels.size() - 1));
 	this.update(graphics);
     }
 
