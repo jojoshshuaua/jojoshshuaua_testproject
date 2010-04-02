@@ -463,23 +463,34 @@ public class Electro2D extends JPanel implements ActionListener {
     public void showMW(int loc100, int loc50, int loc25, int loc10, boolean reMake) {
 
         JLayeredPane layer = ((JFrame)this.getTopLevelAncestor()).getLayeredPane();
-	mwLabels.add(new JLabel("100K"));
-	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(159, loc100+32, 30, 15);
-	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.WHITE);
-	this.add((JLabel)mwLabels.elementAt(mwLabels.size() - 1));
-	mwLabels.add(new JLabel("50K"));
-	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(162, loc50+32, 30, 15);
-	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.WHITE);
-	this.add((JLabel)mwLabels.elementAt(mwLabels.size() - 1 ));
-	mwLabels.add(new JLabel("25K"));
-	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(162, loc25+32, 30, 15);
-	((JLabel)mwLabels.elementAt(mwLabels.size() - 1 )).setForeground(Color.WHITE);
-	this.add((JLabel)mwLabels.elementAt(mwLabels.size() - 1));
-	mwLabels.add(new JLabel("10K"));
-	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(162, loc10+32, 30, 15);
-	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.WHITE);
-	this.add((JLabel)mwLabels.elementAt( mwLabels.size() - 1));
-	this.update(graphics);
+        JLabel hundredK = new JLabel("100K");
+	mwLabels.add(hundredK);
+        layer.add(hundredK);
+        layer.setLayer(hundredK, JLayeredPane.PALETTE_LAYER);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(gelCanvas.getX() - 30, loc100+20, 30, 15);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.BLACK);
+
+	JLabel fiftyK = new JLabel("50K");
+        mwLabels.add(fiftyK);
+        layer.add(fiftyK);
+        layer.setLayer(fiftyK, JLayeredPane.PALETTE_LAYER);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(gelCanvas.getX() - 20, loc50+20, 30, 15);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.BLACK);
+
+	JLabel twentyfiveK = new JLabel("25K");
+        mwLabels.add(twentyfiveK);
+        layer.add(twentyfiveK);
+        layer.setLayer(twentyfiveK, JLayeredPane.PALETTE_LAYER);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(gelCanvas.getX() - 20, loc25+20, 30, 15);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1 )).setForeground(Color.BLACK);
+
+	JLabel tenK = new JLabel("10K");
+        mwLabels.add(tenK);
+        layer.add(tenK);
+        layer.setLayer(tenK, JLayeredPane.PALETTE_LAYER);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(gelCanvas.getX() - 20, loc10+20, 30, 15);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.BLACK);
+
     }
 
     /**
