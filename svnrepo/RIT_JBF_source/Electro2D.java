@@ -384,7 +384,7 @@ public class Electro2D extends JPanel implements ActionListener {
      */
     public ArrayList<Integer> showPH() {
 
-        JLayeredPane layer = ((JFrame)this.getTopLevelAncestor()).getLayeredPane();
+        JLayeredPane layeredPane = ((JFrame)this.getTopLevelAncestor()).getLayeredPane();
         double minPH = getMinRange();
         double maxPH = getMaxRange();
         ArrayList<Integer> linePositions = new ArrayList<Integer>();
@@ -403,9 +403,9 @@ public class Electro2D extends JPanel implements ActionListener {
                 newLabel = new JLabel(twoDForm.format(minPH + i*pHOffset));
                 newLabel.setBounds(gelCanvas.getX() + (i*labelOffset) -9, gelCanvas.getY(), 40, 15);
             }
-            layer.add(newLabel);
+            layeredPane.add(newLabel);
             rangeLabels.add(newLabel);
-            layer.setLayer(newLabel, JLayeredPane.PALETTE_LAYER);
+            layeredPane.setLayer(newLabel, JLayeredPane.PALETTE_LAYER);
             linePositions.add((gelCanvas.getX() +(i*labelOffset) -9));
             
         }
@@ -462,32 +462,32 @@ public class Electro2D extends JPanel implements ActionListener {
      */
     public void showMW(int loc100, int loc50, int loc25, int loc10, boolean reMake) {
 
-        JLayeredPane layer = ((JFrame)this.getTopLevelAncestor()).getLayeredPane();
+        JLayeredPane layeredPane = ((JFrame)this.getTopLevelAncestor()).getLayeredPane();
         JLabel hundredK = new JLabel("100K");
 	mwLabels.add(hundredK);
-        layer.add(hundredK);
-        layer.setLayer(hundredK, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(hundredK);
+        layeredPane.setLayer(hundredK, JLayeredPane.PALETTE_LAYER);
 	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(gelCanvas.getX() - 30, loc100+20, 30, 15);
 	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.BLACK);
 
 	JLabel fiftyK = new JLabel("50K");
         mwLabels.add(fiftyK);
-        layer.add(fiftyK);
-        layer.setLayer(fiftyK, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(fiftyK);
+        layeredPane.setLayer(fiftyK, JLayeredPane.PALETTE_LAYER);
 	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(gelCanvas.getX() - 20, loc50+20, 30, 15);
 	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.BLACK);
 
 	JLabel twentyfiveK = new JLabel("25K");
         mwLabels.add(twentyfiveK);
-        layer.add(twentyfiveK);
-        layer.setLayer(twentyfiveK, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(twentyfiveK);
+        layeredPane.setLayer(twentyfiveK, JLayeredPane.PALETTE_LAYER);
 	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(gelCanvas.getX() - 20, loc25+20, 30, 15);
 	((JLabel)mwLabels.elementAt(mwLabels.size() - 1 )).setForeground(Color.BLACK);
 
 	JLabel tenK = new JLabel("10K");
         mwLabels.add(tenK);
-        layer.add(tenK);
-        layer.setLayer(tenK, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(tenK);
+        layeredPane.setLayer(tenK, JLayeredPane.PALETTE_LAYER);
 	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(gelCanvas.getX() - 20, loc10+20, 30, 15);
 	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.BLACK);
 
