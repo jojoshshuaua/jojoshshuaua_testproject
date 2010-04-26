@@ -446,7 +446,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     }
 
     /**
-     * This method draws the dotted gray vertical lines that represent
+     * This method draws the dotted black vertical lines that represent
      * where the different pH values are on the canvas.
      */
     public void drawPHLines() {
@@ -464,10 +464,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
          */
 	for(int i = 0; i < linePositions.size()-1; i++) {
             length = 0;
-            loc = linePositions.get(i) - offset;
-            if(i == linePositions.size()-2) {
-                loc = loc + 10;
-            }
+            loc = linePositions.get(i) - 24;
             if(loc > 0 && loc < getWidth()) {
                 while(length < this.getHeight()) {
                     bufferImageGraphics.drawLine(loc, length, loc, length + 5);
@@ -581,7 +578,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         lowAcrylamide = electro2D.getLowPercent();
         highAcrylamide = electro2D.getHighPercent();
         int width = 0;
-        bufferImageGraphics.setColor(Color.LIGHT_GRAY);
+        bufferImageGraphics.setColor(Color.BLACK);
 
         while(width < this.getWidth()) {
             bufferImageGraphics.drawLine(width, (int)hundredK, width + 5, (int)hundredK);
@@ -747,6 +744,8 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      */
     public void genDots() {
         clearCanvas();
+
+        System.out.println("gelcanvas 748: HERE IS THE SIZE OF DOTPROTIENS: " + dotProteins.size());
 
         for(int i = 0; i < dotProteins.size(); i++) {
             ((ProteinDotSwingVersion)(dotProteins.elementAt(i))).changeY();

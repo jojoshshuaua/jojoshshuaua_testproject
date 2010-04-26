@@ -86,6 +86,8 @@ public class Electro2D extends JPanel implements ActionListener {
     private FileFrame fileFrame2;
 
     private JPanel leftPanel;
+    private JPanel pHPanel;
+    private JPanel mWPanel;
 
     /**
      * This method initializes all GUI components.
@@ -269,22 +271,49 @@ public class Electro2D extends JPanel implements ActionListener {
         */
 
        this.setLayout(new GridBagLayout());
-       GridBagConstraints constraint = new GridBagConstraints();
+       GridBagConstraints c = new GridBagConstraints();
        
        leftPanel = new JPanel();
        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
-       constraint.gridx = 0;
-       constraint.gridy = 0;
-       constraint.insets = (new Insets(0, 10, 0, 10));
-       constraint.fill = GridBagConstraints.VERTICAL;
-       this.add(leftPanel, constraint);
+       JPanel rightPanel = new JPanel();
+       rightPanel.setLayout(new GridBagLayout());
+
+       c.weightx = 1.0;
+       c.weighty = 1.0;
+       c.gridx = 0;
+       c.gridy = 0;
+       c.insets = (new Insets(0, 10, 0, 10));
+       this.add(leftPanel, c);
+
+       c.gridx = 1;
+       c.gridy = 0;
+       this.add(rightPanel, c);
+
+       GridBagConstraints constraint = new GridBagConstraints();
 
        constraint.gridx = 1;
        constraint.gridy = 0;
-       constraint.weightx = 1.0;
        constraint.fill = GridBagConstraints.BOTH;
-       this.add(gelCanvas, constraint);
+       constraint.ipady = 50;
+       constraint.ipadx = 650;
+       pHPanel = new JPanel();
+       pHPanel.setLayout(null);
+       rightPanel.add(pHPanel, constraint);
+
+       constraint.gridx = 0;
+       constraint.gridy = 1;
+       constraint.ipady = 10;
+       constraint.ipadx = 40;
+       mWPanel = new JPanel();
+       mWPanel.setLayout(null);
+       rightPanel.add(mWPanel, constraint);
+
+       constraint.gridx = 1;
+       constraint.gridy = 1;
+       constraint.ipady = 450;
+       constraint.ipadx = 650;
+       rightPanel.add(gelCanvas, constraint);
 
        JPanel firstPanel = new JPanel();
        firstPanel.add(helpButton);
@@ -384,7 +413,6 @@ public class Electro2D extends JPanel implements ActionListener {
      */
     public ArrayList<Integer> showPH() {
 
-        JLayeredPane layeredPane = ((JFrame)this.getTopLevelAncestor()).getLayeredPane();
         double minPH = getMinRange();
         double maxPH = getMaxRange();
         ArrayList<Integer> linePositions = new ArrayList<Integer>();
@@ -393,23 +421,23 @@ public class Electro2D extends JPanel implements ActionListener {
         DecimalFormat twoDForm = new DecimalFormat("#.##");
         pHOffset = Double.valueOf(twoDForm.format(pHOffset));
 
-        int labelOffset = gelCanvas.getWidth()/7;
+        int labelOffset = pHPanel.getWidth()/7;
         for(int i = 0; i < 8; i++) {
             JLabel newLabel;
             if(i==7) {
                 newLabel = new JLabel(twoDForm.format(maxPH));
-                newLabel.setBounds(gelCanvas.getX() + (i*labelOffset)-20, gelCanvas.getY(), 40, 15);
+                newLabel.setBounds(pHPanel.getWidth() - 20, pHPanel.getHeight()-15, 15, 10);
             } else {
                 newLabel = new JLabel(twoDForm.format(minPH + i*pHOffset));
-                newLabel.setBounds(gelCanvas.getX() + (i*labelOffset) -9, gelCanvas.getY(), 40, 15);
+                newLabel.setBounds(5 + i*labelOffset, pHPanel.getHeight()-15, 10, 10);
             }
-            layeredPane.add(newLabel);
+            pHPanel.add(newLabel);
             rangeLabels.add(newLabel);
-            layeredPane.setLayer(newLabel, JLayeredPane.PALETTE_LAYER);
-            linePositions.add((gelCanvas.getX() +(i*labelOffset) -9));
-            
+            if(i != 0) {
+                linePositions.add((gelCanvas.getX() +(i*labelOffset) -9));
+            }
+            newLabel.repaint();
         }
-
         return linePositions;
     }
 
@@ -462,33 +490,28 @@ public class Electro2D extends JPanel implements ActionListener {
      */
     public void showMW(int loc100, int loc50, int loc25, int loc10, boolean reMake) {
 
-        JLayeredPane layeredPane = ((JFrame)this.getTopLevelAncestor()).getLayeredPane();
         JLabel hundredK = new JLabel("100K");
 	mwLabels.add(hundredK);
-        layeredPane.add(hundredK);
-        layeredPane.setLayer(hundredK, JLayeredPane.PALETTE_LAYER);
-	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(gelCanvas.getX() - 30, loc100+20, 30, 15);
+        mWPanel.add(hundredK);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(mWPanel.getX() + 10, loc100, 30, 15);
 	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.BLACK);
 
 	JLabel fiftyK = new JLabel("50K");
         mwLabels.add(fiftyK);
-        layeredPane.add(fiftyK);
-        layeredPane.setLayer(fiftyK, JLayeredPane.PALETTE_LAYER);
-	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(gelCanvas.getX() - 20, loc50+20, 30, 15);
+        mWPanel.add(fiftyK);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(mWPanel.getX() + 15, loc50, 30, 15);
 	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.BLACK);
 
 	JLabel twentyfiveK = new JLabel("25K");
         mwLabels.add(twentyfiveK);
-        layeredPane.add(twentyfiveK);
-        layeredPane.setLayer(twentyfiveK, JLayeredPane.PALETTE_LAYER);
-	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(gelCanvas.getX() - 20, loc25+20, 30, 15);
+        mWPanel.add(twentyfiveK);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(mWPanel.getX() + 15, loc25, 30, 15);
 	((JLabel)mwLabels.elementAt(mwLabels.size() - 1 )).setForeground(Color.BLACK);
 
 	JLabel tenK = new JLabel("10K");
         mwLabels.add(tenK);
-        layeredPane.add(tenK);
-        layeredPane.setLayer(tenK, JLayeredPane.PALETTE_LAYER);
-	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(gelCanvas.getX() - 20, loc10+20, 30, 15);
+        mWPanel.add(tenK);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(mWPanel.getX() + 15, loc10, 30, 15);
 	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.BLACK);
 
     }
