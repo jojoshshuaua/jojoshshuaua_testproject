@@ -92,18 +92,7 @@ public class Electro2D extends JPanel implements ActionListener {
     /**
      * This method initializes all GUI components.
      */
-    public Electro2D() {
-	// initializing all of the components
-//	this.setTitle( "2D Electrophoresis Simulator" );
-//	this.setBounds( 0, 0, 875, 667 );
-//	this.addWindowListener(
-	//		       new WindowAdapter() {
-		//		 public void windowClosing( WindowEvent e ) {
-			//		  System.exit( 0 );
-				//      }
-			//	  }
-			  //     );
-	
+    public Electro2D() {	
 
 	fileFrame = new FileFrame(this, 1);  //init frame
 	fileFrame2 = new FileFrame(this, 2);
@@ -135,23 +124,29 @@ public class Electro2D extends JPanel implements ActionListener {
 	stopButton = new StopButtonSwingVersion(this);
 	restartButton = new RestartButtonSwingVersion(this);
 
+	animationChooser = new AnimationChooserSwingVersion();
+
+	rangeChooser = new RangeChoiceSwingVersion( this );
+
+	// init %Acrylamide field and set initial value to 15
+	percentAcrylamide = new PercentAcrylamideSwingVersion();
+
+	sequences = new Vector();
+	sequenceTitles = new Vector();
+	molecularWeights = new Vector();
+	piValues = new Vector();
+
 	proteinListFrame = new JFrame( "Protein Lists" );
 	proteinListFrame.setBounds( 0, 0, 300, 250 );
 	proteinListFrame.setResizable(false);
 	proteinListPanel = new JPanel();
 	proteinListPanel.setBounds( 0, 0, 300, 250 );
 	proteinListPanel.setLayout( null );
-//	proteinListPanel.setBackground( Color.BLACK );
-	
 	proteinListButton = new ProteinListButtonSwingVersion( this );
-	
 	proteinList = new java.awt.List();
 	proteinList.setMultipleMode(false); //Don't allow multiple selections
 	proteinList2 = new java.awt.List();
 	proteinList2.setMultipleMode(false);
-
-
-	// give proteinList a mouse Listener to respond to the user's actions
 	proteinList.addMouseListener(new MouseAdapter() {
 		public void mouseEntered(MouseEvent e) {
 		    setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -160,76 +155,8 @@ public class Electro2D extends JPanel implements ActionListener {
 		    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 	    });
-
-	// set this class as the proteinList's action Listener to respond to
-	// selections of objects
 	proteinList.addActionListener(this);
 	proteinList2.addActionListener(this);
-
-	//initializing the range, voltage, percent acrylamide,
-	//and animation choice boxes, providing each with mouse
-	//listeners to change cursor images
-	// and display information at th(I e bottom of the screen
-
-	//voltageChooser = new Choice();
-	//voltageChooser.setForeground(new Color(54,100,139));
-	//voltageChooser.addItem("50 V");
-	//voltageChooser.addItem("100 V");
-	//give volageChooser a mouse listener to respond to user's actions
-	//voltageChooser.addMouseListener(new MouseAdapter() {
-	//	public void mouseEntered(MouseEvent e) {
-	//	    setCursor(new Cursor(Cursor.HAND_CURSOR));
-	//	}
-	//	public void mouseExited(MouseEvent e) {
-	//	    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-	//	}
-	//   });
-
-	animationChooser = new AnimationChooserSwingVersion();
-
-	rangeChooser = new RangeChoiceSwingVersion( this );
-		
-	// init %Acrylamide field and set initial value to 15
-	percentAcrylamide = new PercentAcrylamideSwingVersion();
-	
-	sequences = new Vector();
-	sequenceTitles = new Vector();
-	molecularWeights = new Vector();
-	piValues = new Vector();
-/*
- * The following code was commented out October of 2009 during the conversion
- * of this application from awt components to Swing.
- * /
-/*	this.setLayout(null);
-	//this.setBackground(new Color(176, 196, 222));
-	this.setBackground( new Color( 0, 0, 0 ) );
-	//set bounds on components (approximate, for now) (x, y, width, height)
-/* The gelCanvas line is left uncommented until it itself is converted to swing
- * /
-	gelCanvas.setBounds(192, 49, 670, 600);
-   //     gelCanvas.setBounds(192, 49, 100,100);
-/*	helpButton.setBounds(10,47,49,20);
-	aboutButton.setBounds(62,47,59,20);
-	addProteinButton.setBounds(10,77,109,20);//(10, 290, 109, 20);
-	removeProteinButton.setBounds(proteinListFrame.getWidth()/4 - 5, 
-				      175, 137, 20);
-	colorkey.setBounds( 10, 566, 88, 20 );
-	playButton.setBounds( 15,175,33,33 );//(138,104,33,33);
-	stopButton.setBounds( 58,179,27,27 );//(181,108,27,27);
-	restartButton.setBounds( 95,179,27,27 );//(218,108,27,27);
-	csvButton.setBounds( 10,536,118,20 );//( 10, 265, 118, 20 );
-	webButton.setBounds( 10,506,125,20 );//(134, 265, 125, 20 );
-	percentAcrylamide.setBounds( 21,368,65,50 );//( 32, 228, 65, 50 );
-	rangeImage.setBounds( 19,315,78,24 );//( 149, 173, 78, 24 );
-	secondProt.setBounds( 10, 446, 144, 20 );//( 126, 218, 144, 20 );
-	searchButton.setBounds( 10,476,130,20);//( 126, 240, 130, 20 );
-	proteinListButton.setBounds( 10,416,152,20 );//( 20, 320, 168, 20 );
-
-	proteinList.setBounds( 7, 10, 280, 155 );
-	//	voltageChooser.setBounds( 21,245,65,50 );//( 33, 107, 65, 50 );
-	animationChooser.setBounds( 15, 117, 96, 50 );//( 144,50,96,50 );
-	rangeChooser.setBounds( 15,248,82,50 );//( 24, 170, 82, 50 );
-*/
 	proteinListPanel.add( proteinList );
 	proteinListPanel.add( removeProteinButton );
 	proteinListFrame.getContentPane().add( proteinListPanel );
@@ -239,30 +166,6 @@ public class Electro2D extends JPanel implements ActionListener {
 		}
 	    }
 					    );
-/* These add lines are commented out, October 2009, to allow for structured
- * Swing GUI building in the lines of code following these
- * /
-	//add components to applet panel
-/*	this.add(colorkey);
-	this.add(helpButton);
-	this.add(aboutButton);
-	this.add(addProteinButton);
-	this.add(csvButton);
-	this.add( webButton );
-	this.add(playButton);
-	this.add(stopButton);
-	this.add(restartButton);
-	//	this.add(voltageChooser);
-	this.add(animationChooser);
-	this.add( rangeChooser );
-	this.add( rangeImage );
-	this.add( percentAcrylamide );
-	this.add( secondProt );
-	this.add( gelCanvas );
-	this.add( searchButton );
-	this.add( proteinListButton );
-	this.setBackground( Color.BLACK );
-*/
 
        /*
         * new code for designing a Swing GUI; uses JPanels and layout managers

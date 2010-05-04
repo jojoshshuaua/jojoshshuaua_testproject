@@ -745,8 +745,6 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     public void genDots() {
         clearCanvas();
 
-        System.out.println("gelcanvas 748: HERE IS THE SIZE OF DOTPROTIENS: " + dotProteins.size());
-
         for(int i = 0; i < dotProteins.size(); i++) {
             ((ProteinDotSwingVersion)(dotProteins.elementAt(i))).changeY();
         }
@@ -766,9 +764,11 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         for(int i = 0; i < dotProteins.size(); i++) {
 	    ((ProteinDotSwingVersion)(dotProteins.elementAt(i))).restart();
 	}
-        for(int i = 0; i < dotProteins2.size(); i++) {
-	    ((ProteinDotSwingVersion)(dotProteins2.elementAt(i))).restart();
-	}
+        if(dotProteins2 != null) {
+            for(int i = 0; i < dotProteins2.size(); i++) {
+    	    ((ProteinDotSwingVersion)(dotProteins2.elementAt(i))).restart();
+            }
+        }
         update(graphic);
 	repaint();
     }
@@ -777,8 +777,10 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      * Clears the canvas in preperation for more animation.
      */
     public void clearCanvas() {
-        graphic.setColor(new Color(54, 100, 139));
+//        graphic.setColor(new Color(54, 100, 139));
+        graphic.setColor(Color.RED);
 	graphic.clearRect(1, 48, gelCanvasRectangle.width - 1, gelCanvasRectangle.height - 47);
+        update(graphic);
     }
 
     /**
