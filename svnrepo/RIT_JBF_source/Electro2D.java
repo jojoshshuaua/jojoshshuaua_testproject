@@ -24,7 +24,7 @@ public class Electro2D extends JPanel implements ActionListener {
 
     private FileFrame fileFrame;          //pop up for loading file data
     private JFrame proteinListFrame;       //pop up for displaying protein lists
-    private JPanel proteinListPanel;
+ //   private JPanel proteinListPanel;
     private ProteinListButtonSwingVersion proteinListButton;
     
     /** components of the main applet **/
@@ -136,25 +136,17 @@ public class Electro2D extends JPanel implements ActionListener {
 	molecularWeights = new Vector();
 	piValues = new Vector();
 
-	proteinListFrame = new JFrame( "Protein Lists" );
-	proteinListFrame.setBounds( 0, 0, 300, 250 );
+	proteinListFrame = new ProteinListFrame( "Protein Lists", this);
+/**	proteinListFrame.setBounds( 0, 0, 300, 250 );
 	proteinListFrame.setResizable(false);
 	proteinListPanel = new JPanel();
 	proteinListPanel.setBounds( 0, 0, 300, 250 );
 	proteinListPanel.setLayout( null );
-	proteinListButton = new ProteinListButtonSwingVersion( this );
-	proteinList = new java.awt.List();
+*/	proteinListButton = new ProteinListButtonSwingVersion( this );
+/**	proteinList = new java.awt.List();
 	proteinList.setMultipleMode(false); //Don't allow multiple selections
 	proteinList2 = new java.awt.List();
 	proteinList2.setMultipleMode(false);
-	proteinList.addMouseListener(new MouseAdapter() {
-		public void mouseEntered(MouseEvent e) {
-		    setCursor(new Cursor(Cursor.HAND_CURSOR));
-		}
-		public void mouseExited(MouseEvent e) {
-		    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-		}
-	    });
 	proteinList.addActionListener(this);
 	proteinList2.addActionListener(this);
 	proteinListPanel.add( proteinList );
@@ -166,7 +158,7 @@ public class Electro2D extends JPanel implements ActionListener {
 		}
 	    }
 					    );
-
+*/
        /*
         * new code for designing a Swing GUI; uses JPanels and layout managers
         * to arrange the buttons and labels to look similar to how the old awt
@@ -360,6 +352,7 @@ public class Electro2D extends JPanel implements ActionListener {
 	//clear the molecular weight labels as well (since this method is
 	// only called from the restart button)
 	clearMW();
+        pHPanel.removeAll();
 	//repaint the applet to reflect the change
 	this.repaint();
     }
@@ -377,6 +370,7 @@ public class Electro2D extends JPanel implements ActionListener {
 	//remove all of the labels from the vector
 	mwLabels.removeAllElements();
 	//repaint the applet to reflect the change
+        mWPanel.removeAll();
 	this.repaint();
     }
 
@@ -506,7 +500,7 @@ public class Electro2D extends JPanel implements ActionListener {
     public void getSequenceData2(){
 	fileFrame2.toFront();
 	fileFrame2.setVisible(true);
-	proteinList2.setBounds( 10, 170, 250, 155 );
+/**	proteinList2.setBounds( 10, 170, 250, 155 );
 	removeProteinButton.setBounds( proteinListFrame.getWidth()/4 - 5,
 				       340, 137, 20 );
 	proteinListPanel.add( proteinList2 );
@@ -515,7 +509,7 @@ public class Electro2D extends JPanel implements ActionListener {
 	//proteinList.setBounds( 10, 20, 250, 155 );
 	//this.repaint();
 	proteinListFrame.validate();
-    }
+   */ }
 
 
 
@@ -1309,11 +1303,14 @@ public class Electro2D extends JPanel implements ActionListener {
     }
 
     public Vector getSequences2(){
-	return sequences2;
+        return sequences2;
     }
 
     public Vector getSequenceTitles2(){
-	return sequenceTitles2;
+        if(sequenceTitles2 != null) {
+            return sequenceTitles2;
+        }
+        return new Vector();
     }
 
     public Vector getMolecularWeights2(){
