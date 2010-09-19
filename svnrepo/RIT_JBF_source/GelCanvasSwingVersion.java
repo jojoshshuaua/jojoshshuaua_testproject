@@ -635,8 +635,9 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      * This method clears the IEF animation area.
      */
     public void clearIEF() {
-        bufferImageGraphics.setColor(Color.WHITE);
+        bufferImageGraphics.setColor(Color.RED);
         bufferImageGraphics.clearRect(2, 2, gelCanvasRectangle.width - 3, 45);
+        graphic.drawImage(bufferImage, 0, 0, this);
     }
 
     /**

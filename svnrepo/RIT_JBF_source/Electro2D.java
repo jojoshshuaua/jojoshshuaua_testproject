@@ -23,7 +23,7 @@ import java.awt.Font;
 public class Electro2D extends JPanel implements ActionListener {
 
     private FileFrame fileFrame;          //pop up for loading file data
-    private JFrame proteinListFrame;       //pop up for displaying protein lists
+    private ProteinListFrame proteinListFrame;       //pop up for displaying protein lists
  //   private JPanel proteinListPanel;
     private ProteinListButtonSwingVersion proteinListButton;
     
@@ -97,6 +97,8 @@ public class Electro2D extends JPanel implements ActionListener {
 	fileFrame = new FileFrame(this, 1);  //init frame
 	fileFrame2 = new FileFrame(this, 2);
 	fileFrame.setResizable(false);    //don't allow user to change size
+        proteinList = new java.awt.List();
+        proteinList2 = new java.awt.List();
 
 	web = new WebGenerator( this );
 	webButton = new GenerateHTMLButtonSwingVersion(this);
@@ -294,9 +296,8 @@ public class Electro2D extends JPanel implements ActionListener {
 
     public void displayProtList(){
 	
-	proteinListFrame.validate();
 	proteinListFrame.setVisible(true);
-
+	proteinListFrame.validate();
     }
 
     /**
@@ -959,6 +960,7 @@ public class Electro2D extends JPanel implements ActionListener {
 	for(int x = 0; x < sequenceTitles.size(); x++) {
 	    proteinList.add((String)sequenceTitles.elementAt(x));
 	}
+        proteinListFrame.updateSequences(sequenceTitles, sequenceTitles2);
     }
     
     /**
@@ -1006,6 +1008,7 @@ public class Electro2D extends JPanel implements ActionListener {
 	for( int x = 0; x < sequenceTitles2.size(); x++ ){
 	    proteinList2.add((String)sequenceTitles2.elementAt(x));
 	}
+        proteinListFrame.updateSequences(sequenceTitles, sequenceTitles2);
     }
 
     /**
