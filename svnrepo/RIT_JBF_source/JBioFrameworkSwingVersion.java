@@ -18,7 +18,7 @@ public class JBioFrameworkSwingVersion extends JFrame {
     private JTabbedPane tabbedPane;
     private Electro2D electro2D;
     private Electrophoresis electrophoresis;
-    private ionex ionex;
+    private Ionex ionex;
 
     public static void main(String[] args) {
         JBioFrameworkSwingVersion jbfSwing = new JBioFrameworkSwingVersion();
@@ -32,7 +32,7 @@ public class JBioFrameworkSwingVersion extends JFrame {
 
         electro2D = new Electro2D();
         electrophoresis = new Electrophoresis();
-        ionex = new ionex();
+        ionex = new Ionex();
 
         tabbedPane = new JTabbedPane();
 

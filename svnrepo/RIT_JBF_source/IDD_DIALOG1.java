@@ -30,192 +30,180 @@
 //
 //------------------------------------------------------------------------------
 import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 public class IDD_DIALOG1
 {
-	Container    m_Parent       = null;
+	JPanel    m_Parent       = null;
 	boolean      m_fInitialized = false;
-	DialogLayout m_Layout;
+	
 
 	// Control definitions
 	//--------------------------------------------------------------------------
-	Label         IDC_STATIC1;
-	TextField     IDC_SOLVENTA;
-	Label         IDC_STATIC2;
-	Label         IDC_STATIC3;
-	TextField     IDC_SOLVENTB;
-	Label         IDC_STATIC4;
-	Label         IDC_STATIC5;
-	CheckboxGroup group1;
-	Checkbox      IDC_POS;
-	Checkbox      IDC_NEG;
-	Label         IDC_STATIC6;
-	CheckboxGroup group2;
-	Checkbox      IDC_BUFFER1;
-	Checkbox      IDC_BUFFER2;
-	Checkbox      IDC_BUFFER3;
-	List          IDC_PROTEINS;
-	Button        IDC_REMOVE;
-	Button        IDC_ADD;
-	TextField     IDC_AMOUNT;
-	Label         IDC_STATIC7;
-	Button        IDC_START;
-	Button        IDC_PAUSE;
-	Button        IDC_STOP;
-	Button        IDC_UPDATE;
-	Button        IDC_RESET;
-	List          IDC_SELECTPROTEIN;
+	JLabel         IDC_STATIC1;
+	JTextField     IDC_SOLVENTA;
+	JLabel         IDC_STATIC2;
+	JLabel         IDC_STATIC3;
+	JTextField     IDC_SOLVENTB;
+	JLabel         IDC_STATIC4;
+	JLabel         IDC_STATIC5;
+	ButtonGroup group1;
+	JRadioButton      IDC_POS;
+	JRadioButton      IDC_NEG;
+	JLabel         IDC_STATIC6;
+	ButtonGroup group2;
+	JRadioButton      IDC_BUFFER1;
+	JRadioButton      IDC_BUFFER2;
+	JRadioButton      IDC_BUFFER3;
+	JList          IDC_PROTEINS;
+	JButton        IDC_REMOVE;
+	JButton        IDC_ADD;
+	JTextField     IDC_AMOUNT;
+	JLabel         IDC_STATIC7;
+	JButton        IDC_START;
+	JButton        IDC_PAUSE;
+	JButton        IDC_STOP;
+	JButton        IDC_UPDATE;
+	JButton        IDC_RESET;
+	JComboBox         IDC_SELECTPROTEIN;
 
 
 	// Constructor
 	//--------------------------------------------------------------------------
-	public IDD_DIALOG1 (Container parent)
+	public IDD_DIALOG1 (JPanel parent)
 	{
 		m_Parent = parent;
 	}
 
 	// Initialization.
 	//--------------------------------------------------------------------------
-	public boolean CreateControls()
+	public boolean CreateControls( ActionListener listener )
 	{
 		// Can only init controls once
 		//----------------------------------------------------------------------
 		if (m_fInitialized || m_Parent == null)
 			return false;
 
-		// Parent must be a derivation of the Container class
-		//----------------------------------------------------------------------
-		if (!(m_Parent instanceof Container))
-			return false;
-
-		// Since there is no way to know if a given font is supported from
-		// platform to platform, we only change the size of the font, and not
-		// type face name.  And, we only change the font if the dialog resource
-		// specified a font.
-		//----------------------------------------------------------------------
-		Font OldFnt = m_Parent.getFont();
+		m_Parent.setLayout( new GridLayout( 0, 2 ) );
 		
-		if (OldFnt != null)
-		{
-			Font NewFnt = new Font(OldFnt.getName(), OldFnt.getStyle(), 8);
 
-			m_Parent.setFont(NewFnt);
-		}
-
-		// All position and sizes are in Dialog Units, so, we use the
-		// DialogLayout manager.
-		//----------------------------------------------------------------------
-		m_Layout = new DialogLayout(m_Parent, 190, 247);
-		m_Parent.setLayout(m_Layout);
-		System.out.println( m_Layout );
-		System.out.println( m_Parent );
-		//m_Parent.addNotify();
-
-		Dimension size   = m_Layout.getDialogSize();
-		Insets    insets = m_Parent.insets();
+	
 		
-		m_Parent.resize(insets.left + size.width  + insets.right,
-                        insets.top  + size.height + insets.bottom);
+	
 
 		// Control creation
 		//----------------------------------------------------------------------
-		IDC_STATIC1 = new Label ("Solvent A Concentration:", Label.CENTER);
+		IDC_STATIC1 = new JLabel ("Solvent A Concentration:");
 		m_Parent.add(IDC_STATIC1);
-		m_Layout.setShape(IDC_STATIC1, 11, 28, 80, 8);
+		
 
 		IDC_SOLVENTA = new ConcenTextField ("");
 		m_Parent.add(IDC_SOLVENTA);
-		m_Layout.setShape(IDC_SOLVENTA, 97, 25, 40, 14);
+		
 
-		IDC_STATIC2 = new Label ("M NaCl", Label.LEFT);
+		IDC_STATIC2 = new JLabel ("M NaCl", Label.LEFT);
 		m_Parent.add(IDC_STATIC2);
-		m_Layout.setShape(IDC_STATIC2, 146, 28, 28, 8);
+		
 
-		IDC_STATIC3 = new Label ("Solvent B Concentration:", Label.CENTER);
+		IDC_STATIC3 = new JLabel ("Solvent B Concentration:");
 		m_Parent.add(IDC_STATIC3);
-		m_Layout.setShape(IDC_STATIC3, 11, 49, 80, 8);
+		
 
 		IDC_SOLVENTB = new ConcenTextField ("");
 		m_Parent.add(IDC_SOLVENTB);
-		m_Layout.setShape(IDC_SOLVENTB, 97, 46, 40, 14);
+		
 
-		IDC_STATIC4 = new Label ("M NaCl", Label.LEFT);
+		IDC_STATIC4 = new JLabel ("M NaCl");
 		m_Parent.add(IDC_STATIC4);
-		m_Layout.setShape(IDC_STATIC4, 146, 49, 28, 8);
+		
 
-		IDC_STATIC5 = new Label ("Resin:", Label.LEFT);
+		IDC_STATIC5 = new JLabel ("Resin:");
 		m_Parent.add(IDC_STATIC5);
-		m_Layout.setShape(IDC_STATIC5, 19, 64, 30, 8);
+		
 
-		group1 = new CheckboxGroup ();
-		IDC_POS = new Checkbox ("DEAE - Sephadex", group1, false);
+		group1 = new ButtonGroup ();
+		IDC_POS = new JRadioButton ("DEAE - Sephadex", false);
+        group1.add(IDC_POS);
+
 		m_Parent.add(IDC_POS);
-		m_Layout.setShape(IDC_POS, 7, 74, 72, 10);
+		
 
-		IDC_NEG = new Checkbox ("CM - Sephadex", group1, false);
+		IDC_NEG = new JRadioButton ("CM - Sephadex", false);
+        group1.add(IDC_NEG);
+
 		m_Parent.add(IDC_NEG);
-		m_Layout.setShape(IDC_NEG, 7, 84, 65, 10);
+		
 
-		IDC_STATIC6 = new Label ("Buffer:", Label.LEFT);
+		IDC_STATIC6 = new JLabel ("Buffer:");
 		m_Parent.add(IDC_STATIC6);
-		m_Layout.setShape(IDC_STATIC6, 94, 64, 28, 8);
+		
 
-		group2 = new CheckboxGroup ();
-		IDC_BUFFER1 = new Checkbox ("Sodium Acetate, pH 4.8", group2, false);
+		group2 = new ButtonGroup ();
+		IDC_BUFFER1 = new  JRadioButton("Sodium Acetate, pH 4.8", false);
+        group2.add( IDC_BUFFER1 );
 		m_Parent.add(IDC_BUFFER1);
-		m_Layout.setShape(IDC_BUFFER1, 82, 74, 99, 10);
+		
 
-		IDC_BUFFER2 = new Checkbox ("Sodium Phosphate, pH 7.2", group2, false);
+		IDC_BUFFER2 = new JRadioButton ("Sodium Phosphate, pH 7.2", false);
+        group2.add( IDC_BUFFER2 );
 		m_Parent.add(IDC_BUFFER2);
-		m_Layout.setShape(IDC_BUFFER2, 82, 84, 99, 10);
+		
 
-		IDC_BUFFER3 = new Checkbox ("Tris HCl, pH 8.0", group2, false);
+		IDC_BUFFER3 = new JRadioButton ("Tris HCl, pH 8.0", false);
+        group2.add( IDC_BUFFER3 );
 		m_Parent.add(IDC_BUFFER3);
-		m_Layout.setShape(IDC_BUFFER3, 82, 94, 99, 10);
+		
 
-		IDC_PROTEINS = new List (1, false);
+		IDC_PROTEINS = new JList ();
 		m_Parent.add(IDC_PROTEINS);
-		m_Layout.setShape(IDC_PROTEINS, 7, 107, 174, 53);
+		
 
-		IDC_REMOVE = new Button ("Remove Protein");
+		IDC_REMOVE = new JButton ("Remove Protein");
+		IDC_REMOVE.addActionListener( listener );
 		m_Parent.add(IDC_REMOVE);
-		m_Layout.setShape(IDC_REMOVE, 7, 165, 57, 14);
+		
 
-		IDC_ADD = new Button ("Add Protein");
+		IDC_ADD = new JButton ("Add Protein");
+		IDC_ADD.addActionListener( listener );
 		m_Parent.add(IDC_ADD);
-		m_Layout.setShape(IDC_ADD, 7, 182, 58, 14);
+		
 
 		IDC_AMOUNT = new AmountTextField ("");
 		m_Parent.add(IDC_AMOUNT);
-		m_Layout.setShape(IDC_AMOUNT, 79, 182, 40, 14);
+		
 
-		IDC_STATIC7 = new Label ("mg", Label.LEFT);
+		IDC_STATIC7 = new JLabel ("mg");
 		m_Parent.add(IDC_STATIC7);
-		m_Layout.setShape(IDC_STATIC7, 129, 185, 10, 8);
+	
 
-		IDC_START = new Button ("Start");
+		IDC_START = new JButton ("Start");
+		IDC_START.addActionListener( listener );
 		m_Parent.add(IDC_START);
-		m_Layout.setShape(IDC_START, 7, 225, 50, 14);
+		
 
-		IDC_PAUSE = new Button ("Pause");
+		IDC_PAUSE = new JButton ("Pause");
+		IDC_PAUSE.addActionListener( listener );
 		m_Parent.add(IDC_PAUSE);
-		m_Layout.setShape(IDC_PAUSE, 69, 225, 50, 14);
+		
 
-		IDC_STOP = new Button ("Stop");
+		IDC_STOP = new JButton ("Stop");
+		IDC_STOP.addActionListener( listener );
 		m_Parent.add(IDC_STOP);
-		m_Layout.setShape(IDC_STOP, 131, 225, 50, 14);
-
-		IDC_UPDATE = new Button ("Load Experiment");
+		
+		IDC_UPDATE = new JButton ("Load Experiment");
+		IDC_UPDATE.addActionListener( listener );
 		m_Parent.add(IDC_UPDATE);
-		m_Layout.setShape(IDC_UPDATE, 30, 6, 60, 14);
+		
 
-		IDC_RESET = new Button ("Reset Settings");
+		IDC_RESET = new JButton ("Reset Settings");
+		IDC_RESET.addActionListener( listener );
 		m_Parent.add(IDC_RESET);
-		m_Layout.setShape(IDC_RESET, 102, 6, 60, 14);
+		
 
-		IDC_SELECTPROTEIN = new List (1, false);
+		IDC_SELECTPROTEIN = new JComboBox();
 		m_Parent.add(IDC_SELECTPROTEIN);
-		m_Layout.setShape(IDC_SELECTPROTEIN, 7, 198, 174, 23);
+		
 
 		m_fInitialized = true;
 		return true;
