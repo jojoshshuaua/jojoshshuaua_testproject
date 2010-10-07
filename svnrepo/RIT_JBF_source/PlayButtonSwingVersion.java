@@ -65,8 +65,7 @@ public class PlayButtonSwingVersion extends JButton implements ActionListener {
 	    //get the animation the user wishes to see
             electro2D.clearpH();
 	    choice = electro2D.getAnimationChoice();
-            System.out.println("PlayButtonSwingVersion 67: SIZE OF ELECTRO2D.GETSEQUENCES: " + electro2D.getSequences().size());
-	    if( electro2D.getSequences().size() > 0 ){
+	    if( electro2D.getSequencesReady()){
 
 		//if the data for the animation needs to be processed,
 		//do so

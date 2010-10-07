@@ -389,6 +389,14 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      * @param g the graphics object
      */
     public void update(Graphics g) {
+        if (dotProteins == null) {
+            dotProteins = new Vector();
+        }
+
+        if (dotProteins2 == null) {
+            dotProteins2 = new Vector();
+        }
+
         // First, clear off any dots left over from the last animation
 	bufferImageGraphics.clearRect(1, 48, gelCanvasRectangle.width - 2, gelCanvasRectangle.height - 49);
 	// Then, draw the protein dots

@@ -19,6 +19,10 @@ public class ProteinListFrame extends JFrame {
     JList sequenceTwoList;
     Vector sequenceTitlesOne;
     Vector sequenceTitlesTwo;
+    Vector<Integer> positionsOne;
+    Vector<Integer> positionsTwo;
+    Vector copySequenceOne;
+    Vector copySequenceTwo;
 
     /**
      * Constructor for the window; sets up the instance variables and builds
@@ -33,10 +37,14 @@ public class ProteinListFrame extends JFrame {
         setLayout(new GridBagLayout());
         JLabel sequenceOneLabel = new JLabel("Sequence One");
         JLabel sequenceTwoLabel = new JLabel("Sequence Two");
-        sequenceOneList = new JList(electro2D.getSequenceTitles());
-        sequenceTwoList = new JList(electro2D.getSequenceTitles2());
-        sequenceTitlesOne = new Vector(electro2D.getSequenceTitles());
-        sequenceTitlesTwo = new Vector(electro2D.getSequenceTitles2());
+        sequenceOneList = new JList();
+        sequenceTwoList = new JList();
+        sequenceTitlesOne = new Vector();
+        sequenceTitlesTwo = new Vector();
+        copySequenceOne = (Vector)sequenceTitlesOne.clone();
+        copySequenceTwo = (Vector)sequenceTitlesTwo.clone();
+        positionsOne = new Vector<Integer>();
+        positionsTwo = new Vector<Integer>();
         JScrollPane sequenceOneScroll = new JScrollPane(sequenceOneList);
         JScrollPane sequenceTwoScroll = new JScrollPane(sequenceTwoList);
         JLabel removeLabel = new JLabel("Select proteins to remove: ");
@@ -107,6 +115,48 @@ public class ProteinListFrame extends JFrame {
         sequenceTwoList.setListData(pL2);
         sequenceTitlesOne = new Vector(pL1);
         sequenceTitlesTwo = new Vector(pL2);
+        copySequenceOne = (Vector)sequenceTitlesOne.clone();
+        copySequenceTwo = (Vector)sequenceTitlesTwo.clone();
+        positionsOne = new Vector<Integer>();
+        positionsTwo = new Vector<Integer>();
+    }
+
+    /**
+     * This method is called to collect the positions of the elements still within
+     * the manipulated sequence into vectors for use with synchronizing Electro2D
+     * with the user's manipulations.
+     */
+    public void updatePositions() {
+        positionsOne = new Vector<Integer>();
+        positionsTwo = new Vector<Integer>();
+        for (int x = 0; x < copySequenceOne.size(); x++) {
+            if (sequenceTitlesOne.contains(copySequenceOne.get(x))) {
+                positionsOne.add(x);
+            }
+        }
+        for (int x = 0; x < copySequenceTwo.size(); x++) {
+            if (sequenceTitlesTwo.contains(copySequenceTwo.get(x))) {
+                positionsTwo.add(x);
+            }
+        }
+        if (positionsOne.size() == 0) {
+            positionsOne.add(-1);
+        }
+        if (positionsTwo.size() == 0) {
+            positionsTwo.add(-1);
+        }
+
+        if (positionsOne.size() > 0) {
+            electro2D.setSequencesReady(true);
+        }
+
+        if (positionsTwo.size() > 0) {
+            electro2D.setSequencesReady(true);
+        }
+
+        if (positionsOne.get(0) < 0 && positionsTwo.get(0) < 0) {
+            electro2D.setSequencesReady(false);
+        }
     }
     
     /**
@@ -127,6 +177,8 @@ public class ProteinListFrame extends JFrame {
             sequenceTwoList.setListData(sequenceTitlesTwo);
             sequenceOneList.validate();
             sequenceTwoList.validate();
+            updatePositions();
+            positionsOne = new Vector<Integer>();
         }
     }
 
@@ -148,7 +200,8 @@ public class ProteinListFrame extends JFrame {
             sequenceTwoList.setListData(sequenceTitlesTwo);
             sequenceOneList.validate();
             sequenceTwoList.validate();
-
+            updatePositions();
+            positionsTwo = new Vector<Integer>();
         }
     }
 
@@ -166,6 +219,7 @@ public class ProteinListFrame extends JFrame {
             sequenceTwoList.setListData(sequenceTitlesTwo);
             sequenceOneList.validate();
             sequenceTwoList.validate();
+            updatePositions();
         }
     }
 
@@ -191,7 +245,23 @@ public class ProteinListFrame extends JFrame {
             sequenceTwoList.setListData(sequenceTitlesTwo);
             sequenceOneList.validate();
             sequenceTwoList.validate();
+            updatePositions();
         }
+    }
+
+    /**
+     * The following two methods are accessors for the position vectors. 
+     * Electro2D will call them in its get methods for the vectors used in
+     * gel filtration in order to carry over the manipulations done by the user.
+     * 
+     * @return Vector<Integer> the positions of each element still in the sequence.
+     */
+    public Vector<Integer> getPositionsOne() {
+        return positionsOne;
+    }
+
+    public Vector<Integer> getPositionsTwo() {
+        return positionsTwo;
     }
 
 }

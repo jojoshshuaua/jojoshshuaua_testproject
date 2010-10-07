@@ -1,9 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import javax.swing.ButtonGroup;
-import javax.swing.JRadioButton;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class SearchProteinFunction implements MouseListener, ActionListener{
     
@@ -11,24 +9,36 @@ public class SearchProteinFunction implements MouseListener, ActionListener{
     private Vector dots2;
     private GelCanvasSwingVersion gel;
     private Electro2D electro2D;
-    private Frame window;
-    private SearchProteinFunctionButton search;
-    private SearchProteinResetButton reset;
-    private TextField searchTerm;
-    private TextField excludeTerm;
-    private Panel buttonPane;
-    private Panel buttonLabelPane;
+    private JFrame window;
+//    private Frame window;
+//    private SearchProteinFunctionButton search;
+//    private SearchProteinResetButton reset;
+    private JButton search;
+    private JButton reset;
+    private JTextField searchTerm;
+//    private TextField searchTerm;
+    private JTextField excludeTerm;
+//    private TextField excludeTerm;
+    private JPanel buttonPane;
+//    private Panel buttonPane;
+    private JPanel buttonLabelPane;
+//    private Panel buttonLabelPane;
     private JPanel buttonSelectionPane;
-    private Panel searchLabelPane;
-    private Panel searchFieldPane;
-    private Panel textPane;
-    private Label proteinTitleLabel;
-    private Label aaSequenceLabel;
-    private Label proteinFunctionLabel;
-    private Label includesLabel;
-    private Label excludesLabel;
+    private JPanel searchLabelPane;
+//    private Panel searchLabelPane;
+    private JPanel searchFieldPane;
+//    private Panel searchFieldPane;
+    private JPanel textPane;
+//    private Panel textPane;
+//    private Label proteinTitleLabel;
+//    private Label aaSequenceLabel;
+//    private Label proteinFunctionLabel;
+    private JLabel includesLabel;
+//    private Label includesLabel;
+    private JLabel excludesLabel;
+//    private Label excludesLabel;
     private String searchField;
-    private static Color background = Color.BLACK;//new Color( 202, 225, 255 );
+//    private static Color background = Color.BLACK;//new Color( 202, 225, 255 );
     private ButtonGroup radioButtons;
     private JRadioButton sequenceButton;
     private JRadioButton titleButton;
@@ -42,19 +52,29 @@ public class SearchProteinFunction implements MouseListener, ActionListener{
 	gel = electro2D.getGel();
 	dots1 = new Vector();
 	dots2 = new Vector();
-	excludesLabel = new Label( "Excludes: " );
-	includesLabel = new Label( "Includes: " );
-	excludesLabel.setForeground( Color.WHITE );
-	includesLabel.setForeground( Color.WHITE );
-	searchTerm = new TextField();
-	excludeTerm = new TextField();
-	buttonPane = new Panel();
-	buttonLabelPane = new Panel();
+	excludesLabel = new JLabel( "Excludes: " );
+//	excludesLabel = new Label( "Excludes: " );
+	includesLabel = new JLabel( "Includes: " );
+//	includesLabel = new Label( "Includes: " );
+//	excludesLabel.setForeground( Color.WHITE );
+//	includesLabel.setForeground( Color.WHITE );
+	searchTerm = new JTextField();
+//	searchTerm = new TextField();
+	excludeTerm = new JTextField();
+//	excludeTerm = new TextField();
+	buttonPane = new JPanel();
+//	buttonPane = new Panel();
+	buttonLabelPane = new JPanel();
+//	buttonLabelPane = new Panel();
 	buttonSelectionPane = new JPanel();
-	textPane = new Panel();
-	searchLabelPane = new Panel();
-	searchFieldPane = new Panel();
-	window = new Frame();
+	textPane = new JPanel();
+//	textPane = new Panel();
+	searchLabelPane = new JPanel();
+//	searchLabelPane = new Panel();
+	searchFieldPane = new JPanel();
+//	searchFieldPane = new Panel();
+	window = new JFrame();
+//	window = new Frame();
 	window.addWindowListener( new WindowAdapter(){
 		public void windowClosing( WindowEvent e ) {
 					  window.hide();
@@ -62,12 +82,16 @@ public class SearchProteinFunction implements MouseListener, ActionListener{
 				  }
 				  );
 
-	search = new SearchProteinFunctionButton( searchTerm, excludeTerm,
-						  this );
-	reset = new SearchProteinResetButton( this );
-	sequenceButton = new JRadioButton( "Sequence" );
-	titleButton = new JRadioButton( "Protein Title" );
-	functionButton = new JRadioButton( "Protein Function" );
+//	search = new SearchProteinFunctionButton( searchTerm, excludeTerm, this );
+//	reset = new SearchProteinResetButton( this );
+        search = new JButton("Search");
+        reset = new JButton("Reset");
+        search.addActionListener(new SearchListener());
+        reset.addActionListener(new ResetListener());
+	sequenceButton = new JRadioButton( "Sequence", false );
+	titleButton = new JRadioButton( "Protein Title", true );
+	functionButton = new JRadioButton( "Protein Function", false );
+        searchField = "function";
 	sequenceButton.addActionListener( this );
 	titleButton.addActionListener( this );
 	functionButton.addActionListener( this );
@@ -77,49 +101,52 @@ public class SearchProteinFunction implements MouseListener, ActionListener{
 	functionButton.setMnemonic( KeyEvent.VK_F );
 	sequenceButton.setMnemonic( KeyEvent.VK_S );
 	titleButton.setMnemonic( KeyEvent.VK_T );
-	titleButton.setBackground( background );
-	titleButton.setForeground( Color.WHITE );
-	sequenceButton.setBackground( background );
-	sequenceButton.setForeground( Color.WHITE );
-	functionButton.setBackground( background );
-	functionButton.setForeground( Color.WHITE );
+//	titleButton.setBackground( background );
+//	titleButton.setForeground( Color.WHITE );
+//	sequenceButton.setBackground( background );
+//	sequenceButton.setForeground( Color.WHITE );
+//	functionButton.setBackground( background );
+//	functionButton.setForeground( Color.WHITE );
 	radioButtons.add( sequenceButton );
 	radioButtons.add( titleButton );
 	radioButtons.add( functionButton );
 
 	buttonLabelPane.setLayout( new GridLayout(0,1) );
-	buttonLabelPane.setBounds( 0, 0, 200, 50 );
-	buttonLabelPane.setBackground( background );
-	Label labelPane = new Label( "Select Search Field" );
-	labelPane.setForeground( Color.WHITE );
+//	buttonLabelPane.setBounds( 0, 0, 200, 50 );
+//	buttonLabelPane.setBackground( background );
+	JLabel labelPane = new JLabel( "Select Search Field" );
+//	Label labelPane = new Label( "Select Search Field" );
+//	labelPane.setForeground( Color.WHITE );
 	buttonLabelPane.add( labelPane );
 	buttonSelectionPane.setLayout( new GridLayout( 0, 1 ) );
-	buttonSelectionPane.setBounds( 0, 0, 200, 150 );
-	buttonSelectionPane.setBackground( background );
+//	buttonSelectionPane.setBounds( 0, 0, 200, 150 );
+//	buttonSelectionPane.setBackground( background );
 	buttonSelectionPane.add( titleButton );
 	buttonSelectionPane.add( functionButton );
 	buttonSelectionPane.add( sequenceButton );
 	
 	buttonPane.setLayout( new BorderLayout() );
-	buttonPane.setBounds( 0, 0, window.getWidth()/2, window.getHeight() );
+//	buttonPane.setBounds( 0, 0, window.getWidth()/2, window.getHeight() );
 	buttonPane.add( buttonLabelPane, BorderLayout.NORTH );
 	buttonPane.add( buttonSelectionPane, BorderLayout.CENTER );
 	
-	includesLabel.setBounds( 25, 12, 75, 20 );
-	searchTerm.setBounds( 40, 33, 100, 20 );
-	excludesLabel.setBounds( 25, 52, 75, 20 );
-	excludeTerm.setBounds( 40, 72, 100, 20 );
-	search.setBounds( 30, 100, 50, 20 );
-	reset.setBounds( 100, 100, 50, 20 );
-	searchLabelPane.setLayout( new FlowLayout() );
-	searchLabelPane.setBounds( 0, 0, 200, 50 );
-	searchLabelPane.setBackground( background );
+//	includesLabel.setBounds( 25, 12, 75, 20 );
+//	searchTerm.setBounds( 40, 33, 100, 20 );
+//	excludesLabel.setBounds( 25, 52, 75, 20 );
+//	excludeTerm.setBounds( 40, 72, 100, 20 );
+//	search.setBounds( 30, 100, 50, 20 );
+//	reset.setBounds( 100, 100, 50, 20 );
+	searchLabelPane.setLayout( new GridLayout(0,1));
+//	searchLabelPane.setLayout( new FlowLayout() );
+//	searchLabelPane.setBounds( 0, 0, 200, 50 );
+//	searchLabelPane.setBackground( background );
 	Label searchLabel = new Label( "Enter Search Term" );
-	searchLabel.setForeground( Color.WHITE );
+//	searchLabel.setForeground( Color.WHITE );
 	searchLabelPane.add( searchLabel );
-	searchFieldPane.setLayout( null );
-	searchFieldPane.setBounds( 0, 0, 200, 150 );
-	searchFieldPane.setBackground( background );
+	searchFieldPane.setLayout( new GridLayout(0,1) );
+//	searchFieldPane.setLayout( null );
+//	searchFieldPane.setBounds( 0, 0, 200, 150 );
+//	searchFieldPane.setBackground( background );
 	searchFieldPane.add( includesLabel );
 	searchFieldPane.add( searchTerm );
 	searchFieldPane.add( excludesLabel );
@@ -128,8 +155,8 @@ public class SearchProteinFunction implements MouseListener, ActionListener{
 	searchFieldPane.add( reset );
 	
 	textPane.setLayout( new BorderLayout() );
-	textPane.setBounds( 0, 0, window.getWidth()/2, window.getHeight() );
-	textPane.setBackground( new Color( 202, 225, 225 ) );
+//	textPane.setBounds( 0, 0, window.getWidth()/2, window.getHeight() );
+//	textPane.setBackground( new Color( 202, 225, 225 ) );
 	textPane.add( searchLabelPane, BorderLayout.NORTH );
 	textPane.add( searchFieldPane, BorderLayout.CENTER );
 	
@@ -138,15 +165,36 @@ public class SearchProteinFunction implements MouseListener, ActionListener{
 	window.setTitle( "Search Proteins" );
 	window.add( buttonPane, BorderLayout.WEST );
 	window.add( textPane, BorderLayout.EAST );
-	window.setBounds( 0, 0, 400, 300 );
+//	window.setBounds( 0, 0, 400, 300 );
 	window.pack();
-	window.setResizable( false );
+//	window.setResizable( false );
 	window.setVisible( true );
 	
     }
+
+    private class SearchListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            searchFor(searchTerm.getText(), excludeTerm.getText());
+        }
+    }
+
+    private class ResetListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            displayAll();
+        }
+    }
+
     public void searchFor( String fcnName, String limitations ){
 	dots1 = gel.getDots();
 	dots2 = gel.getDots2();
+
+        if (dots1 == null) {
+            dots1 = new Vector();
+        }
+
+        if (dots2 == null) {
+            dots2 = new Vector();
+        }
 
 	ProteinDotSwingVersion prot = null;
 	if( /*function.getSelected()*/ searchField.equals( "function" ) ){
@@ -218,7 +266,8 @@ public class SearchProteinFunction implements MouseListener, ActionListener{
 		}
 	    }
 	}
-	gel.repaint();
+//	gel.repaint();
+        gel.update(gel.getGraphics());
     }
     
     public void displayAll(){
@@ -232,7 +281,8 @@ public class SearchProteinFunction implements MouseListener, ActionListener{
 		((ProteinDotSwingVersion)dots2.elementAt( j )).doShowMe();
 	    }
 	}
-	gel.repaint();
+//	gel.repaint();
+        gel.update(gel.getGraphics());
     }
     
     public void hideExcludeFields(){

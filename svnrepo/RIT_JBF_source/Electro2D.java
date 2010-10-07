@@ -84,6 +84,7 @@ public class Electro2D extends JPanel implements ActionListener {
     private Vector molecularWeights2;
     private Vector piValues2;
     private FileFrame fileFrame2;
+    private boolean sequencesReady;
 
     private JPanel leftPanel;
     private JPanel pHPanel;
@@ -94,6 +95,7 @@ public class Electro2D extends JPanel implements ActionListener {
      */
     public Electro2D() {	
 
+	proteinListFrame = new ProteinListFrame( "Protein Lists", this);
 	fileFrame = new FileFrame(this, 1);  //init frame
 	fileFrame2 = new FileFrame(this, 2);
 	fileFrame.setResizable(false);    //don't allow user to change size
@@ -137,6 +139,7 @@ public class Electro2D extends JPanel implements ActionListener {
 	sequenceTitles = new Vector();
 	molecularWeights = new Vector();
 	piValues = new Vector();
+        sequencesReady = false;
 
 	proteinListFrame = new ProteinListFrame( "Protein Lists", this);
 /**	proteinListFrame.setBounds( 0, 0, 300, 250 );
@@ -1135,6 +1138,18 @@ public class Electro2D extends JPanel implements ActionListener {
      * @return sequences
      */
     public Vector getSequences() {
+        Vector<Integer> positionsOne = proteinListFrame.getPositionsOne();
+        System.out.println("POSITIONSONE = " + positionsOne);
+        System.out.println("Size of sequences: " + sequences.size());
+        if (positionsOne.size() > 0) {
+            Vector copySequences = (Vector)sequences.clone();
+            sequences.clear();
+            if(positionsOne.get(0) > -1) {
+                for(int x = 0; x < positionsOne.size(); x++) {
+                    sequences.add(copySequences.get(positionsOne.get(x)));
+                }
+            }
+        }
 	return sequences;
     }
 
@@ -1144,6 +1159,16 @@ public class Electro2D extends JPanel implements ActionListener {
      * @return sequenceTitles
      */
     public Vector getSequenceTitles() {
+        Vector<Integer> positionsOne = proteinListFrame.getPositionsOne();
+        if (positionsOne.size() > 0) {
+            Vector copySequenceTitles = (Vector)sequenceTitles.clone();
+            sequenceTitles.clear();
+            if(positionsOne.get(0) > -1) {
+                for(int x = 0; x < positionsOne.size(); x++) {
+                    sequenceTitles.add(copySequenceTitles.get(positionsOne.get(x)));
+                }
+            }
+        }
 	return sequenceTitles;
     }
 
@@ -1162,6 +1187,16 @@ public class Electro2D extends JPanel implements ActionListener {
      * @return molecularWeights
      */
     public Vector getMolecularWeights() {
+        Vector<Integer> positionsOne = proteinListFrame.getPositionsOne();
+        if (positionsOne.size() > 0) {
+            Vector copyMolecularWeights = (Vector)molecularWeights.clone();
+            molecularWeights.clear();
+            if(positionsOne.get(0) > -1) {
+                for(int x = 0; x < positionsOne.size(); x++) {
+                    molecularWeights.add(copyMolecularWeights.get(positionsOne.get(x)));
+                }
+            }
+        }
 	return molecularWeights;
     }
 
@@ -1289,6 +1324,16 @@ public class Electro2D extends JPanel implements ActionListener {
      * @return piValues
      */
     public Vector getPiValues() {
+        Vector<Integer> positionsOne = proteinListFrame.getPositionsOne();
+        if (positionsOne.size() > 0) {
+            Vector copyPiValues = (Vector)piValues.clone();
+            piValues.clear();
+            if(positionsOne.get(0) > -1) {
+                for(int x = 0; x < positionsOne.size(); x++) {
+                    piValues.add(copyPiValues.get(positionsOne.get(x)));
+                }
+            }
+        }
 	return piValues;
     }
 
@@ -1298,29 +1343,89 @@ public class Electro2D extends JPanel implements ActionListener {
      * @return functions
      */
     public Vector getFunctions(){
+        Vector<Integer> positionsOne = proteinListFrame.getPositionsOne();
+        if (positionsOne.size() > 0) {
+            Vector copyFunctions = (Vector)functions.clone();
+            functions.clear();
+            if(positionsOne.get(0) > -1) {
+                for(int x = 0; x < positionsOne.size(); x++) {
+                    functions.add(copyFunctions.get(positionsOne.get(x)));
+                }
+            }
+        }
 	return functions;
     }
 
     public Vector getPiValues2(){
+        Vector<Integer> positionsTwo = proteinListFrame.getPositionsTwo();
+        if (positionsTwo.size() > 0) {
+            Vector copyPiValues2 = (Vector)piValues2.clone();
+            piValues2.clear();
+            if(positionsTwo.get(0) > -1) {
+                for(int x = 0; x < positionsTwo.size(); x++) {
+                    piValues2.add(copyPiValues2.get(positionsTwo.get(x)));
+                }
+            }
+        }
 	return piValues2;
     }
 
     public Vector getSequences2(){
+        Vector<Integer> positionsTwo = proteinListFrame.getPositionsTwo();
+        if (positionsTwo.size() > 0) {
+            Vector copySequences2 = (Vector)sequences2.clone();
+            sequences2.clear();
+            if(positionsTwo.get(0) > -1) {
+                for(int x = 0; x < positionsTwo.size(); x++) {
+                    sequences2.add(copySequences2.get(positionsTwo.get(x)));
+                }
+            }
+        }
         return sequences2;
     }
 
     public Vector getSequenceTitles2(){
         if(sequenceTitles2 != null) {
+            Vector<Integer> positionsTwo = proteinListFrame.getPositionsTwo();
+            if (positionsTwo.size() > 0) {
+                Vector copySequenceTitles2 = (Vector)sequenceTitles2.clone();
+                sequenceTitles2.clear();
+                if(positionsTwo.get(0) > -1) {
+                    for(int x = 0; x < positionsTwo.size(); x++) {
+                        sequenceTitles.add(copySequenceTitles2.get(positionsTwo.get(x)));
+                    }
+                }
+            }
             return sequenceTitles2;
         }
         return new Vector();
     }
 
     public Vector getMolecularWeights2(){
+        Vector<Integer> positionsTwo = proteinListFrame.getPositionsTwo();
+        if (positionsTwo.size() > 0) {
+            Vector copyMolecularWeights2 = (Vector)molecularWeights2.clone();
+            molecularWeights2.clear();
+            if(positionsTwo.get(0) > -1) {
+                for(int x = 0; x < positionsTwo.size(); x++) {
+                    molecularWeights2.add(copyMolecularWeights2.get(positionsTwo.get(x)));
+                }
+            }
+        }
 	return molecularWeights2;
     }
 
     public Vector getFunctions2(){
+        Vector<Integer> positionsTwo = proteinListFrame.getPositionsTwo();
+        if (positionsTwo.size() > 0) {
+            Vector copyFunctions2 = (Vector)functions2.clone();
+            functions2.clear();
+            if(positionsTwo.get(0) > -1) {
+                for(int x = 0; x < positionsTwo.size(); x++) {
+                    functions2.add(copyFunctions2.get(positionsTwo.get(x)));
+                }
+            }
+        }
 	return functions2;
     }
 
@@ -1336,6 +1441,28 @@ public class Electro2D extends JPanel implements ActionListener {
      */
     public void setSequences(Vector s){
 	sequences = s;
+        sequencesReady = true;
+    }
+
+    /**
+     * This method is used by ProteinListFrame to let Electro2D and
+     * GelCanvasSwingVersion know whether or not there are sequences available for
+     * animiation.
+     *
+     * @param bool
+     */
+    public void setSequencesReady(boolean bool) {
+        sequencesReady = bool;
+    }
+
+    /**
+     * This method is used by PlayButtonSwingVersion to determine when the user
+     * clicks play if there are sequences ready to animate.
+     * 
+     * @return sequencesReady
+     */
+    public boolean getSequencesReady() {
+        return sequencesReady;
     }
 
     /**
@@ -1369,6 +1496,7 @@ public class Electro2D extends JPanel implements ActionListener {
     public void setSequences2( Vector s ){
 	sequences2 = new Vector();
 	sequences2 = s;
+        sequencesReady = true;
     }
 
     public void setSequenceTitles2( Vector st ){
