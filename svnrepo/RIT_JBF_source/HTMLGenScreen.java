@@ -7,24 +7,21 @@
  * Created: 11/06/2003
  */
 
-import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.BoxLayout;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class HTMLGenScreen extends Frame implements ActionListener,
+public class HTMLGenScreen extends JFrame implements ActionListener,
 						    MouseListener{
 
     //    private static Color background = new Color( 202, 225, 255 );
-    private static Color background = Color.BLACK;
-    private static Color foreground = Color.WHITE;
+//    private static Color background = Color.BLACK;
+//    private static Color foreground = Color.WHITE;
     private static final int PI_VAL = 1;
     private static final int TITLE_VAL = 0;
     private static final int FUNCTION_VAL = 3;
     private static final int MW_VAL = 2;
-    private Panel contentPanel;
+    private JPanel contentPanel;
     private ButtonGroup buttons;
     private JRadioButton functionButton;
     private JRadioButton titleButton;
@@ -42,24 +39,24 @@ public class HTMLGenScreen extends Frame implements ActionListener,
 	functionButton = new JRadioButton( "Protein Function" );
 	functionButton.setActionCommand( "function" );
 	functionButton.addActionListener( this );
-	functionButton.setBackground( background );
-	functionButton.setForeground( foreground );
+//	functionButton.setBackground( background );
+//	functionButton.setForeground( foreground );
 	piButton = new JRadioButton( "pI Value" );
 	piButton.setActionCommand( "pI" );
 	piButton.addActionListener( this );
-	piButton.setBackground( background );
-	piButton.setForeground( foreground );
+//	piButton.setBackground( background );
+//	piButton.setForeground( foreground );
 	mwButton = new JRadioButton( "Molecular Weight Value" );
 	mwButton.setActionCommand( "mw" );
 	mwButton.addActionListener( this );
-	mwButton.setForeground( foreground );
-	mwButton.setBackground( background );
+//	mwButton.setForeground( foreground );
+//	mwButton.setBackground( background );
 	titleButton = new JRadioButton( "Protein Title" );
 	titleButton.setActionCommand( "title" );
 	titleButton.addActionListener( this );
 	titleButton.setSelected( true );
-	titleButton.setBackground( background );
-	titleButton.setForeground( foreground );
+//	titleButton.setBackground( background );
+//	titleButton.setForeground( foreground );
 
 	buttons = new ButtonGroup();
 	buttons.add( titleButton );
@@ -71,8 +68,8 @@ public class HTMLGenScreen extends Frame implements ActionListener,
 	//submit.setSize( 75, 30 );
 	submit.addMouseListener( this );
     
-	contentPanel = new Panel();
-	contentPanel.setBackground( background );
+	contentPanel = new JPanel();
+//	contentPanel.setBackground( background );
 	contentPanel.setLayout( new BoxLayout(
 				       contentPanel, BoxLayout.Y_AXIS ) ); 
 	contentPanel.add( titleButton );
@@ -81,16 +78,12 @@ public class HTMLGenScreen extends Frame implements ActionListener,
 	contentPanel.add( functionButton );
 	contentPanel.add( submit );
 
-	this.addWindowListener( new WindowAdapter(){
-		public void windowClosing( WindowEvent e ){
-		    dispose();
-		}
-	    }
-				);
-	this.setBounds( 0, 0, 218, 160 );
-	contentPanel.setBounds( 0, 0, 200, 150 );
+	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//	this.setBounds( 0, 0, 218, 160 );
+//	contentPanel.setBounds( 0, 0, 200, 150 );
 	this.add( contentPanel );
 	this.setVisible( true );
+        pack();
     }
 
     public void actionPerformed( ActionEvent e ){

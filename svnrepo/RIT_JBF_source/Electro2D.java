@@ -1530,7 +1530,9 @@ public class Electro2D extends JPanel implements ActionListener {
      * @return a string
      */
     public String getAppletInfo() {
-	return "Electro2D...copyright 2003 Adam L Bazinet & Jill Zapoticznyj";
+	return "Electro2D...copyright" +
+                "" +
+                " 2003 Adam L Bazinet & Jill Zapoticznyj";
     }   
     
     public void writeToCSV(){

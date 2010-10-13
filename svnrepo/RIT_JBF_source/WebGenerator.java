@@ -30,7 +30,8 @@ public class WebGenerator{
     private final String closeTD = "\u003C/TD\u003E";
     private final String openTR = "\u003CTR\u003E";
     private final String closeTR = "\u003C/TR\u003E";
-    private final String directoryString = "./../HTML Files/";
+//    private final String directoryString = "./../HTML Files/";
+    private final String directoryString = "HTML Files/";
 
     public WebGenerator( Electro2D e ){
 	
@@ -66,7 +67,7 @@ public class WebGenerator{
 
 	HTMLSorter htmlSort = new HTMLSorter( searchVal, names, pI_vals, molwt, functions);
 	Vector sorted = new Vector( htmlSort.getSorted() );
-	
+
 	maxMW =/*((String)molwt.elementAt( 0 ) );*/ String.valueOf(electro2D.getMaxMW());
 	minMW = /*((String)molwt.elementAt( 0 ) );*/String.valueOf(electro2D.getMinMW());
 	maxPi = /*((String)pI_vals.elementAt( 0 ) );*/String.valueOf(electro2D.getMaxPi());
@@ -75,7 +76,7 @@ public class WebGenerator{
 	String startingLine = " \u003Chtml\u003E\u003Chead\u003E" + 
 	    "\u003Cbody bgcolor=" + bgColor + "\u003E\u003Ctitle\u003E" + 
 	    filename + "\u003C/title\u003E\u003C/head\u003E";
-
+        
 	String startTable = openTab + "TABLE BORDER=2" + closeTab + openTab + 
 	    "TR" + closeTab + openTD + "PROTEIN TITLE" + 
 	    closeTD + openTD + "MOLECULAR WEIGHT" + closeTD + openTD + 
@@ -173,14 +174,3 @@ public class WebGenerator{
 	//}
     }
 }
-
-
-
-
-
-
-
-
-
-
-
