@@ -32,40 +32,48 @@ public class CSVCreator{
     public void writeToCSV(){
 	
 	String filename = electro2D.getLastFileLoaded();
-	PrintWriter out = null;
-	try{
-		File fl = new File( directoryString );
-		if( !fl.exists() ){
-			fl.mkdir();
-		}
-	    out = new PrintWriter( new BufferedWriter( new FileWriter( 
-							   directoryString+ File.separator + filename.substring(0,
-						filename.indexOf(".")) + ".csv" )));
-	}catch( IOException e ){
+        if (filename.length() > 0) {
+            PrintWriter out = null;
+            try{
+            	File fl = new File( directoryString );
+            	if( !fl.exists() ){
+            		fl.mkdir();
+            	}
+                out = new PrintWriter( new BufferedWriter( new FileWriter(
+                    					   directoryString +
+                                                           File.separator +
+                                                           filename.substring(0,
+                                                           filename.indexOf("."))
+                                                           + ".csv" )));
+            }catch( IOException e ){
 	    System.err.println( "Error writing to CSV file" );
-	}
+            }
 	
-	E2DProtein p = null;
-	ProteinDotSwingVersion d = null;
+            E2DProtein p = null;
+            ProteinDotSwingVersion d = null;
 	
-	out.println( "Title" + "," + "Sequence" + "," + "Molecular Weight" + 
-		     "," + "pI Value" + "," + "X-Coordinate" + "," + 
-		     "Y-Coordinate" );
+            out.println( "Title" + "," + "Sequence" + "," + "Molecular Weight" +
+            	     "," + "pI Value" + "," + "X-Coordinate" + "," +
+            	     "Y-Coordinate" );
 
-	for( int i = 0; i < proteins.size(); i++ ){
-	    d = (ProteinDotSwingVersion)proteins.elementAt( i );
-	    p = (E2DProtein)d.getPro();
+            if (proteins == null) {
+                proteins = new Vector();
+            }
+            for( int i = 0; i < proteins.size(); i++ ){
+                d = (ProteinDotSwingVersion)proteins.elementAt( i );
+                p = (E2DProtein)d.getPro();
 	    
-	    out.println( "\"" + p.getID() + "\"" + "," + p.getSequence() + "," + 
+                out.println( "\"" + p.getID() + "\"" + "," + p.getSequence() + "," +
 			 p.getMW() + "," + p.getPI() + "," + 
 			 d.returnX() + "," + d.returnY() );
-	}
+            }
 	 
-	try{
-	    out.close();
-	}catch( Exception e ){
-	    System.err.println( "Error closing stream" );
-	}
+            try{
+                out.close();
+            }catch( Exception e ){
+                System.err.println( "Error closing stream" );
+            }
+        }
     }
 }
 
