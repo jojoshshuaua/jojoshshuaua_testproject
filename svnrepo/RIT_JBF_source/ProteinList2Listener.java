@@ -26,7 +26,6 @@ public class ProteinList2Listener implements ActionListener{
 						     e.getActionCommand(), 2);
 	proteinFrame.setResizable(false);
 	proteinFrame.show();
-	proteinFrame.updateLabel();
     }
     
 }

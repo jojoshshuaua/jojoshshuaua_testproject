@@ -1024,7 +1024,6 @@ public class Electro2D extends JPanel implements ActionListener {
 						     e.getActionCommand(), 1);
 	//proteinFrame.setResizable(false);
 	proteinFrame.setVisible(true);
-	proteinFrame.updateLabel();
 	
 	if( playButton.getSdsStatus() ){
 	    gelCanvas.drawLocation( e.getActionCommand() );

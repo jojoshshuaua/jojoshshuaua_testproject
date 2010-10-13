@@ -934,64 +934,66 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         double clickX = e.getX();
 	double clickY = e.getY();
-        for(int i = 0; i < dotProteins.size(); i++) {
-	    double dotX = ((ProteinDotSwingVersion)dotProteins.elementAt(i)).returnX();
-	    double dotY = ((ProteinDotSwingVersion)dotProteins.elementAt(i)).returnY();
-            if(((ProteinDotSwingVersion)dotProteins.elementAt(i)).getShowMe() && clickX <= dotX + 6 && clickX >= dotX - 1) {
-                if(clickY <= dotY + 7 && clickY >= dotY - 1) {
-                    ProteinFrame pFrame = new ProteinFrame(electro2D, ((ProteinDotSwingVersion)dotProteins.elementAt(i)).getPro().getID(), 1);
-                    pFrame.show();
-                    pFrame.updateLabel();
+        if (dotProteins != null) {
+            for(int i = 0; i < dotProteins.size(); i++) {
+                double dotX = ((ProteinDotSwingVersion)dotProteins.elementAt(i)).returnX();
+                double dotY = ((ProteinDotSwingVersion)dotProteins.elementAt(i)).returnY();
+                if(((ProteinDotSwingVersion)dotProteins.elementAt(i)).getShowMe() && clickX <= dotX + 6 && clickX >= dotX - 1) {
+                    if(clickY <= dotY + 7 && clickY >= dotY - 1) {
+                        ProteinFrame pFrame = new ProteinFrame(electro2D, ((ProteinDotSwingVersion)dotProteins.elementAt(i)).getPro().getID(), 1);
+                        pFrame.show();
+                    }
                 }
             }
         }
-
-        for(int i = 0; i < dotProteins2.size(); i++) {
-            double dotX = ((ProteinDotSwingVersion)dotProteins2.elementAt(i)).returnX();
-	    double dotY = ((ProteinDotSwingVersion)dotProteins2.elementAt(i)).returnY();
-            if(((ProteinDotSwingVersion)dotProteins2.elementAt(i)).getShowMe() && clickX <= dotX + 5 && clickX >= dotX - 1) {
-                if(clickY <= dotY + 5 && clickY >= dotY - 1) {
-                    ProteinFrame pFrame = new ProteinFrame(electro2D, ((ProteinDotSwingVersion)dotProteins2.elementAt(i)).getPro().getID(), 2);
-                    pFrame.show();
-		    pFrame.updateLabel();
+        if (dotProteins2 != null) {
+            for(int i = 0; i < dotProteins2.size(); i++) {
+                double dotX = ((ProteinDotSwingVersion)dotProteins2.elementAt(i)).returnX();
+                double dotY = ((ProteinDotSwingVersion)dotProteins2.elementAt(i)).returnY();
+                if(((ProteinDotSwingVersion)dotProteins2.elementAt(i)).getShowMe() && clickX <= dotX + 5 && clickX >= dotX - 1) {
+                    if(clickY <= dotY + 5 && clickY >= dotY - 1) {
+                        ProteinFrame pFrame = new ProteinFrame(electro2D, ((ProteinDotSwingVersion)dotProteins2.elementAt(i)).getPro().getID(), 2);
+                        pFrame.show();
+                    }
                 }
             }
         }
-
         Vector containsBarProteinsProteins = new Vector();
         double iefWidth = IEFProteinSwingVersion.returnWidth();
-        for(int j = 0; j < barProteins.size(); j++) {
-            double iefX = ((IEFProteinSwingVersion)barProteins.elementAt(j)).returnX();
-	    double iefY = ((IEFProteinSwingVersion)barProteins.elementAt(j)).returnY();
-            if(IEFProteinSwingVersion.returnHeight() > 0) {
-                if(clickX >= iefX && clickX <= iefX + iefWidth) {
-                    if(clickY >= iefY && clickY <= iefY + 40) {
-                        containsBarProteinsProteins = ((IEFProteinSwingVersion)barProteins.elementAt(j)).getProtein();
-                        IEFFrame iFrame = new IEFFrame((IEFProteinSwingVersion)barProteins.elementAt(j));
-                        iFrame.setResizable(true);
-                        iFrame.pack();
-			iFrame.show();
+        if (barProteins != null) {
+            for(int j = 0; j < barProteins.size(); j++) {
+                double iefX = ((IEFProteinSwingVersion)barProteins.elementAt(j)).returnX();
+                double iefY = ((IEFProteinSwingVersion)barProteins.elementAt(j)).returnY();
+                if(IEFProteinSwingVersion.returnHeight() > 0) {
+                    if(clickX >= iefX && clickX <= iefX + iefWidth) {
+                        if(clickY >= iefY && clickY <= iefY + 40) {
+                            containsBarProteinsProteins = ((IEFProteinSwingVersion)barProteins.elementAt(j)).getProtein();
+                            IEFFrame iFrame = new IEFFrame((IEFProteinSwingVersion)barProteins.elementAt(j));
+                            iFrame.setResizable(true);
+                            iFrame.pack();
+                            iFrame.show();
+                        }
                     }
                 }
             }
         }
-
-        for(int j = 0; j < barProteins2.size(); j++) {
-            double iefX = ((IEFProteinSwingVersion)barProteins2.elementAt(j)).returnX();
-	    double iefY = ((IEFProteinSwingVersion)barProteins2.elementAt(j)).returnY();
-            if (IEFProteinSwingVersion.returnHeight() > 0) {
-                if(clickX >= iefX && clickX <= iefX + iefWidth) {
-                    if(clickY >= iefY && clickY <= iefY + 40) {
-                        containsBarProteinsProteins = ((IEFProteinSwingVersion)barProteins2.elementAt(j)).getProtein();
-                        IEFFrame iFrame = new IEFFrame((IEFProteinSwingVersion)barProteins2.elementAt(j));
-			iFrame.setResizable(true);
-			iFrame.pack();
-			iFrame.show();
+        if (barProteins2 != null) {
+            for(int j = 0; j < barProteins2.size(); j++) {
+                double iefX = ((IEFProteinSwingVersion)barProteins2.elementAt(j)).returnX();
+                double iefY = ((IEFProteinSwingVersion)barProteins2.elementAt(j)).returnY();
+                if (IEFProteinSwingVersion.returnHeight() > 0) {
+                    if(clickX >= iefX && clickX <= iefX + iefWidth) {
+                        if(clickY >= iefY && clickY <= iefY + 40) {
+                            containsBarProteinsProteins = ((IEFProteinSwingVersion)barProteins2.elementAt(j)).getProtein();
+                            IEFFrame iFrame = new IEFFrame((IEFProteinSwingVersion)barProteins2.elementAt(j));
+                            iFrame.setResizable(true);
+                            iFrame.pack();
+                            iFrame.show();
+                        }
                     }
                 }
             }
         }
-
     }
 
 }
