@@ -645,6 +645,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     public void clearIEF() {
         bufferImageGraphics.setColor(Color.RED);
         bufferImageGraphics.clearRect(2, 2, gelCanvasRectangle.width - 3, 45);
+//trying        bufferImageGraphics.drawRect(2, 2, gelCanvasRectangle.width - 3, 45);
         graphic.drawImage(bufferImage, 0, 0, this);
     }
 

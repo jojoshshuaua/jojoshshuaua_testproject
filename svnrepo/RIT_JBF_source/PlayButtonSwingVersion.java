@@ -93,20 +93,13 @@ public class PlayButtonSwingVersion extends JButton implements ActionListener {
 		//if the user selected SDS-PAGE animation, and the IEF is
 		// already drawn, perform the SDS-PAGE animation
 		else if( choice.equals( "SDS-PAGE" )){
-                    electro2D.getGel().clearIEF();
-                    repaint();
-                    System.out.println("PlayButtonSwingVersion 96: iefDrawn = " + iefDrawn);
-		    if( iefDrawn == true ){
-			/*electro2D.getGel().resetWriteRanges();*/
+                    if( iefDrawn == true ){
 			electro2D.getGel().clearCanvas();
+                        electro2D.getGel().clearIEF();
 			electro2D.getGel().resetLocation();
 			playing = true;
 			electro2D.restartThread();
-			repaint();
 			sdsDrawn = true;
-                        /*electro2D.getGel().resetDrawMW();*/
-			//electro2D.getGel().resetReLine();
-
 		    }
 		}
 	    }
