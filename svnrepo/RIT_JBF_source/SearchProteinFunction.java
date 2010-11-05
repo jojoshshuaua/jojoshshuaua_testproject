@@ -197,7 +197,7 @@ public class SearchProteinFunction implements MouseListener, ActionListener{
         }
 
 	ProteinDotSwingVersion prot = null;
-	if( /*function.getSelected()*/ searchField.equals( "function" ) ){
+	if( searchField.equals( "function" ) ){
 	    for( int i = 0; i < dots1.size(); i++ ){
 		prot = (ProteinDotSwingVersion)dots1.elementAt( i );
 		if( ((E2DProtein)prot.getPro()).getFunction().indexOf( fcnName )
@@ -267,6 +267,19 @@ public class SearchProteinFunction implements MouseListener, ActionListener{
 	    }
 	}
 //	gel.repaint();
+        int count = 0;
+        for(ProteinDotSwingVersion dot : (Vector<ProteinDotSwingVersion>)dots1) {
+            if (dot.getShowMe()) {
+                count++;
+            }
+        }
+        for(ProteinDotSwingVersion dot : (Vector<ProteinDotSwingVersion>)dots2) {
+            if (dot.getShowMe()) {
+                count++;
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Search found " + count + " proteins.");
+        count = 0;
         gel.update(gel.getGraphics());
     }
     

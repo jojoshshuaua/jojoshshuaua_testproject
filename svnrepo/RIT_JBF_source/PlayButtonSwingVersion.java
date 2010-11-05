@@ -23,7 +23,7 @@ public class PlayButtonSwingVersion extends JButton implements ActionListener {
 
     public PlayButtonSwingVersion(Electro2D e) {
 
-        super("Play");
+        super("Run");
         addActionListener(this);
         electro2D = e;
         playing = false;
@@ -38,7 +38,7 @@ public class PlayButtonSwingVersion extends JButton implements ActionListener {
 
     public void resetPlay(){
 	playing = false;
-        this.setText("Play");
+        this.setText("Run");
     }
 
     public void resetIEF(){
@@ -69,8 +69,6 @@ public class PlayButtonSwingVersion extends JButton implements ActionListener {
 
 		//if the data for the animation needs to be processed,
 		//do so
-		//if((( electro2D.getGel().getDots().size() == 0 ) ||
-		//  ( electro2D.getBool() ))){
 		    if( choice.equals( "IEF" )){
 			electro2D.getGel().prepare();
 			electro2D.resetBool();
@@ -78,7 +76,6 @@ public class PlayButtonSwingVersion extends JButton implements ActionListener {
 			    electro2D.getGel().prepare2();
 			}
 		    }
-		    //}
 
 		//if the user selected IEF animation and the image is not
 		// already displayed on the screen, perform the IEF
@@ -97,6 +94,7 @@ public class PlayButtonSwingVersion extends JButton implements ActionListener {
 			electro2D.getGel().clearCanvas();
                         electro2D.getGel().clearIEF();
 			electro2D.getGel().resetLocation();
+                        electro2D.clearpH();
 			playing = true;
 			electro2D.restartThread();
 			sdsDrawn = true;
@@ -107,7 +105,7 @@ public class PlayButtonSwingVersion extends JButton implements ActionListener {
 
         // let the user know whether they can pause or play the animation
         if(playing == false) {
-	    this.setText("Play");
+	    this.setText("Run");
 	} else {
 	    this.setText("Pause");
 	}

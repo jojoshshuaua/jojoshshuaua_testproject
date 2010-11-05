@@ -325,10 +325,10 @@ public class Electro2D extends JPanel implements ActionListener {
             JLabel newLabel;
             if(i==7) {
                 newLabel = new JLabel(twoDForm.format(maxPH));
-                newLabel.setBounds(pHPanel.getWidth() - 20, pHPanel.getHeight()-15, 15, 10);
+                newLabel.setBounds(pHPanel.getWidth() - 35, pHPanel.getHeight()-15, 35, 10);
             } else {
                 newLabel = new JLabel(twoDForm.format(minPH + i*pHOffset));
-                newLabel.setBounds(5 + i*labelOffset, pHPanel.getHeight()-15, 10, 10);
+                newLabel.setBounds(1 + i*labelOffset, pHPanel.getHeight()-15, 35, 10);
             }
             pHPanel.add(newLabel);
             rangeLabels.add(newLabel);
@@ -345,10 +345,11 @@ public class Electro2D extends JPanel implements ActionListener {
      * when the restart button is pressed to clear the canvas.
      */
     public void clearpH(){
-	
+
+
 	// remove each of the labels from the applet's image
 	for( int i = 0; i < rangeLabels.size(); i++ ){
-	    this.remove( (JLabel)rangeLabels.elementAt( i ) );
+	    pHPanel.remove( (JLabel)rangeLabels.elementAt( i ) );
 	}
 	
 	//remove all of the labels from the vector
@@ -394,7 +395,7 @@ public class Electro2D extends JPanel implements ActionListener {
         JLabel hundredK = new JLabel("100K");
 	mwLabels.add(hundredK);
         mWPanel.add(hundredK);
-	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(mWPanel.getX() + 10, loc100, 30, 15);
+	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setBounds(mWPanel.getX() + 10, loc100, 40, 15);
 	((JLabel)mwLabels.elementAt(mwLabels.size() - 1)).setForeground(Color.BLACK);
 
 	JLabel fiftyK = new JLabel("50K");
@@ -1593,13 +1594,3 @@ public class Electro2D extends JPanel implements ActionListener {
 //    }
 //
 } //Electro2D
-
-
-
-
-
-
-
-
-
-

@@ -163,6 +163,8 @@ public class FileFrame extends JFrame implements ActionListener {
                     GenomeFileParser.e2dParse(filename, electro2D, "", fileNum);
                 }
 
+                JOptionPane.showMessageDialog(null, "Proteins loaded.");
+
             }
         }
     }

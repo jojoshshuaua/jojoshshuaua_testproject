@@ -334,6 +334,9 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
 	    gelCanvasRectangle = getBounds();
 	    bufferImage = this.createImage(gelCanvasRectangle.width, gelCanvasRectangle.height);
 	    bufferImageGraphics = bufferImage.getGraphics();
+            bufferImageGraphics.setColor(Color.BLACK);
+            bufferImageGraphics.fillRect(0, 0, gelCanvasRectangle.width - 1, gelCanvasRectangle.height - 1);
+
 	}
 
         /**
@@ -371,14 +374,13 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
 
         /**
          * Next, we color the buffer image with a rectangle the size of our
-         * canvas in a sort of subdued blue color. Then we make a red
+         * canvas in black. Then we make a black
          * rectangle at the top of the image that's almost as long as the
          * image itself but only 46 pixals tall.
          * Then we copy it all over to our canvas.
          */
-	bufferImageGraphics.setColor(new Color(54,100,139));
+	bufferImageGraphics.setColor( Color.RED);
 	bufferImageGraphics.drawRect(0,0,gelCanvasRectangle.width-1,gelCanvasRectangle.height-1);
-	bufferImageGraphics.setColor( Color.RED );
 	bufferImageGraphics.drawRect( 1, 1, gelCanvasRectangle.width - 3, 46 );
         graphic.drawImage(bufferImage, 0, 0, this);
     }
@@ -398,8 +400,12 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         }
 
         // First, clear off any dots left over from the last animation
+        bufferImageGraphics.setColor(Color.BLACK);//trying to turn canvas black
 	bufferImageGraphics.clearRect(1, 48, gelCanvasRectangle.width - 2, gelCanvasRectangle.height - 49);
-	// Then, draw the protein dots
+        bufferImageGraphics.fillRect(1, 48, gelCanvasRectangle.width - 2, gelCanvasRectangle.height - 49); //trying to turn canvas black
+        bufferImageGraphics.setColor(Color.RED);//trying to turn canvas black
+        bufferImageGraphics.drawRect(1, 48, gelCanvasRectangle.width - 2, gelCanvasRectangle.height - 49);
+        // Then, draw the protein dots
         for(int i = 0; i < dotProteins.size(); i++) {
 	    ((ProteinDotSwingVersion)(dotProteins.elementAt(i))).draw(bufferImageGraphics);
 	}
@@ -463,7 +469,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
 	int length = 0;
 	int loc = 0;
         int offset = (this.getTopLevelAncestor().getWidth() - this.getWidth() - 25);
-	bufferImageGraphics.setColor(Color.BLACK);
+	bufferImageGraphics.setColor(Color.WHITE);
 
         /**
          * Loop through each integer that's in the range between the minPH
@@ -586,7 +592,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         lowAcrylamide = electro2D.getLowPercent();
         highAcrylamide = electro2D.getHighPercent();
         int width = 0;
-        bufferImageGraphics.setColor(Color.BLACK);
+        bufferImageGraphics.setColor(Color.WHITE);
 
         while(width < this.getWidth()) {
             bufferImageGraphics.drawLine(width, (int)hundredK, width + 5, (int)hundredK);
@@ -643,9 +649,11 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      * This method clears the IEF animation area.
      */
     public void clearIEF() {
-        bufferImageGraphics.setColor(Color.RED);
+        bufferImageGraphics.setColor(Color.BLACK);
         bufferImageGraphics.clearRect(2, 2, gelCanvasRectangle.width - 3, 45);
-//trying        bufferImageGraphics.drawRect(2, 2, gelCanvasRectangle.width - 3, 45);
+        bufferImageGraphics.fillRect(2, 2, gelCanvasRectangle.width - 3, 45); //trying to turn canvas black
+        bufferImageGraphics.setColor(Color.RED);
+        bufferImageGraphics.drawRect(2, 2, gelCanvasRectangle.width - 3, 45);
         graphic.drawImage(bufferImage, 0, 0, this);
     }
 
@@ -787,9 +795,11 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      * Clears the canvas in preperation for more animation.
      */
     public void clearCanvas() {
-//        graphic.setColor(new Color(54, 100, 139));
+        graphic.setColor(Color.BLACK);
+        graphic.clearRect(1, 48, gelCanvasRectangle.width - 1, gelCanvasRectangle.height - 47);
+        graphic.fillRect(1, 48, gelCanvasRectangle.width - 1, gelCanvasRectangle.height - 47); //trying to turn canvas black
         graphic.setColor(Color.RED);
-	graphic.clearRect(1, 48, gelCanvasRectangle.width - 1, gelCanvasRectangle.height - 47);
+        graphic.drawRect(1, 48, gelCanvasRectangle.width - 1, gelCanvasRectangle.height - 47);
         update(graphic);
     }
 
@@ -862,10 +872,10 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
       * @param e used to return the x and y location of the event
       */
     public void mousePressed(MouseEvent e) {
-        mousePress = true;
+/**        mousePress = true;
         startX = e.getX();
         startY = e.getY();
-    }
+**/    }
 
     /**
      * Mouse listener event. Works with the variables set in mousePressed to
@@ -875,7 +885,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      * @param e used to find where the user released the mouse
      */
     public void mouseReleased(MouseEvent e) {
-        if (mousePress) {
+   /**     if (mousePress) {
             stopX = e.getX();
             stopY = e.getY();
 	    if(startX != stopX && stopX > startX + 5) {
@@ -905,7 +915,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
                 }
             }
         }
-    }
+**/    }
 
     /**
      * This event does nothing.

@@ -10,15 +10,12 @@
  */
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.event.*;
-import java.io.*;
 
 public class JBioFrameworkSwingVersion extends JFrame {
 
+    public static final long serialVersionUID = 1L;
     private JTabbedPane tabbedPane;
     private Electro2D electro2D;
-    private Electrophoresis electrophoresis;
-    private Ionex ionex;
 
     public static void main(String[] args) {
         JBioFrameworkSwingVersion jbfSwing = new JBioFrameworkSwingVersion();
@@ -31,16 +28,10 @@ public class JBioFrameworkSwingVersion extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         electro2D = new Electro2D();
-        electrophoresis = new Electrophoresis();
-        ionex = new Ionex();
 
         tabbedPane = new JTabbedPane();
 
-/*what happens if one of these classes comes back null?
-  think about a try-catch block or some other error handling */
         tabbedPane.addTab("Electro2D", electro2D);
-        tabbedPane.addTab("Electrophoresis", electrophoresis);
-        tabbedPane.addTab("Ionex", ionex);
 
         add(tabbedPane);
 

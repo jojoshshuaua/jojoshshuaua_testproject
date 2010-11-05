@@ -1,5 +1,4 @@
-import java.awt.*;
-import java.awt.color.*;
+import javax.swing.*;
 import java.awt.event.*;
 /**
  * Removes highlighted proteins from the protein list.
@@ -10,21 +9,22 @@ import java.awt.event.*;
  * @author Adam Bazinet
  *
  */
-public class SearchProteinButton extends Canvas implements MouseListener {
+//public class SearchProteinButton extends Canvas implements MouseListener {
+public class SearchProteinButton extends JButton implements ActionListener {
 
     private Electro2D electro2D;
-    private Color bgColor = Color.BLACK;
+/**    private Color bgColor = Color.BLACK;
     private Color fillColorOff = Color.RED;
     private Color fillColorOn = new Color(255,165,0); //orange
     private boolean highlighted = false;
     private Color textColor = Color.white;
     private Font textFont = new Font("Arial", Font.BOLD, 14);
     private Rectangle d = null;  //dimensions of this component
-    private String pro_id = "";  //the ID of the protein
+**/    private String pro_id = "";  //the ID of the protein
 
     //double buffering variables
-    private Image buffer = null;
-    private Graphics bufferGraphics = null;
+//    private Image buffer = null;
+//    private Graphics bufferGraphics = null;
 
     /**
      * Constructor, performs some perfunctory tasks.
@@ -33,17 +33,18 @@ public class SearchProteinButton extends Canvas implements MouseListener {
      * @param id - the string being searched for
      */
     public SearchProteinButton( Electro2D e, String id ) {
+        super("GenBank Search");
 	electro2D = e; //give the button a reference to Electro2D
 	pro_id = id; //set the search value to the string passed to the method
 	//have the button register itself as a MouseListener in order to
 	//respond to mouse events from the user
-	this.addMouseListener(this);
+	this.addActionListener(this);
     }
     
     /**
      * Paints user controls.
      */
-    public void paint(Graphics g) {
+/**    public void paint(Graphics g) {
 
 	//initialize buffering variables
 	if(d == null || buffer == null || bufferGraphics == null) {
@@ -74,20 +75,21 @@ public class SearchProteinButton extends Canvas implements MouseListener {
     public void update(Graphics g) {
 	paint(g);
     }
-
+**/
     /**
      * Mouse listener methods. Used to respond to user button presses, etc.
      */
-    public void mousePressed(MouseEvent e) {
+/**    public void mousePressed(MouseEvent e) {
 	//do nothing
     }
     public void mouseReleased(MouseEvent e) {
 	//do nothing
     }
+**/
     /**
      * Responds to the cursor being placed over this button.
      */
-    public void mouseEntered(MouseEvent e) {
+/**   public void mouseEntered(MouseEvent e) {
 	//change the image of the cursor
 	setCursor(new Cursor(Cursor.HAND_CURSOR));
 	highlighted = true; //register that the cursor is over the button
@@ -97,11 +99,11 @@ public class SearchProteinButton extends Canvas implements MouseListener {
 	// button.
 	//electro2D.showStatus("Perform a GenBank search for this protein.");
     }
-    
+**/
     /**
      * Responds to the mouse being removed from over the button.
      */
-    public void mouseExited(MouseEvent e) {
+/**    public void mouseExited(MouseEvent e) {
 	//change the image of the cursor
 	setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	highlighted = false; //register that the cursor is not over the button
@@ -110,14 +112,16 @@ public class SearchProteinButton extends Canvas implements MouseListener {
 	//remove the message from the status bar
 	//	electro2D.showStatus("");
     }
-    /**
+**/
+   /**
      * Responds to the user clicking on the button.
      */
-    public void mouseClicked(MouseEvent e) {
+/**    public void mouseClicked(MouseEvent e) {
 	//open the search page and perform the search for the protein
 	electro2D.showSearchPage( pro_id );
     }
-
+**/
+    public void actionPerformed(ActionEvent e) {
+        electro2D.showSearchPage(pro_id);
+    }
 }
-
-
