@@ -214,8 +214,6 @@ public class PeptideGen{
 	    System.out.println("here3");
 	}
 	System.out.println("here4");
-	//CSVGenerator cv = new CSVGenerator(peptides, mol);
-	//cv.writeToCSV();
     }
     
     /**

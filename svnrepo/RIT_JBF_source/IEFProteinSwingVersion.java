@@ -76,11 +76,7 @@ public class IEFProteinSwingVersion extends Component {
 	tempX = rand.nextInt((int)w - 7);
 	tempX = tempX + 1;
 	increments = (myX - tempX)/50;
-
-
     }
-
-
 
     /**
      * addProtein adds a collection of proteins c to the vector of proteins

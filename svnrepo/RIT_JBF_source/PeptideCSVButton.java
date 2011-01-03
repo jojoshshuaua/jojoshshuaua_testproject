@@ -16,10 +16,8 @@ public class PeptideCSVButton extends Canvas implements MouseListener {
 	private int enzymeIndex = -1;
 	private String proteinName = "";
 	private PeptideCSVGenerator pGen = null;
-	
-//	private Electro2D electro2D;
-    private Color bgColor = Color.BLACK;
-    private Color fillColorOff = Color.RED;
+        private Color bgColor = Color.BLACK;
+        private Color fillColorOff = Color.RED;
     private Color fillColorOn = new Color(255,165,0); //orange
     private boolean highlighted = false;
     private Color textColor = Color.white;
@@ -33,7 +31,6 @@ public class PeptideCSVButton extends Canvas implements MouseListener {
     /**
      * Constructor, performs some perfunctory tasks.
      *
-     * 
      */
     public PeptideCSVButton( String name ) {
     	proteinName = name;
@@ -103,7 +100,6 @@ public class PeptideCSVButton extends Canvas implements MouseListener {
 	repaint();
 	//display a message in the status bar reflecting the purpose of this
 	// button.
-	//electro2D.showStatus("Perform a SwissProt search for this protein.");
     }
     
     /**
@@ -116,7 +112,6 @@ public class PeptideCSVButton extends Canvas implements MouseListener {
 	//and redraw the button to reflect the change in bg color
 	repaint();
 	//remove the message from the status bar
-	//electro2D.showStatus("");
     }
     
     /**

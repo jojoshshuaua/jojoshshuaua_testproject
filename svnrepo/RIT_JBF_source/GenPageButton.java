@@ -92,9 +92,6 @@ public class GenPageButton extends Canvas implements MouseListener {
 	highlighted = true; //register that the cursor is over the button
 	//and redraw the button to reflect the change in bg color
 	repaint();
-	//display a message in the status bar reflecting the purpose of this
-	// button.
-	//electro2D.showStatus("Perform a SwissProt search for this protein.");
     }
     
     /**
@@ -107,7 +104,6 @@ public class GenPageButton extends Canvas implements MouseListener {
 	//and redraw the button to reflect the change in bg color
 	repaint();
 	//remove the message from the status bar
-	//electro2D.showStatus("");
     }
     /**
      * Responds to the user clicking on the button.

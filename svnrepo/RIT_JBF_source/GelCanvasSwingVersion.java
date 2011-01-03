@@ -82,22 +82,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
      *         the component
      */
     public Dimension getMinimiumSize() {
-       /* JPanel buttonPanel = electro2D.getButtonPanel();
-        Dimension electro2DDimension = electro2D.getSize();
-        Dimension buttonPanelDimension = buttonPanel.getSize();
-
-        int electro2DWidth = (int) electro2DDimension.getWidth();
-        int buttonPanelWidth = (int) buttonPanelDimension.getWidth();
-        int canvasWidth = electro2DWidth - buttonPanelWidth - 5;
-
-        int electro2DHeight = (int) electro2DDimension.getHeight();
-        int canvasHeight = electro2DHeight - 10;
-
-        Dimension thisDimension = new Dimension(canvasWidth, canvasHeight);
-        return thisDimension;
-        */
-
-        return new Dimension(800, electro2D.getHeight());
+         return new Dimension(800, electro2D.getHeight());
     }
 
 
@@ -872,10 +857,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
       * @param e used to return the x and y location of the event
       */
     public void mousePressed(MouseEvent e) {
-/**        mousePress = true;
-        startX = e.getX();
-        startY = e.getY();
-**/    }
+    }
 
     /**
      * Mouse listener event. Works with the variables set in mousePressed to
@@ -917,11 +899,6 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         }
 **/    }
 
-    /**
-     * This event does nothing.
-     *
-     * @param e unused
-     */
     public void mouseEntered(MouseEvent e) {
     }
 

@@ -24,7 +24,6 @@ public class Electro2D extends JPanel implements ActionListener {
 
     private FileFrame fileFrame;          //pop up for loading file data
     private ProteinListFrame proteinListFrame;       //pop up for displaying protein lists
- //   private JPanel proteinListPanel;
     private ProteinListButtonSwingVersion proteinListButton;
     
     /** components of the main applet **/
@@ -142,28 +141,8 @@ public class Electro2D extends JPanel implements ActionListener {
         sequencesReady = false;
 
 	proteinListFrame = new ProteinListFrame( "Protein Lists", this);
-/**	proteinListFrame.setBounds( 0, 0, 300, 250 );
-	proteinListFrame.setResizable(false);
-	proteinListPanel = new JPanel();
-	proteinListPanel.setBounds( 0, 0, 300, 250 );
-	proteinListPanel.setLayout( null );
-*/	proteinListButton = new ProteinListButtonSwingVersion( this );
-/**	proteinList = new java.awt.List();
-	proteinList.setMultipleMode(false); //Don't allow multiple selections
-	proteinList2 = new java.awt.List();
-	proteinList2.setMultipleMode(false);
-	proteinList.addActionListener(this);
-	proteinList2.addActionListener(this);
-	proteinListPanel.add( proteinList );
-	proteinListPanel.add( removeProteinButton );
-	proteinListFrame.getContentPane().add( proteinListPanel );
-	proteinListFrame.addWindowListener( new WindowAdapter(){
-		public void windowClosing( WindowEvent e ){
-		    proteinListFrame.setVisible(false);
-		}
-	    }
-					    );
-*/
+	proteinListButton = new ProteinListButtonSwingVersion( this );
+
        /*
         * new code for designing a Swing GUI; uses JPanels and layout managers
         * to arrange the buttons and labels to look similar to how the old awt
@@ -292,8 +271,7 @@ public class Electro2D extends JPanel implements ActionListener {
         return leftPanel;
     }
 
-	
-	/**
+   /**
      * Any drawing on the applet panel itself is done here.
      */
 
@@ -426,8 +404,6 @@ public class Electro2D extends JPanel implements ActionListener {
 
 	//chose the SDS-PAGE value in animationChooser
 	animationChooser.setSelectedItem( "SDS-PAGE" );
-	//repaint the applet to reflect the change
-	//this.repaint();
     }
 
     /**
@@ -437,8 +413,6 @@ public class Electro2D extends JPanel implements ActionListener {
     public void setIEF(){
 	//choose the IEF value in animationChooser
 	animationChooser.setSelectedItem( "IEF" );
-	//repaint the applet to reflect the change
-	//this.repaint;
     }
 
     /**
@@ -505,19 +479,7 @@ public class Electro2D extends JPanel implements ActionListener {
     public void getSequenceData2(){
 	fileFrame2.toFront();
 	fileFrame2.setVisible(true);
-/**	proteinList2.setBounds( 10, 170, 250, 155 );
-	removeProteinButton.setBounds( proteinListFrame.getWidth()/4 - 5,
-				       340, 137, 20 );
-	proteinListPanel.add( proteinList2 );
-	proteinListPanel.setBounds( 0, 0, 300, 420 );
-	proteinListFrame.setBounds( 0, 0, 300, 420 );
-	//proteinList.setBounds( 10, 20, 250, 155 );
-	//this.repaint();
-	proteinListFrame.validate();
-   */ }
-
-
-
+    }
 
     /**
      * Brings up the help.html page.
@@ -525,19 +487,16 @@ public class Electro2D extends JPanel implements ActionListener {
     public void showHelpPage() {
 	
 	//create a URL object
-//  	     //catch and display any errors that occurred while assigning
-//  	     //information to the URL
+        //catch and display any errors that occurred while assigning
+        //information to the URL
 
 
 	 
-	 //if no errors occurred, open a new window and display the help page
-	// if(helpPage != null){
-	     // getAppletContext().showDocument(helpPage, "_blank");
+	 // if no errors occurred, open a new window and display the help page
 	File f = new File( "HTML Files" + File.separator + "Help" + File.separator + "help.html" );
 	try{
 	    BrowserLauncher.openURL( f.toURL().toString() );
 	} catch(IOException e ){System.err.println( e.getMessage());}
-	// }
     }
 
     /**
@@ -545,12 +504,8 @@ public class Electro2D extends JPanel implements ActionListener {
      */
     public void showAboutPage() {
 	
-	// create a URL object
-	//   URL aboutPage = null;
-
-	 //if no errors occurred, open a new window and display the about page
+	 // open a new window and display the about page
 	     File f = new File( "HTML Files" + File.separator + "about.html" );
-	     System.out.println( f.exists() );
 	     try{
 		 BrowserLauncher.openURL( f.toURL().toString() );
 	     }catch(IOException e ){System.err.println( e.getMessage()); e.printStackTrace();}
@@ -577,8 +532,7 @@ public class Electro2D extends JPanel implements ActionListener {
 	//if no errors occured, open the search page
 	if( searchPage != null ){
 	    try{
-	    //getAppletContext().showDocument( searchPage, "_blank" );
-	    BrowserLauncher.openURL( searchID );
+                BrowserLauncher.openURL( searchID );
 	    }catch(IOException e ){System.err.println( e.getMessage() );}
 	}
 	
@@ -607,7 +561,6 @@ public class Electro2D extends JPanel implements ActionListener {
 	    try{
 	    BrowserLauncher.openURL( searchID );
 	    }catch(IOException e){System.err.println( e.getMessage());}
-	    //getAppletContext().showDocument( searchPage, "_blank" );
 	}
 	
     }
@@ -657,7 +610,6 @@ public class Electro2D extends JPanel implements ActionListener {
 	    try{
 	    BrowserLauncher.openURL( searchId );
 	    }catch(IOException e ){System.err.println( e.getMessage() );}
-	    //getAppletContext().showDocument( searchPage, "_blank" );
 	}
     }
 
@@ -1111,10 +1063,6 @@ public class Electro2D extends JPanel implements ActionListener {
     }
 
     /**
-     * Utility methods.
-     */
-    
-    /**
      * Returns the last file loaded
      *
      * @return lastFileLoaded
@@ -1139,8 +1087,6 @@ public class Electro2D extends JPanel implements ActionListener {
      */
     public Vector getSequences() {
         Vector<Integer> positionsOne = proteinListFrame.getPositionsOne();
-        System.out.println("POSITIONSONE = " + positionsOne);
-        System.out.println("Size of sequences: " + sequences.size());
         if (positionsOne.size() > 0) {
             Vector copySequences = (Vector)sequences.clone();
             sequences.clear();
@@ -1545,52 +1491,5 @@ public class Electro2D extends JPanel implements ActionListener {
 	web.genFile( this.getLastFileLoaded() );
     }
 
-//    public static void main( String[] args ){
-//	if( args.length >= 5 ){
-//	    Electro2D e = new Electro2D();
-//	    String file = args[2];
-//	    String extention = file.substring( file.indexOf( "." ) + 1 );
-//	    if( extention.equals( "faa" ) ){
-//		GenomeFileParser.fastaParse( file, e, "", 1 );
-//	    }
-//	    else if( extention.equals( "pdb" ) ){
-//		GenomeFileParser.pdbParse( file, e, "", 1 );
-//	    }
-//	    else{
-//		System.err.println( file + " is not a valid file.  Please "
-//				    + "enter a .pdb or .faa file." );
-//		System.exit( 1 );
-//	    }
-//	    int numSecs = Integer.parseInt( args[4] );
-//	      e.setVisible( true );
-//	      //e.setVisible(false);
-//	    //e.setVisible( false );
-//	    PositionGenerator posGen = new PositionGenerator( numSecs,
-//							      e );
-//	    //e.setVisible( false );
-//	    posGen.start();
-//	    //System.exit( 0 );
-//
-//
-//	}
-//	else{
-//		Frame jf = new Frame();
-//		jf.addWindowListener(
-//			       new WindowAdapter() {
-//				 public void windowClosing( WindowEvent e ) {
-//					  System.exit( 0 );
-//				      }
-//				  }
-//			       );
-//		jf.setTitle( "2D Electrophoresis Simulator" );
-//		jf.setBounds( 0, 0, 875, 667 );
-////		jf.setBackground( Color.BLACK );
-//	    Electro2D e = new Electro2D();
-////	    e.setBackground( Color.BLACK );
-//	    jf.add(e);
-//	    jf.setResizable( false );
-//	    jf.setVisible(true);
-//	}
-//    }
-//
+
 } //Electro2D

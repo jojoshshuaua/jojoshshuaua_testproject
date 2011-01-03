@@ -24,7 +24,6 @@ public class PeptideGenUI extends Frame implements ActionListener {
 		jScroll = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		setTitle("Peptide Generator for " + proteinName);
 		jScroll.setBounds(10, 110, 500, 195);
-		//jScroll.add(table);
 	
 		mainPanel = new JPanel();                  //init panel
 		mainPanel.setLayout(null);                //abs. positioning
@@ -60,7 +59,6 @@ public class PeptideGenUI extends Frame implements ActionListener {
 		
 		peptideBtn = new PeptideCSVButton( proteinName );
 		peptideBtn.setBounds( 10, 335, 118, 20 ); 
-		//mainPanel.add( jScroll );
 		
 			mainPanel.add( jScroll );
 		mainPanel.add( enzymes );
@@ -70,7 +68,6 @@ public class PeptideGenUI extends Frame implements ActionListener {
 		this.setBounds(0, 0, 600, 400);
 		
 		this.setVisible( true );
-		//pack();
 		pGen = new PeptideGen();
 	}
 	
@@ -111,7 +108,6 @@ public class PeptideGenUI extends Frame implements ActionListener {
 			peptideBtn.setValues( values );
 			peptideBtn.setIndex( enzymes.getSelectedIndex() + 1 );
 		}
-		//System.out.priln( "got here" );
 		// set the cursor image back to normal
 		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		// display the protein titles from the file

@@ -40,7 +40,6 @@ public class Preprocessor{
 	molwts = e.getMolecularWeights();
 	piVals = e.getPiValues();
 	functions = e.getFunctions();
-	//numEnzymes = 
 	fileName = e.getLastFileLoaded();
     }
     
@@ -62,7 +61,6 @@ public class Preprocessor{
 	    System.err.println( "Error writing to file" );
 	}
 	out.println( FILE_HEADER + fileName );
-	// out.println(NUMENZYME_HEADER + numEnzymes );
 	out.println( LINE_SEPARATOR );
 	
 	for( int i = 0; i < sequenceTitle.size(); i++ ){
@@ -153,7 +151,6 @@ public class Preprocessor{
 	else{
 	    
 	    electro2D.setLastFileLoaded( ((String)fileData.elementAt( fileNameLoc )).substring( hlength ) );
-	    // System.out.println( ((String)fileData.elementAt( fileNameLoc )).substring( hlength));
 	    for( int i = endofHeader + 1; i < fileData.size() - 1; i++ ){
 		line = (String)fileData.elementAt( i );
 		while( line.indexOf( "NAME:" ) != -1 ){
@@ -249,12 +246,3 @@ public class Preprocessor{
 	}
     }
 }
-
-
-
-
-
-
-
-
-

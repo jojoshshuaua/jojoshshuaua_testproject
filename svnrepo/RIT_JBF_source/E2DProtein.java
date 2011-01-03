@@ -8,7 +8,6 @@
 
 import java.awt.*;
 import java.util.Random;  // randomly generates colors for protein
-//import java.net.URL;  // represents a URL for a website
 import java.util.HashMap;
 
 public class E2DProtein {
@@ -17,7 +16,7 @@ public class E2DProtein {
     // in the simulation
 
     private static final Color colors[] = {
-        /*Color.BLUE, Color.RED, Color.GREEN,*/ Color.YELLOW,
+        Color.YELLOW,
 	new Color( 254, 143, 74 ), new Color( 160, 11, 206 ), 
 	new Color( 72, 100, 100 ), new Color( 0, 95, 95 ), Color.CYAN,
         new Color( 158, 49, 49 ), new Color( 0, 135, 16 ),
@@ -57,9 +56,7 @@ public class E2DProtein {
 	if( id.indexOf( "DNA" ) != -1 || id.indexOf( "dna" ) != -1 ){
 	    myColor = dnaColor;
 	}
-	else if(/* id.indexOf( "RNA" ) != -1 ||*/
-		 id.indexOf( "ribosomal" ) != -1 
-		 /*||id.indexOf( "rna" ) != -1*/ ){
+	else if(id.indexOf( "ribosomal" ) != -1){
 	    myColor = rnaColor;
 	}
 	else if( id.indexOf( "hypothetical" ) != -1 ){
@@ -77,17 +74,12 @@ public class E2DProtein {
 	}
 	else if( fcn.indexOf( "transduction" ) != -1 ){
 	    myColor = transductionColor;
-	    System.out.println( "TRANSDUCTION " + myFunction );
 	}
 	else{
 	    Random r = new Random();
 	    myColor = colors[ r.nextInt( 9 ) ];
 	}
     }
-
-    /**
-     * accessors
-     */
 
     /**
      * returns protein title
@@ -173,11 +165,4 @@ public class E2DProtein {
 	return retVal;
     }
 
-} // Protein.java
-
-
-
-
-
-
-
+}

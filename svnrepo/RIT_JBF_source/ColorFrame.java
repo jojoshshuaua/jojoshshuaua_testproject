@@ -15,9 +15,6 @@ public class ColorFrame {
     private ArrayList labels;
     private HashMap colorkey;
     
-    /**
-     * Constructor 
-     */
     public ColorFrame(){
 	colorkey = E2DProtein.getColorGuide();
 	
@@ -29,14 +26,6 @@ public class ColorFrame {
 	    }
 				      );
 	labels = new ArrayList();
-	// "rna in Title", rnaColor );
-	//retVal.put( "dna in Title", dnaColor );
-	//retVal.put( "ribosomal in Title" );
-	//retVal.put( "Enzyme EC in Function", enzymeColor );
-	//retVal.put( "hypothetical protein", hypotheticalColor );
-	//retVal.put( "transport protein in Function", transportColor );
-	//retVal.put( "receptor in Function", receptorColor );
-	//retVal.put( "transduction in Function", transductionColor );
 	
 	colorPanel = new Panel();
 	colorPanel.setLayout( new GridLayout( 0,1 ) );
@@ -74,8 +63,6 @@ public class ColorFrame {
 	colorFrame.setBounds( 0, 0, 400, 300 );
 	colorPanel.setBounds( 0, 0, 400, 300 );
 	colorFrame.add( colorPanel );
-	//colorFrame.pack();
-	//colorFrame.show();
     }
 
     public void showKey(){
@@ -83,17 +70,3 @@ public class ColorFrame {
 	colorFrame.show();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

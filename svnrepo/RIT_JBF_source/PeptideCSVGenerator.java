@@ -15,7 +15,6 @@ public class PeptideCSVGenerator{
 
     public void writeToCSV(){
 	String truncatedName = "";
-	System.out.println( proteinName + " " + proteinName.length() );
 	if( (proteinName.replace( " ", "" )).length() < 15 ){
 		truncatedName = (proteinName.replace( " ", "" ));
 	}
@@ -50,4 +49,3 @@ public class PeptideCSVGenerator{
 	}
     }
 }
-

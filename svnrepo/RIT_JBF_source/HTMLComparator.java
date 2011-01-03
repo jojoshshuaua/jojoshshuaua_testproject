@@ -29,7 +29,6 @@ public class HTMLComparator implements Comparator{
 			}
 		    }
 		    else if( i == 1 || i == 2 ){
-			//System.out.println( objA );
 			int comp = compareDouble( a, b, i );
 			if( comp != 0 ){
 			    return comp;
@@ -37,12 +36,8 @@ public class HTMLComparator implements Comparator{
 		    }
 		}
 	    
-	    //System.out.println( "a " + objA );
-	    //System.out.println( "b " + objB );
 	    }
 	    else{
-		// System.out.println( "a " + objA );
-		//System.out.println( "b " + objB );
 		return (((String)objA.elementAt( compBy )).compareTo( 
 								     (String)objB.elementAt( compBy ) ) );
 	    }
@@ -69,9 +64,6 @@ public class HTMLComparator implements Comparator{
 		    }
 		}
 		
-		
-	        System.out.println( "a " + objA );
-		System.out.println( "b " + objB );
 		return 0;
 	    }
 	    return compareDouble( a, b, compBy );

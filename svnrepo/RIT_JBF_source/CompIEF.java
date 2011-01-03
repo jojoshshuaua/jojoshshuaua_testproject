@@ -74,7 +74,7 @@ public class CompIEF implements Comparator{
 		    else if( (maxpi2 >= maxpi1 - range ) && ( maxpi2<=maxpi1 ) ){
 				retVal = 0;
 	    	}
-	    	//retVal = 0;
+
 		}
 		// if the x coordinate of the first IEFProtein is greater than that of
 		// the second, the first IEFProtein is greater.
@@ -83,13 +83,8 @@ public class CompIEF implements Comparator{
 		}
 	
 		//else, the second was greater and retVal still equals -1.
-		//System.out.println("Return Value = " + retVal + " IEF #1 Values: max: " + maxpi1 + " min: " + minpi1);
-		//System.out.println("IEF #2 Values: max: " + maxpi2 + " min: " + minpi2 );
-		//return retVal
 		
 		return retVal;
     }
     
 }
-
-	

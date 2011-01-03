@@ -9,7 +9,6 @@
  */
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import java.util.ArrayList;
 
@@ -32,7 +31,6 @@ public class ProteinFrame extends JFrame {
     private String sequenceString; // the sequence of amino acids for
                                           // the protein
     private String proteinFunction = "";  // the function of the protein
-//    private PeptideGenButton pgButton = null;
     private JLabel function;               // protein function
     private JLabel functionLabel;
     private ArrayList<JLabel> functionList;
@@ -60,7 +58,6 @@ public class ProteinFrame extends JFrame {
         searchPanel.setLayout(new FlowLayout());
 	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationByPlatform(true);
-
 
 	//get protein function 
 	proteinFunction = electro2D.getFunctionbyTitle( proteinTitle );
@@ -148,233 +145,7 @@ public class ProteinFrame extends JFrame {
         this.add(searchPanel, BorderLayout.CENTER);
 
         pack();
-/**
-	functionList = new ArrayList<JLabel>();
-        String tempF = proteinFunction;
-	for( int i = 0; tempF.length() > 0; i++ ){
-            if( tempF.length() < 45 ){
-                Label l = new Label( tempF );
-                functionList.add(new JLabel(tempF));
-                tempF = "";
-            }
-        }
-
-	JLabel currentLabel;
-	for( int i = 0; i < functionList.size(); i++ ){
-	    currentLabel = ((JLabel)functionList.get( i ));
-	    proteinPanel.add(currentLabel);
-	}
-
-   **/
-        pack();
-        
-        //	functionLabel.setForeground( Color.WHITE );
-	
-/**	if( proteinFunction.substring( 0, 6 ).equals( "Enzyme" ) ){
-	    String tempF = proteinFunction;
-	    tempF = tempF.substring( 7,
-				   tempF.lastIndexOf( "\u003B" )+1 );
-	    ecSearch = new ECSearchButton( electro2D, tempF );
-	}
-	
-	pgButton = new PeptideGenButton( electro2D, sequenceString, proteinTitle );
-	
-	if( proteinFunction.length() < 45 ){
-	    function = new Label( proteinFunction );
-	    function.setForeground( Color.WHITE );
-	    function.setFont( theFont );
-	    this.smallFunctionSetup();
-	}
-	else{
-	    functionList = new ArrayList();
-	    String tempF = proteinFunction;
-	    for( int i = 0; tempF.length() > 0; i++ ){
-		if( tempF.length() < 45 ){
-		    Label l = new Label( tempF );
-		    l.setForeground( Color.WHITE );
-		    l.setFont( theFont );
-		    functionList.add( new Label( tempF ) );
-		    tempF = "";
-		}
-		else{
-		    Label l = new Label( tempF.substring( 0, 45 ) + "-" );
-		    l.setFont( theFont );
-		    l.setForeground( Color.WHITE );
-		    functionList.add( l );
-		    tempF = tempF.substring( 45 );
-		   
-		}
-	    }
-	    this.largeFunctionSetup();
-	}
-
-    }
-    
-    public void largeFunctionSetup(){
-	
-	titleLabel.setBounds(5,30,390,20);
-	mwLabel.setBounds(5,60,390,20);
-	piLabel.setBounds(5,90,390,20);
-	functionLabel.setBounds( 42, 120, 65, 20 );
-	int count = 23;
-	int startLoc = 120;
-	Label currentLabel;
-	for( int i = 0; i < functionList.size(); i++ ){
-	    currentLabel = ((Label)functionList.get( i ));
-	    currentLabel.setBounds( 112, startLoc, 320, 20 );
-	    startLoc = startLoc + count;
-	    proteinPanel.add( currentLabel );
-	}
-	count = 25;
-	startLoc = startLoc + 7;
-	if( ecSearch == null ){
-	    if( search != null ){
-		search.setBounds( 130, startLoc/*185, 135, 20 );
-	    }
-	    if( swsSearch != null ){
-		startLoc = startLoc + count;
-		swsSearch.setBounds( 100, startLoc, 195, 20 );
-	    }
-	    startLoc = startLoc + count;
-	    blstSearch.setBounds( 140, startLoc/*235, 115, 20 );
-	    startLoc = startLoc + count;
-	    pgButton.setBounds( 120, startLoc, 152, 20 );
-	}
-	else if( ecSearch != null ){
-	    if( search != null ){
-		search.setBounds( 60, startLoc/*185, 135, 20 );
-		blstSearch.setBounds( 220, startLoc/*185, 115, 20 );
-		startLoc = startLoc + count;
-	    }
-	    else{
-		blstSearch.setBounds( 60, startLoc/*185, 115, 20 );
-		startLoc = startLoc + count;
-	    }
-	    if( swsSearch != null ){
-		swsSearch.setBounds( 100, startLoc/*210, 195, 20 );
-		startLoc = startLoc + count;
-	    }
-	    ecSearch.setBounds( 105, startLoc/*235, 180, 20 );
-	    startLoc = startLoc + count;
-	    pgButton.setBounds( 120, startLoc, 152, 20 );
-	    startLoc = startLoc + count;
-	}
-**/
-//	this.setBounds(xLoc,yLoc,400,startLoc + 100);       //set frame position
-
-	// Changing the location of the next frame allows for layering
-	// in the case of multiple frames
-	
-//	xLoc = xLoc + 15;       //set x Location of next frame
-//	yLoc = yLoc + 15;       //set y location of the next frame
-	
-	//once the locations reach a certain point, start over to prevent 
-	// windows going off the screen
-
-/**	if( xLoc > 300 ){
-	    xLoc = 0;
-	    yLoc = 0;
-	}
-
-	dimensions = this.getBounds();       //store frame size
-
-	proteinPanel.setBounds(0,0,dimensions.width,dimensions.height);
-	
-	this.add(proteinPanel);              //add components
-	proteinPanel.add(titleLabel);
-	proteinPanel.add(mwLabel);
-	proteinPanel.add(piLabel);
-	proteinPanel.add( functionLabel );
-	proteinPanel.add( pgButton );
-	if( search != null ){
-	    proteinPanel.add( search );
-	}
-	if( search != null ){
-	    proteinPanel.add( swsSearch );
-	}
-	proteinPanel.add( blstSearch );
-	if( ecSearch != null ){
-	    proteinPanel.add( ecSearch );
-	}
-	
+        setSize(380, 150);
     }
 
-    public void smallFunctionSetup(){
-    
-	
-	this.setBounds(xLoc,yLoc,400,400);         //set frame position
-
-	// Changing the location of the next frame allows for layering
-	// in the case of multiple frames
-	
-	xLoc = xLoc + 15;       //set x Location of next frame            
-	yLoc = yLoc + 15;       //set y location of the next frame
-	
-	//once the locations reach a certain point, start over to prevent 
-	// windows going off the screen
-
-	if( xLoc > 300 ){
-	    xLoc = 0;
-	    yLoc = 0;
-	}
-
-	dimensions = this.getBounds();       //store frame size
-
-	proteinPanel.setBounds(0,0,dimensions.width,dimensions.height);
-	titleLabel.setBounds(5,30,390,20);
-	titleLabel.setForeground( Color.WHITE );
-	mwLabel.setBounds(5,60,390,20);
-	mwLabel.setForeground( Color.WHITE );
-	piLabel.setBounds(5,90,390,20);
-	piLabel.setForeground( Color.WHITE );
-	functionLabel.setBounds( 42, 120, 65, 20 );
-	functionLabel.setForeground( Color.WHITE );
-	function.setBounds( 112, 120, 350, 20 );
-	function.setForeground( Color.WHITE );
-	System.out.println( proteinFunction );
-	if( ecSearch == null ){
-	    if( search != null ){
-		search.setBounds( 130, 165, 135, 20 );
-	    }
-	    if( swsSearch != null ){
-		swsSearch.setBounds( 100, 195, 195, 20 );
-	    }
-	    blstSearch.setBounds( 140, 220, 115, 20 );
-	    pgButton.setBounds( 120, 245, 152, 20 );
-	}
-	else if( ecSearch != null ){
-	    if( search != null ){
-		search.setBounds( 60, 165, 135, 20 );
-	    }
-	    if( swsSearch != null ){
-		swsSearch.setBounds( 100, 195, 195, 20 );
-	    }
-	    blstSearch.setBounds( 220, 165, 115, 20 );
-	    ecSearch.setBounds( 105, 225, 180, 20 );
-		pgButton.setBounds( 120, 250, 152, 20 );
-	}
-	this.add(proteinPanel);              //add components
-	proteinPanel.add(titleLabel);
-	proteinPanel.add(mwLabel);
-	proteinPanel.add(piLabel);
-	proteinPanel.add( function );
-	proteinPanel.add( functionLabel );
-	proteinPanel.add( pgButton );
-	if( search != null ){
-	    proteinPanel.add( search );
-	}
-	if( search != null ){
-	    proteinPanel.add( swsSearch );
-	}
-	proteinPanel.add( blstSearch );
-	if( ecSearch != null ){
-	    proteinPanel.add( ecSearch );
-	}
-	
-*/
-    }
-
- //   public void updateLabel() {
-	//titleLabel.repaint();
-   // }
 }

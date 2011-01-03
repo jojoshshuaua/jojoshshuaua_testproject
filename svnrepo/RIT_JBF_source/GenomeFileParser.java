@@ -794,7 +794,6 @@ public class GenomeFileParser {
 	    // store the file name in Electro2D
 	    electro2D.setLastFileLoaded( theFile );
 	    electro2D.setMaxAndMinVals( maxMW, minMW, maxPi, minPi );
-	    //System.out.println( "file read" );
 	}
 	else if( fileNum == 2 ){
 	    electro2D.setSequences2( sequences );
@@ -1083,7 +1082,6 @@ public class GenomeFileParser {
 			}
 		    }
 		}
-		//System.out.println( temp );
 		if(temp.length() >=35 && temp.substring(35).lastIndexOf("\"") != -1) {
 		    temp = temp.substring(35);	
 		    //add first line
@@ -1111,7 +1109,6 @@ public class GenomeFileParser {
 		    totalChain += temp.substring(21, temp.lastIndexOf("\""));
 		}
 		
-		//System.out.println( totalChain );
 		sequences.addElement(totalChain); //add the sequence
 		totalChain = ""; //reset for next chain
 		functions.addElement( function ); //add the function
@@ -1171,7 +1168,6 @@ public class GenomeFileParser {
 	    }
 	    
 	    piValues.addElement(pIstring);
-	    //    System.out.println( pIstring + "  " + mWstring +" " + 
 	   
 	}
 	//set vectors in calling applet based on results of this file read
@@ -1184,12 +1180,6 @@ public class GenomeFileParser {
 	    // store the file name in Electro2D
 	    electro2D.setLastFileLoaded( theFile );	
 	    electro2D.setMaxAndMinVals( maxMW, minMW, maxPi, minPi );
-
-	    System.out.println( "sequencetitle" + sequenceTitles.size() );
-	    System.out.println( "sequence" + sequences.size() );
-	    System.out.println( "pi" + piValues.size() );
-	    System.out.println( "mw" + molecularWeights.size() );
-	    System.out.println( "functions" + functions.size() );
 	}
 	else if( fileNum == 2 ){
 	    electro2D.setSequences2( sequences );

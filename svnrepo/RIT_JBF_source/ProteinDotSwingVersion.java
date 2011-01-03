@@ -1,6 +1,3 @@
-/*
- * Swing version of the ProteinDot class.
- */
 
 /**
  * @author Jill Zapoticznyj

@@ -26,12 +26,10 @@ class AmountTextField extends TextField
 			}
 			else{
 				setText( lastValue);
-//					Toolkit.getDefaultToolkit().beep();
 			}
 		}
 		catch( NumberFormatException e){
 			setText( lastValue);
-//				Toolkit.getDefaultToolkit().beep();
 		}
 
 		return true;
@@ -74,13 +72,11 @@ class ConcenTextField extends TextField
 			}
 			catch( NumberFormatException e){
 				setText( lastValue);
-	//				Toolkit.getDefaultToolkit().beep();
 			}
 		}
 
 		//invalid value entered
 		setText( lastValue);
-//		Toolkit.getDefaultToolkit().beep();
 
 		return true;
 	}

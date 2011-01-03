@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.color.*;
 import java.awt.event.*;
 /**
  * Removes highlighted proteins from the protein list.
@@ -85,9 +84,6 @@ public class RemoveProteinButton extends Canvas implements MouseListener {
 	highlighted = true; //register that the cursor is over the button
 	//and repaint it in order to reflect the change in bg color
 	repaint();
-	//display a message to the user in the status bar reflecting the
-	//purpose of this button
-	//electro2D.showStatus("Remove highlighted proteins from the list.");
     }
     /**
      * Responds to the cursor being moved from over the button
@@ -98,8 +94,6 @@ public class RemoveProteinButton extends Canvas implements MouseListener {
 	highlighted = false; //register that the cursor is not over the button
 	//and repaint it to reflect the change in the background color
 	repaint();
-	//remove the message in the status bar
-	//electro2D.showStatus("");
     }
     /**
      * Responds to a mouse click

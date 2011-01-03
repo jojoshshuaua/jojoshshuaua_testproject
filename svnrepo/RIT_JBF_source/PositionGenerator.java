@@ -43,12 +43,10 @@ public class PositionGenerator extends Thread{
 	titles = e.getSequenceTitles();
 	dots = new Vector();
 	electro2D = e;
-
-	//this.generateDots();
 	
     }
     
-    public void /*generateDots()*/ run(){
+    public void run(){
 	GelCanvasSwingVersion gel = electro2D.getGel();
 	double width = gel.getWidth();
 	double pI = 0;
@@ -81,10 +79,8 @@ public class PositionGenerator extends Thread{
 	    for( int j = 0; j < numLoopsPerSecond * numSecs; j++ ){
 		yLoc = ( 10 / defaultPercent ) * (defaultVoltage/25) * .25 
 		  * (100000/MW) + yLoc;
-		//yLoc = yLoc + yLoc;
 		
 	    }
-	    System.out.println( numSecs + " " + yLoc);
 
 	    //finally generate Color
 	    
@@ -130,10 +126,7 @@ public class PositionGenerator extends Thread{
 	    title = "";
 	}
 	((GelCanvasSwingVersion)gel).genGIFFile( dots, numSecs );
-	//gel.repaint();
-	//  if( numSecs%2 != 0 || numSecs%2 == 0 ){
-//  	 ((GelCanvas)gel).genGIFFile( dots, numSecs );
-//  	}
+
 	try{
 	    this.sleep( (long)1000 );
 	}catch(Exception e ){}

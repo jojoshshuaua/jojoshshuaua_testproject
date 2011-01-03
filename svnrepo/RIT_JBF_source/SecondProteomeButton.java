@@ -88,8 +88,6 @@ public class SecondProteomeButton extends Canvas implements MouseListener {
 	//let the paint method know the cursor is over the object
 	highlighted = true;
 	repaint();
-	//display information at the bottom of the screen
-	//electro2D.showStatus("Load second proteome data.");
     }
 
     /**
@@ -101,9 +99,6 @@ public class SecondProteomeButton extends Canvas implements MouseListener {
 	// let the paint method know the cursor has left from over the object
 	highlighted = false;
 	repaint();
-	//remove the information that was being displayed at the bottom of the
-	// screen
-	//electro2D.showStatus("");
     }
 
     /**

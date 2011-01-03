@@ -5,7 +5,6 @@ import java.util.Vector;
 
 public class ImageZoom extends Frame implements MouseListener{
     
-    //private Frame canvasFrame;
     private Panel canvasPanel;
     private Canvas imageCanvas;
     private int startX;
@@ -38,11 +37,7 @@ public class ImageZoom extends Frame implements MouseListener{
 						      new ReplicateScaleFilter(
 									       5*( stopX - startX ), 5*(stopY - startY ) ) );
 	filtered = createImage( prod );
-	
-	//filtered = filtered.getScaledInstance( size*( stopX - startX ), 
-	//size*( stopY - startY ), 
-	//  Image.SCALE_SMOOTH );
-    
+	    
 	this.setTitle( "Gel Zoom" );
 	this.setBounds( 0, 0,5*( stopX - startX ), 5*( stopY - startY ) );
 	this.addWindowListener( new WindowAdapter(){
@@ -56,15 +51,7 @@ public class ImageZoom extends Frame implements MouseListener{
 	canvasPanel.setBounds( 0, 0, ( stopX - startX ), ( stopY - startY ));
 	canvasPanel.setLayout( null );
 	
-	//imageCanvas = new Canvas();
-	//canvasPanel.add( imageCanvas );
-	//this.add(  );
-	
-	
-	//this.setBounds( 0, 0, canvasPanel.getWidth(), canvasPanel.getHeight() );
-	//imageCanvas.setBounds( 0, 0, canvasPanel.getWidth(), canvasPanel.getHeight() );
 	tracker = new MediaTracker( this );
-	//filtered = e2d.createImage( prod );
 	tracker.addImage( filtered, 0 );
 	
 	try{
@@ -72,12 +59,6 @@ public class ImageZoom extends Frame implements MouseListener{
 	}catch( InterruptedException ex ){
 	    System.err.println( "Error loading zoomed image" );
 	}
-    //filtered = filtered.getScaledInstance( ( stopX - startX ), 
-    //				       size*( stopY - startY ), 
-    //				       Image.SCALE_SMOOTH );
-	//	try{
-	//  tracker.waitForID(0);
-	//}catch(InterruptedException exc ){}
 	
 
 	this.show();
@@ -85,10 +66,8 @@ public class ImageZoom extends Frame implements MouseListener{
     
     public void paint( Graphics g ){
 	
-	//this.setBounds( 0, 0, size*( stopX - startX ), size*( stopY - startY ) );
 	
 	g.drawImage( filtered, 0, 0, imageCanvas );
-	//System.out.println( bigDot );
     }
 
     public void mouseClicked( MouseEvent e ){
@@ -117,11 +96,3 @@ public class ImageZoom extends Frame implements MouseListener{
     public void mouseReleased( MouseEvent e ){}
     public void mouseExited( MouseEvent e ){}
 }
-
-
-
-
-
-
-
-

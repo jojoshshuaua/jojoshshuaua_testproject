@@ -86,11 +86,7 @@ public class FileFrame extends JFrame implements ActionListener {
 
         sa = fl.list( new ImageFilter() );
 
-//        System.out.println("Here goes the test.");
-//        System.out.print(sa);
-
         for (int file = 0; file < sa.length; file++) {
-//          System.out.println(sa[file]);
             choice.addItem(sa[file]);
         }
     }

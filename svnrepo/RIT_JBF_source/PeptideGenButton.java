@@ -94,8 +94,6 @@ public class PeptideGenButton extends Canvas implements MouseListener {
 	//let the paint method know the cursor is over the object
 	highlighted = true;
 	repaint();
-	//display information at the bottom of the screen
-	//electro2D.showStatus("Search for specific protein information.");
     }
 
     /**
@@ -109,7 +107,6 @@ public class PeptideGenButton extends Canvas implements MouseListener {
 	repaint();
 	//remove the information that was being displayed at the bottom of the
 	// screen
-	//electro2D.showStatus("");
     }
 
     /**

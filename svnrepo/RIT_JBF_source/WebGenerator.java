@@ -30,7 +30,6 @@ public class WebGenerator{
     private final String closeTD = "\u003C/TD\u003E";
     private final String openTR = "\u003CTR\u003E";
     private final String closeTR = "\u003C/TR\u003E";
-//    private final String directoryString = "./../HTML Files/";
     private final String directoryString = "HTML Files/";
 
     public WebGenerator( Electro2D e ){
@@ -68,10 +67,10 @@ public class WebGenerator{
 	HTMLSorter htmlSort = new HTMLSorter( searchVal, names, pI_vals, molwt, functions);
 	Vector sorted = new Vector( htmlSort.getSorted() );
 
-	maxMW =/*((String)molwt.elementAt( 0 ) );*/ String.valueOf(electro2D.getMaxMW());
-	minMW = /*((String)molwt.elementAt( 0 ) );*/String.valueOf(electro2D.getMinMW());
-	maxPi = /*((String)pI_vals.elementAt( 0 ) );*/String.valueOf(electro2D.getMaxPi());
-	minPi = /*((String)pI_vals.elementAt( 0 ) );*/String.valueOf(electro2D.getMinPi());
+	maxMW = String.valueOf(electro2D.getMaxMW());
+	minMW = String.valueOf(electro2D.getMinMW());
+	maxPi = String.valueOf(electro2D.getMaxPi());
+	minPi = String.valueOf(electro2D.getMinPi());
 	
 	String startingLine = " \u003Chtml\u003E\u003Chead\u003E" + 
 	    "\u003Cbody bgcolor=" + bgColor + "\u003E\u003Ctitle\u003E" + 
@@ -102,9 +101,7 @@ public class WebGenerator{
 	    pWrite.println( startingLine );
 	    pWrite.println( maxmwCode );
 	    pWrite.println( minmwCode );
-	    //buf.newLine();
 	    pWrite.println( maxpiCode );
-	    //buf.newLine();
 	    pWrite.println( minpiCode);
 	    pWrite.println( filesizeCode );
 	    pWrite.println( startTable );
@@ -119,58 +116,27 @@ public class WebGenerator{
 	String pI = "";
 	double pIDouble = 0;
 	Vector tmp = new Vector();
-	//System.out.println( sorted.size() );
 	for( int i = 0; i < sorted.size(); i++ ){
-	    //  try{
 		tmp = ((Vector)sorted.elementAt(i));
-		//System.out.println( tmp.elementAt(1) );
-		pI = (String)tmp.elementAt(1);/*(String)pI_vals.elementAt( i )*/;
-		//System.out.println( pI );
+		pI = (String)tmp.elementAt(1);
 	    pIDouble = Double.parseDouble(pI);
-	    molwtValue = (String)tmp.elementAt(2);/*molwt.elementAt( i )*/;
+	    molwtValue = (String)tmp.elementAt(2);
 	    molwtDouble = Double.parseDouble(molwtValue);
 
 	    protInfoTable = openTR + openTD +
-		(String)tmp.elementAt(0)/*(String)names.elementAt( i )*/ + closeTD + openTD + 
+		(String)tmp.elementAt(0) + closeTD + openTD + 
 		molwtValue + closeTD + openTD +
 		pI + closeTD + openTD +
-		(String)tmp.elementAt(3)/*functions.elementAt( i )*/ + closeTD + closeTR;
+		(String)tmp.elementAt(3) + closeTD + closeTR;
 	    
 	    pWrite.println( protInfoTable );
 
-	    //   }catch(IOException e ){
-	    //System.err.println( e + " " + e.getMessage() + "hi" );
-	    //e.printStackTrace();
-	    //}
 	}
-
-
-
-	//try{
 
 	    pWrite.println( endTable );
 	    pWrite.println( endLine );
-	    //System.out.println( "closing stream" );
 	    pWrite.close();
-	    //}catch( Exception e ){
-	    ///    System.err.println( e.getMessage() );
-	    //}
-	    //finally{
-	    //try{
-		pWrite.close();
-		//}catch( Exception c ){
-		//System.err.println( c.getMessage() );
-		// }
+            pWrite.close();
     
-	
-	//File f = new File( "./webgen.html" );
-	//try{
-	//  BrowserLauncher.openURL( f.toURL().toString() );
-	//}catch( MalformedURLException e ){ 
-	//  System.err.println( e.getMessage() );
-	//}
-	//catch( IOException e ){
-	//  System.err.println( e.getMessage() );
-	//}
     }
 }

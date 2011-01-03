@@ -5,13 +5,9 @@
  * @author Adam Bazinet
  */
 
-import java.util.*;
-
 public class DotThread extends Thread{
     private static boolean go = false;
-    private boolean iefdrawn = false;
     private GelCanvasSwingVersion gel;
-    private static double percent = -1;
     private Electro2D electro2D;
 
     /**
@@ -21,9 +17,8 @@ public class DotThread extends Thread{
      */
 
     public DotThread( GelCanvasSwingVersion g, Electro2D e ){
-	// assign the GelCanvas parameter to gel
 	gel = g;
-	electro2D = e; // assign a reference to Electro2D
+	electro2D = e;
     }
 
     /**
@@ -65,8 +60,6 @@ public class DotThread extends Thread{
     public void run(){
 	GelCanvasSwingVersion.stopBlink();
 	//send the percent acrylamide value to ProteinDot
-	//lowPercent = electro2D.getLowPercent();
-	//highPercent = electro2D.getHighPercent();
 	ProteinDotSwingVersion.setPercent( electro2D.getLowPercent(),
 			       electro2D.getHighPercent() );
 
@@ -116,11 +109,8 @@ public class DotThread extends Thread{
 	}catch( Exception e ){
 	    System.err.println( "Exception was: " + e );
 	}
-	//System.out.println( "The number of cycles was " + i );
 	gel.setreLine();
 	gel.setMWLines( i );
-	//gel.repaint();
-	/*gel.resetDrawMW();*/
 	i = 0;
 	electro2D.resetPlay();
 	gel.paint( gel.getGraphic() );
@@ -130,4 +120,3 @@ public class DotThread extends Thread{
 	}
     }
 }
-

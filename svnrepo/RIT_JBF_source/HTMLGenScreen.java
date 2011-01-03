@@ -8,15 +8,11 @@
  */
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 
 public class HTMLGenScreen extends JFrame implements ActionListener,
 						    MouseListener{
 
-    //    private static Color background = new Color( 202, 225, 255 );
-//    private static Color background = Color.BLACK;
-//    private static Color foreground = Color.WHITE;
     private static final int PI_VAL = 1;
     private static final int TITLE_VAL = 0;
     private static final int FUNCTION_VAL = 3;
@@ -39,24 +35,16 @@ public class HTMLGenScreen extends JFrame implements ActionListener,
 	functionButton = new JRadioButton( "Protein Function" );
 	functionButton.setActionCommand( "function" );
 	functionButton.addActionListener( this );
-//	functionButton.setBackground( background );
-//	functionButton.setForeground( foreground );
 	piButton = new JRadioButton( "pI Value" );
 	piButton.setActionCommand( "pI" );
 	piButton.addActionListener( this );
-//	piButton.setBackground( background );
-//	piButton.setForeground( foreground );
 	mwButton = new JRadioButton( "Molecular Weight Value" );
 	mwButton.setActionCommand( "mw" );
 	mwButton.addActionListener( this );
-//	mwButton.setForeground( foreground );
-//	mwButton.setBackground( background );
 	titleButton = new JRadioButton( "Protein Title" );
 	titleButton.setActionCommand( "title" );
 	titleButton.addActionListener( this );
 	titleButton.setSelected( true );
-//	titleButton.setBackground( background );
-//	titleButton.setForeground( foreground );
 
 	buttons = new ButtonGroup();
 	buttons.add( titleButton );
@@ -65,11 +53,9 @@ public class HTMLGenScreen extends JFrame implements ActionListener,
 	buttons.add( functionButton );
 	
 	submit = new JButton( "Generate HTML Document" );
-	//submit.setSize( 75, 30 );
 	submit.addMouseListener( this );
     
 	contentPanel = new JPanel();
-//	contentPanel.setBackground( background );
 	contentPanel.setLayout( new BoxLayout(
 				       contentPanel, BoxLayout.Y_AXIS ) ); 
 	contentPanel.add( titleButton );
@@ -79,8 +65,6 @@ public class HTMLGenScreen extends JFrame implements ActionListener,
 	contentPanel.add( submit );
 
 	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//	this.setBounds( 0, 0, 218, 160 );
-//	contentPanel.setBounds( 0, 0, 200, 150 );
 	this.add( contentPanel );
 	this.setVisible( true );
         pack();
@@ -104,7 +88,6 @@ public class HTMLGenScreen extends JFrame implements ActionListener,
 
     public void mouseClicked( MouseEvent e ){
 	WebGenerator.setSearch( sortField );
-	//open the search page and perform the search for the protein
 	electro2D.generateWebPage();
 	this.dispose();
     }

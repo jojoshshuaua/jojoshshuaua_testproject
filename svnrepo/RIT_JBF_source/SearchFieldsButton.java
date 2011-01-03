@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.color.*;
 import java.awt.event.*;
 /**
  * Brings up the file loader frame.
@@ -90,8 +89,7 @@ public class SearchFieldsButton extends Canvas implements MouseListener {
 	highlighted = true;
 	repaint();
 	//display information at the bottom of the screen
-	//electro2D.showStatus("Search for specific protein information.");
-    }
+   }
 
     /**
      * Responds to a mouse exiting from over the object
@@ -102,9 +100,6 @@ public class SearchFieldsButton extends Canvas implements MouseListener {
 	// let the paint method know the cursor has left from over the object
 	highlighted = false;
 	repaint();
-	//remove the information that was being displayed at the bottom of the
-	// screen
-	//electro2D.showStatus("");
     }
 
     /**

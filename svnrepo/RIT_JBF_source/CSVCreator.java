@@ -11,21 +11,12 @@ import java.util.*;
 
 public class CSVCreator{
     
-    //private Vector sequences;
-    //private Vector sequenceTitles;
-    //private Vector molwts;
-    //private Vector piVals;
     private Vector proteins;
     private Electro2D electro2D;
     private final String directoryString = "CSV Files";
 
     public CSVCreator( Electro2D e ){
-	electro2D = e;
-	//sequences = electro2D.getSequences();
-	//sequenceTitles = electro2D.getSequenceTitles();
-	//molwts = electro2D.getMolecularWeights();
-	//piVals = electro2D.getPiValues();
-	
+	electro2D = e;	
 	proteins = electro2D.getGel().getDots();
     }
 
