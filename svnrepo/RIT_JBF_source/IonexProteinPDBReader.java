@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.regex.*;
 
 /**
- * Reads in an Ionex protein from a genbank file
+ * Reads in an Ionex protein from a PDB file
  *
  * @author Kyle Dewey
  */
@@ -28,7 +28,15 @@ public class IonexProteinPDBReader implements IonexProteinReader {
     public IonexProteinPDBReader() {}
 
     /**
-     * Gets an amino acid from the given three letter code.
+     * Gets an amino acid from the given single letter code
+     */
+    public static AminoAcid getAminoAcid( char code )
+	throws UnknownAminoAcidException {
+	return getAminoAcid( code + "" );
+    }
+
+    /**
+     * Gets an amino acid from the given three or one letter code.
      * @param code The three letter code
      * @return The amino acid
      * @exception UnknownAminoAcidException If the code is unknown

@@ -2,6 +2,8 @@
  * IonexModelInterface.java
  */
 
+import java.util.*;
+
 /**
  * Defines what actions the model must understand in response to a
  * controller.
@@ -15,7 +17,7 @@ public interface IonexModelInterface {
      * with each other in the model, and also to get what color
      * each protein band is
      */
-    public IonexProteinBand[] getProteinBands();
+    public List< IonexProteinBand > getProteinBands();
 
     /**
      * Gets how far into the simulation we are.

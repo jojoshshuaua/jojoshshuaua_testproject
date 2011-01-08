@@ -69,9 +69,8 @@ public class IonexColumn extends Component {
     protected void drawProtein( IonexProteinBand protein,
 				Graphics g ) {
 	Color originalColor = g.getColor();
-	int position = IonexModel.proteinPosition( protein.getPosition() );
-	int bandWidth = IonexModel.proteinBandWidth( position,
-						     protein.getBandWidth() );
+	int position = protein.getPosition();
+	int bandWidth = IonexProteinBand.BAND_WIDTH;
 	
 	if ( position != IonexModel.BEYOND_COLUMN ) {
 	    g.setColor( protein.getColor() );
@@ -85,7 +84,6 @@ public class IonexColumn extends Component {
 
     public void updateColumn( IonexProteinBand protein,
 			      Graphics g ) {
-	blankColumn( protein, g );
 	drawProtein( protein, g );
     }
 
@@ -95,32 +93,12 @@ public class IonexColumn extends Component {
      * will be updated in order or decreasing position (greatest
      * position first).
      */
-    public void updateColumn( IonexProteinBand[] proteins,
+    public void updateColumn( java.util.List< IonexProteinBand > proteins,
 			      Graphics g ) {
-	proteins = sortByPositionDesc( proteins );
+	sortByPositionDesc( proteins );
 
 	for ( IonexProteinBand current : proteins ) {
 	    updateColumn( current, g );
-	}
-    }
-
-    /**
-     * Clears out the area of the column previously occupied
-     * by the given protein
-     */
-    protected void blankColumn( IonexProteinBand protein,
-				Graphics g ) {
-	Color originalColor = g.getColor();
-	int position = IonexModel.proteinPosition( protein.getOldPosition() );
-	int bandWidth = IonexModel.proteinBandWidth( position,
-						     protein.getOldBandWidth() );
-	if ( position != IonexModel.BEYOND_COLUMN ) {
-	    g.setColor( color );
-	    g.fillRect( columnStartX,
-			position,
-			columnEndX - columnStartX,
-			bandWidth );
-	    g.setColor( originalColor );
 	}
     }
 
@@ -138,32 +116,19 @@ public class IonexColumn extends Component {
 	g.setColor( originalColor );
     }
 
-    public void paintComponent( IonexProteinBand[] proteins,
+    public void paintComponent( java.util.List< IonexProteinBand > proteins,
 				Graphics g ) {
 	updateColumn( proteins,
 		      g );
     }
 
     /**
-     * Converts the given array to a list
-     */
-    public static java.util.List< IonexProteinBand > arrayToList( IonexProteinBand[] array ) {
-	java.util.List< IonexProteinBand > retval = new ArrayList< IonexProteinBand >();
-	for( IonexProteinBand current : array ) {
-	    retval.add( current );
-	}
-
-	return retval;
-    }
-
-    /**
      * Sorts the given proteins according to position
      * The protein with the greatest position is put first
-     * Note that this is nondestructive.
+     * Note that this is destructive.
      */
-    public static IonexProteinBand[] sortByPositionDesc( IonexProteinBand[] proteins ) {
-	java.util.List< IonexProteinBand > asList = arrayToList( proteins );
-	Collections.sort( asList,
+    public static void sortByPositionDesc( java.util.List< IonexProteinBand > proteins ) {
+	Collections.sort( proteins,
 			  new Comparator< IonexProteinBand >() {
 			      public int compare( IonexProteinBand first,
 						  IonexProteinBand second ) {
@@ -176,6 +141,5 @@ public class IonexColumn extends Component {
 				  }
 			      }
 			  } );
-	return asList.toArray( new IonexProteinBand[ proteins.length ] );
     }
 }

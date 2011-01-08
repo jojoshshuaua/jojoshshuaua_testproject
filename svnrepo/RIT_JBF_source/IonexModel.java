@@ -22,8 +22,8 @@ public class IonexModel implements IonexModelInterface, Runnable {
     public static final int FRAME_DELAY = 100; // milliseconds between frames
 
     // related to the column itself
-    public static final int COLUMN_LOW_Y = 107;
-    public static final int COLUMN_HIGH_Y = 305;
+    public static final int COLUMN_LOW_Y = 25;
+    public static final int COLUMN_HIGH_Y = 497;
     public static final int COLUMN_SIZE_Y = COLUMN_HIGH_Y - COLUMN_LOW_Y;
     public static final int BEYOND_COLUMN = -1;
 
@@ -38,18 +38,6 @@ public class IonexModel implements IonexModelInterface, Runnable {
 		    return Double.NEGATIVE_INFINITY;
 		}
 	};
-    public static final IonexProteinBand BOUND_PROTEIN_BAND = 
-	new IonexProteinBand( BOUND_PROTEIN, true ) {
-	    public Color getColor() {
-		return Color.BLACK;
-	    }
-	    public boolean isBound() {
-		return true;
-	    }
-	    public int getPosition() {
-		return 0;
-	    }
-	};
     // end constants
 
     // begin instance variables
@@ -58,6 +46,7 @@ public class IonexModel implements IonexModelInterface, Runnable {
     public final Solvent solvent; // the solvent used for the simulation
     public final Resin resin; // the resin used for the simulation
     public final IonexViewInterface view; // the view to update
+    public final IonexProteinBand boundProteinBand;
     private Thread runner; // runs the model
     private boolean running = false; // set to true if we are running
     private int currentFrame = 0;
@@ -65,9 +54,8 @@ public class IonexModel implements IonexModelInterface, Runnable {
                                 // top of the column (currently)
     private double bottomConcNaCl; // concentration of NaCl at the bottom
                                    // of the column (currently)
-    private List< IonexProteinBand > boundProteins; // proteins bound at the top
-    private List< IonexProteinBand > unboundProteins; // proteins moving in
-                                                      // the column
+    private List< Pair< Double, Double > > concTable; // index is frame, item is the top and bottom [NaCl]
+    private IonexProteinBand[] allProteins;
     // end instance variables
 
     /**
@@ -79,7 +67,6 @@ public class IonexModel implements IonexModelInterface, Runnable {
 		       Resin resin,
 		       IonexProtein[] proteins,
 		       IonexViewInterface view ) {
-	List< IonexProteinBand > allBands;
 	this.startConcNaCl = startConcNaCl;
 	this.endConcNaCl = endConcNaCl;
 	this.solvent = solvent;
@@ -89,46 +76,66 @@ public class IonexModel implements IonexModelInterface, Runnable {
 	// at the start, the top and bottom have the starting concentration
 	topConcNaCl = bottomConcNaCl = startConcNaCl;
 
+	concTable = Arrays.asList( makeConcTable() );
+	boundProteinBand = makeBoundProteinBand();
 	// put the proteins into bands
-	allBands = proteinsToBands( proteins );
-	boundProteins = getBoundProteins( allBands );
-	unboundProteins = getUnboundProteins( allBands );
-	unboundProteins.add( BOUND_PROTEIN_BAND ); // visible proteins
-
-	sortByCharge( unboundProteins );
+	allProteins = proteinsToBands( proteins );
+	sortByCharge( allProteins );
 
 	// reflect that we are ready in the view
 	updateView();
     }
 
-    public static List< IonexProteinBand > getBoundProteins( List< IonexProteinBand > proteins ) {
-	List< IonexProteinBand > retval = new ArrayList< IonexProteinBand >();
-	for( IonexProteinBand current : proteins ) {
-	    if ( current.isBound() ) {
-		retval.add( current );
+    /**
+     * Makes the bound protein band.
+     */
+    public IonexProteinBand makeBoundProteinBand() {
+	return new IonexProteinBand( BOUND_PROTEIN, this ) {
+	    public Color getColor() {
+		return Color.BLACK;
 	    }
-	}
-
-	return retval;
+	    public boolean isBound() {
+		return true;
+	    }
+	    public int getPosition( int frame ) {
+		return 0;
+	    }
+	    public int getPosition() {
+		return 0;
+	    }
+	};
     }
 
-    public static List< IonexProteinBand > getUnboundProteins( List< IonexProteinBand > proteins ) {
-	List< IonexProteinBand > retval = new ArrayList< IonexProteinBand >();
-	for( IonexProteinBand current : proteins ) {
-	    if ( !current.isBound() ) {
-		retval.add( current );
-	    }
-	}
-
-	return retval;
+    public int getNumProteins() {
+	return allProteins.length;
     }
 
     /**
-     * Gets the protein bands.  This is primarily so the view can determine
-     * what colors have been assigned to each protein
+     * Gets the protein bands for the current frame
      */
-    public IonexProteinBand[] getProteinBands() {
-	return unboundProteins.toArray( new IonexProteinBand[ 0 ] );
+    public List< IonexProteinBand > getProteinBands() {
+	return getProteinBands( getCurrentFrame() );
+    }
+
+   /**
+    * Gets the protein bands that should be drawn.  
+    * This is intended for the view.
+    */
+    public List< IonexProteinBand > getProteinBands( int frame ) {
+	List< IonexProteinBand > retval = new ArrayList< IonexProteinBand >();
+	for( IonexProteinBand current : allProteins ) {
+	    if ( current == boundProteinBand ||
+		 !current.isBound( frame ) ) {
+		retval.add( current );
+	    }
+	}
+
+	if ( retval.size() < allProteins.length ) {
+	    // some proteins must be bound
+	    retval.add( boundProteinBand );
+	}
+
+	return retval;
     }
 
     /**
@@ -151,16 +158,11 @@ public class IonexModel implements IonexModelInterface, Runnable {
     /**
      * Converts the given proteins into a parallel list of protein bands.
      */
-    protected List< IonexProteinBand > proteinsToBands( IonexProtein[] proteins ) {
-	List< IonexProteinBand > retval = 
-	    new ArrayList< IonexProteinBand >( proteins.length );
+    protected IonexProteinBand[] proteinsToBands( IonexProtein[] proteins ) {
+	IonexProteinBand[] retval = new IonexProteinBand[ proteins.length ];
 	
-	for( IonexProtein current : proteins ) {
-	    IonexProteinBand band = new IonexProteinBand( current );
-	    band.setBound( solvent.pH,
-			   startConcNaCl,
-			   resin );
-	    retval.add( band );
+	for( int x = 0; x < retval.length; x++ ) {
+	    retval[ x ] = new IonexProteinBand( proteins[ x ], this );
 	}
 
 	return retval;
@@ -171,8 +173,11 @@ public class IonexModel implements IonexModelInterface, Runnable {
      * positively charged proteins will be at the front of the list.
      * Destructive.
      */
-    protected void sortByCharge( List< IonexProteinBand > proteins ) {
-	Collections.sort( proteins,
+    protected void sortByCharge( IonexProteinBand[] proteins ) {
+	// according to Java API, changes to the list write through
+	// to the array
+	List< IonexProteinBand > asList = Arrays.asList( proteins );
+	Collections.sort( asList,
 			  new Comparator< IonexProteinBand >() {
 			      public int compare( IonexProteinBand first,
 						  IonexProteinBand second ) {
@@ -189,68 +194,139 @@ public class IonexModel implements IonexModelInterface, Runnable {
 			  } );
     }
 
-    protected void unbindProteins() {
-	if ( boundProteins.size() > 0 ) {
-	    for( int x = 0; x < boundProteins.size(); x++ ) {
-		IonexProteinBand current = boundProteins.get( x );
-		current.setBound( solvent.pH,
-				  topConcNaCl,
-				  resin );
-		if ( !current.isBound() ) {
-		    boundProteins.remove( x );
-		    unboundProteins.add( current );
-		    x--;
-		}
-	    }
-	    
-	    if ( boundProteins.size() == 0 ) {
-		unboundProteins.remove( BOUND_PROTEIN_BAND );
-	    }
+    /**
+     * Gets the position for the given protein
+     */
+    public int getPosition( double unbindingConc,
+			    int frame ) {
+	int retval = frame - frameWhenTopNaCl( unbindingConc );
+	if ( retval < 0 ) {
+	    retval = 0;
 	}
+
+	return retval;
     }
 
     /**
-     * Moves the proteins in the column
-     * @todo Make some of these values constants pending better understanding
-     */
-    public void moveProteins() {
-	boolean changeMade = false;
-	unbindProteins();
-	for( IonexProteinBand current : unboundProteins ) {
-	    current.incrementPosition();
-	} // for each protein
-
-	if ( unboundProteins.size() > 0 ) {
-	    view.updateProteinPosition();
-	}
-    } // moveProteins
-	    
-    /**
-     * Determines the current top and bottom concentrations of NaCl.
+     * Determines the current top and bottom concentrations of NaCl, based on
+     * the given frame.
      *
      * @todo Make some of these values constants pending better
      * understanding of what they actually represent
      */
-    public void calcConcNaCl() {
-	if ( currentFrame <= 150 ) {
-	    topConcNaCl = bottomConcNaCl = startConcNaCl;
-	} else if ( currentFrame <= 300 ) {
+    public Pair< Double, Double > calcConcNaCl( int frame ) {
+	double top, bottom;
+	if ( frame <= 150 ) {
+	    top = bottom = startConcNaCl;
+	} else if ( frame <= 300 ) {
 	    // concentration entering column changes
 	    // the time for the initial wash to move through the column
-	    topConcNaCl = startConcNaCl + 
-		((( endConcNaCl - startConcNaCl ) / 150 ) * ( currentFrame - 150 ) );
-	    bottomConcNaCl = startConcNaCl;
-	} else if ( currentFrame <= 450 ) {
+	    top = startConcNaCl + 
+		((( endConcNaCl - startConcNaCl ) / 150 ) * ( frame - 150 ) );
+	    bottom = startConcNaCl;
+	} else if ( frame <= 450 ) {
 	    // only final wash entering column
-	    topConcNaCl = endConcNaCl;
-	    bottomConcNaCl = startConcNaCl + 
-		((( endConcNaCl - startConcNaCl ) / 150 ) * ( currentFrame - 300 ) );
+	    top = endConcNaCl;
+	    bottom = startConcNaCl + 
+		((( endConcNaCl - startConcNaCl ) / 150 ) * ( frame - 300 ) );
 	} else {
 	    // only the high concentration now
-	    topConcNaCl = bottomConcNaCl = endConcNaCl;
+	    top = bottom = endConcNaCl;
 	}
 
+	return new Pair< Double, Double >( new Double( top ),
+					   new Double( bottom ) );
+    }
+	
+    /**
+     * Gets the top and bottom[NaCl] for the current frame
+     */
+    public Pair< Double, Double > getConcNaCl() {
+	return getConcNaCl( getCurrentFrame() );
+    }
+
+    /**
+     * Gets the top and bottom [NaCl] for a given frame
+     */
+    public Pair< Double, Double > getConcNaCl( int frame ) {
+	return concTable.get( frame );
+    }
+
+    /**
+     * Makes a table that associates a given top and bottom [NaCl] with 
+     * a frame.  That is, given a top [NaCl], it can associate
+     * it with a given frame.  Note that the top and bottom [NaCl] are
+     * individually monotonically increasing, so these values are already sorted.
+     */
+    public Pair< Double, Double >[] makeConcTable() {
+	Pair< Double, Double >[] retval = new Pair[ NUM_FRAMES ];
+	for( int x = 0; x < retval.length; x++ ) {
+	    retval[ x ] = calcConcNaCl( x );
+	}
+	return retval;
+    }
+    
+    /**
+     * Given an index into the concentration table, it will get the largest
+     * index in the table at which the top [NaCl] is equal to the top [NaCl]
+     * for the given index.  For instance, if given the list:
+     * [1,2,2,3,4], and an index of 1, this will return 2.  But with
+     * [1,2,3,4] and 1, it will return 1.
+     */
+    public static int getBiggestIndex( int index,
+				List< Pair< Double, Double > > table ) {
+	double value = table.get( index ).first.doubleValue();
+	int x = index + 1;
+	while( x < table.size() &&
+	       value == table.get( x ).first.doubleValue() ) {
+	    x++;
+	}
+
+	return x - 1;
+    }
+
+    /**
+     * Finds the frame at which the top NaCl is at least the given value, using
+     * the given list of concentrations at frames.
+     */
+    public static int frameWhenTopNaCl( double conc,
+					List< Pair< Double, Double > > table ) {
+	int retval = Collections.binarySearch( table,
+					       new Pair< Double, Double >( conc, 0.0 ),
+					       new Comparator< Pair< Double, Double > >() {
+						   public int compare( Pair< Double, Double > one,
+								       Pair< Double, Double > two ) {
+						       return one.first.compareTo( two.first );
+						   }
+					       } );
+	if ( retval < 0 ) {
+	    retval = -retval + 1;
+	}
+
+	return getBiggestIndex( retval, table );
+    }
+
+    public int frameWhenTopNaCl( double conc ) {
+	return frameWhenTopNaCl( conc, concTable );
+    }
+
+    /**
+     * Performs all the work neccessary to process the given frame
+     */
+    public void processFrame( int frame ) {
+	adjustNaClConc( frame );
+	moveProteins( frame );
+    }
+
+    public void adjustNaClConc( int frame ) {
+	Pair< Double, Double > concNaCl = getConcNaCl( frame );
+	topConcNaCl = concNaCl.first;
+	bottomConcNaCl = concNaCl.second;
 	updateViewNaClConcentrations();
+    }
+
+    public void moveProteins( int frame ) {
+	view.updateProteinPosition();
     }
 
     /**
@@ -258,10 +334,7 @@ public class IonexModel implements IonexModelInterface, Runnable {
      */
     public void advanceFrame() {
 	currentFrame++;
-
-	moveProteins(); // move the proteins in the columns
-	calcConcNaCl(); // adjust for changes in amounts of NaCl
-	// detector was previously updated here
+	processFrame( currentFrame );
     }
 
     /**
@@ -272,16 +345,12 @@ public class IonexModel implements IonexModelInterface, Runnable {
         //so it can't interfere with other processing going on.
         Thread.currentThread().setPriority( Thread.MIN_PRIORITY );
 	
-        // Remember the starting time.
-        long startTime = System.currentTimeMillis();
-	
         // This is the animation loop.
 	while( running &&
-	       currentFrame <= NUM_FRAMES ) {
+	       currentFrame + 1 < NUM_FRAMES ) {
 	    advanceFrame();
 	    try {
-		startTime += FRAME_DELAY;
-		Thread.sleep( Math.max( 0, startTime - System.currentTimeMillis() ) );
+		Thread.sleep( FRAME_DELAY );
 	    } catch ( InterruptedException e ) {
 		running = false;
 		break;
@@ -312,7 +381,20 @@ public class IonexModel implements IonexModelInterface, Runnable {
     }
 
     public double getPercentageThrough() {
-	return (double)currentFrame / NUM_FRAMES;
+	return getPercentageThrough( getCurrentFrame() );
+    }
+
+    public double getPercentageThrough( int frame ) {
+	return (double)frame / NUM_FRAMES;
+    }
+
+    public int getCurrentFrame() {
+	return currentFrame;
+    }
+
+    public double amountEluting( IonexProteinBand protein ) {
+	return amountEluting( protein,
+			      getCurrentFrame() );
     }
 
     /**
@@ -320,49 +402,17 @@ public class IonexModel implements IonexModelInterface, Runnable {
      * This correlates to how much of the Y axis should be consumed by a given
      * protein.
      */
-    public double amountEluting( IonexProteinBand protein ) {
-	int midPoint = (int)Math.ceil( (double)protein.getMaxBandWidth() / 2 );
-	double amountPer = 1.0 / midPoint;
-	int position = proteinPosition( protein.getPosition() );
+    public double amountEluting( IonexProteinBand protein, int frame ) {
+	int position = protein.getPosition( frame );
+	int bandWidth = IonexProteinBand.BAND_WIDTH;
 	double retval;
-
-	if ( position != BEYOND_COLUMN ) {
-	    int bandWidth = proteinBandWidth( position,
-					      protein.getBandWidth() );
-	    if ( bandWidth <= midPoint ) {
-		retval = bandWidth * amountPer;
-	    } else {
-		retval = ( protein.getMaxBandWidth() - bandWidth ) *
-		    amountPer;
-	    }
-	} else {
+	
+	if ( position + bandWidth < COLUMN_HIGH_Y ||
+	     position > COLUMN_HIGH_Y ) {
 	    retval = 0.0;
+	} else {
+	    retval = (double)Math.abs( COLUMN_HIGH_Y - ( position + bandWidth ) ) / bandWidth;
 	}
-
-	return retval;
-    }
-
-    public static int proteinBandWidth( int position,
-					int originalBandWidth ) {
-	int retval = originalBandWidth;
-
-	// if the protein started to elute, then the actual
-	// band width is different
-	if ( position != BEYOND_COLUMN &&
-	     position + originalBandWidth > COLUMN_HIGH_Y ) {
-	    retval = COLUMN_HIGH_Y - position;
-	}
-
-	return retval;
-    }
-
-    public static int proteinPosition( int originalPosition ) {
-	int retval = originalPosition + COLUMN_LOW_Y;
-
-	if ( retval > COLUMN_HIGH_Y ) {
-	    retval = BEYOND_COLUMN;
-	}
-
 	return retval;
     }
 } // IonexModel

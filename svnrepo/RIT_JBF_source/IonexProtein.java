@@ -11,12 +11,16 @@ import java.util.*;
  */
 public class IonexProtein implements Comparable< IonexProtein > {
     // begin constants
-    public static final String PDB_DIRECTORY_PATH = "./pdb/";
+    public static final String PDB_DIRECTORY_PATH = "pdb/";
     public static final String PDB_FILE_EXTENSION = ".PDB";
+    public static final String GENBANK_FILE_EXTENSION = ".GB";
+    public static final String FASTA_FILE_EXTENSION = ".FASTA";
     public static final Map< String, IonexProteinReader > READERS =
 	new HashMap< String, IonexProteinReader >() {
 	{
 	    put( PDB_FILE_EXTENSION, new IonexProteinPDBReader() );
+	    put( GENBANK_FILE_EXTENSION, new IonexProteinGenBankReader() );
+	    put( FASTA_FILE_EXTENSION, new IonexProteinFASTAReader() );
 	}
     };
     // end constants
@@ -29,6 +33,7 @@ public class IonexProtein implements Comparable< IonexProtein > {
     // begin instance variables
     private String name; // the name of the protein
     private AminoAcid[] sequence; // the sequence of the protein
+    private Cache<Double,Double> chargeCache;
     // end instance variables
 
     /**
@@ -41,6 +46,15 @@ public class IonexProtein implements Comparable< IonexProtein > {
 			 AminoAcid[] sequence ) {
 	this.name = name;
 	this.sequence = sequence;
+	chargeCache = new Cache< Double, Double >( new CacheCall< Double, Double >() {
+		public Double call( Double input ) {
+		    return new Double( getChargeNoCache( input.doubleValue() ) );
+		}
+	    } );
+    }
+
+    public double getCharge( double pH ) {
+	return chargeCache.get( new Double( pH ) ).doubleValue();
     }
 
     /**
@@ -49,7 +63,7 @@ public class IonexProtein implements Comparable< IonexProtein > {
      * @param pH The pH the protein is at
      * @return The overall charge of the protein at this pH
      */
-    public double getCharge( double pH ) {
+    public double getChargeNoCache( double pH ) {
 	double retval = 0.0;
 
 	for( int x = 0; x < sequence.length; x++ ) {
@@ -179,6 +193,32 @@ public class IonexProtein implements Comparable< IonexProtein > {
     }
 
     /**
+     * Gets the extension from the given file.
+     * @return The file extension, or "" if there is no extension
+     */
+    public static String getExtension( File file ) {
+	String retval = "";
+	String name = file.getName().toUpperCase();
+	int last = name.lastIndexOf( "." );
+
+	if ( last != -1 ) {
+	    retval = name.substring( last );
+	}
+
+	return retval;
+    }
+	
+	
+    /**
+     * gets a reader that can understand the given file
+     * @return A reader that can understand the given file, or null if
+     * there is no such reader
+     */
+    public static IonexProteinReader getReader( File file ) {
+	return READERS.get( getExtension( file ) );
+    }
+
+    /**
      * Loads in a protein from the given file.
      * Automatically determines format.
      *
@@ -193,10 +233,11 @@ public class IonexProtein implements Comparable< IonexProtein > {
 	throws FileNotFoundException,
 	IonexProteinFormatException,
 	IOException {
+	IonexProteinReader reader = getReader( file );
 	IonexProtein retval = null;
 
-	if ( isPDBFile( file ) ) {
-	    retval = READERS.get( PDB_FILE_EXTENSION ).readProtein( file );
+	if ( reader != null ) {
+	    retval = reader.readProtein( file );
 	}
 
 	return retval;

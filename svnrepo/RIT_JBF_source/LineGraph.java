@@ -21,6 +21,7 @@ public class LineGraph {
     }
     // begin constants
     public static final Color DEFAULT_COLOR = Color.BLACK;
+    public static final Color BACKGROUND_COLOR = IonexView.BACKGROUND_COLOR;
     // end constants
 
     // begin instance variables
@@ -60,17 +61,35 @@ public class LineGraph {
      */
     public void addPoint( int x, int y ) {
 	points.add( new Point( x, y ) );
-	parent.repaint();
     }
 
-    public void paintComponent( Graphics g ) {
+    /**
+     * Draws up to the given point.
+     */
+    public void paintComponent( Graphics g, 
+				int cutoff ) {
+	paintComponent( color, 
+			g, 
+			cutoff );
+    }
+
+    /**
+     * Draws a line of a given color
+     */
+    public void paintComponent( Color color,
+				Graphics g,
+				int cutoff ) {
 	int size = points.size();
+	int limit = ( cutoff < size ) ? cutoff : size;
 
 	if ( size >= 2 ) {
 	    Point first = points.get( 0 );
-	    for( int x = 1; x < size; x++ ) {
+	    for( int x = 1; x < limit; x++ ) {
 		Point current = points.get( x );
-		drawLine( first, current, g );
+		drawLine( first, 
+			  current, 
+			  color,
+			  g );
 		first = current;
 	    }
 	}
@@ -78,6 +97,7 @@ public class LineGraph {
 
     protected void drawLine( Point first,
 			     Point second,
+			     Color color,
 			     Graphics g ) {
 	Color originalColor = g.getColor();
 	g.setColor( color );

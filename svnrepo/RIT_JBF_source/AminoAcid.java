@@ -43,25 +43,45 @@ public class AminoAcid {
 	new HashMap< String, AMINO_ACID_TYPE >( NUM_AMINO_ACIDS ) {
 	{
 	    put( "ARG", AMINO_ACID_TYPE.ARG );
+	    put( "R", AMINO_ACID_TYPE.ARG );
 	    put( "HIS", AMINO_ACID_TYPE.HIS );
+	    put( "H", AMINO_ACID_TYPE.HIS );
 	    put( "LYS", AMINO_ACID_TYPE.LYS );
+	    put( "K", AMINO_ACID_TYPE.LYS );
 	    put( "ASP", AMINO_ACID_TYPE.ASP );
+	    put( "D", AMINO_ACID_TYPE.ASP );
 	    put( "GLU", AMINO_ACID_TYPE.GLU );
+	    put( "E", AMINO_ACID_TYPE.GLU );
 	    put( "SER", AMINO_ACID_TYPE.SER );
+	    put( "S", AMINO_ACID_TYPE.SER );
 	    put( "THR", AMINO_ACID_TYPE.THR );
+	    put( "T", AMINO_ACID_TYPE.THR );
 	    put( "ASN", AMINO_ACID_TYPE.ASN );
+	    put( "N", AMINO_ACID_TYPE.ASN );
 	    put( "GLN", AMINO_ACID_TYPE.GLN );
+	    put( "Q", AMINO_ACID_TYPE.GLN );
 	    put( "CYS", AMINO_ACID_TYPE.CYS );
+	    put( "C", AMINO_ACID_TYPE.CYS );
 	    put( "GLY", AMINO_ACID_TYPE.GLY );
+	    put( "G", AMINO_ACID_TYPE.GLY );
 	    put( "PRO", AMINO_ACID_TYPE.PRO );
+	    put( "P", AMINO_ACID_TYPE.PRO );
 	    put( "ALA", AMINO_ACID_TYPE.ALA );
+	    put( "A", AMINO_ACID_TYPE.ALA );
 	    put( "ILE", AMINO_ACID_TYPE.ILE );
+	    put( "I", AMINO_ACID_TYPE.ILE );
 	    put( "LEU", AMINO_ACID_TYPE.LEU );
+	    put( "L", AMINO_ACID_TYPE.LEU );
 	    put( "MET", AMINO_ACID_TYPE.MET );
+	    put( "M", AMINO_ACID_TYPE.MET );
 	    put( "PHE", AMINO_ACID_TYPE.PHE );
+	    put( "F", AMINO_ACID_TYPE.PHE );
 	    put( "TRP", AMINO_ACID_TYPE.TRP );
+	    put( "W", AMINO_ACID_TYPE.TRP );
 	    put( "TYR", AMINO_ACID_TYPE.TYR );
+	    put( "Y", AMINO_ACID_TYPE.TYR );
 	    put( "VAL", AMINO_ACID_TYPE.VAL );
+	    put( "V", AMINO_ACID_TYPE.VAL );
 	}
     };
 
@@ -164,7 +184,7 @@ public class AminoAcid {
     }
 
     /**
-     * Gets the amino acid with the given three letter code
+     * Gets the amino acid with the given three letter or one letter code
      * @param code The three-letter code for the amino acid.  Case insensitive.
      * @return The amino acid with the given code, or null if there is none
      */

@@ -30,32 +30,35 @@ public class IonexView extends JPanel implements IonexViewInterface,
     public static final double DEFAULT_END_NACL_CONCENTRATION = 1.0;
     public static final double MIN_NACL_CONCENTRATION = 0.0;
     public static final double MAX_NACL_CONCENTRATION = 1.0;
-    public static final String IONEX_PICTURE_PATH = "macro.gif";
-    public static final int IONEX_LABEL_WIDTH = 509;
-    public static final int IONEX_LABEL_HEIGHT = 558;
+    public static final String IONEX_COLUMN_PICTURE_PATH = "column.gif";
+    public static final String IONEX_GRAPH_PICTURE_PATH = "graph.gif";
+    public static final int IONEX_COLUMN_WIDTH = 300;
+    public static final int IONEX_COLUMN_HEIGHT = 500;
+    public static final int IONEX_GRAPH_WIDTH = 900;
+    public static final int IONEX_GRAPH_HEIGHT = 100;
     public static final String PDB_START_DIRECTORY = ".";
     public static final String PROTEOME_FILE_EXTENSION = ".PROTEOME";
 
     // those related to the positions of graphical items
     // column
-    public static final int COLUMN_START_X = 291;
-    public static final int COLUMN_END_X = 386;
+    public static final int COLUMN_START_X = 8;
+    public static final int COLUMN_END_X = 198;
     public static final int COLUMN_START_Y = IonexModel.COLUMN_LOW_Y;
     public static final int COLUMN_END_Y = IonexModel.COLUMN_HIGH_Y;
 
     // detector
     public static final Color DETECTOR_COLOR = Color.BLUE;
-    public static final int DETECTOR_START_X = 30;
-    public static final int DETECTOR_START_Y = 355;
-    public static final int DETECTOR_END_X = 485;
-    public static final int DETECTOR_END_Y = 390;
+    public static final int DETECTOR_START_X = 3;
+    public static final int DETECTOR_START_Y = 10;
+    public static final int DETECTOR_END_X = 885;
+    public static final int DETECTOR_END_Y = 65;
     
     // showing actual NaCl value
     public static final Color NACL_CONC_COLOR = Color.GRAY;
-    public static final int TOP_NACL_READ_X = COLUMN_END_X + 10;
-    public static final int TOP_NACL_READ_Y = COLUMN_START_Y + 5;
+    public static final int TOP_NACL_READ_X = COLUMN_END_X + 45;
+    public static final int TOP_NACL_READ_Y = COLUMN_START_Y + 15;
     public static final int BOTTOM_NACL_READ_X = TOP_NACL_READ_X;
-    public static final int BOTTOM_NACL_READ_Y = COLUMN_END_Y + 5;
+    public static final int BOTTOM_NACL_READ_Y = COLUMN_END_Y - 10;
 
     // concentration
     public static final Color CONCENTRATION_COLOR = Color.RED;
@@ -64,12 +67,8 @@ public class IonexView extends JPanel implements IonexViewInterface,
     public static final int CONCENTRATION_END_X = DETECTOR_END_X;
     public static final int CONCENTRATION_END_Y = DETECTOR_END_Y;
 
-    // protein list
     public static final Color BACKGROUND_COLOR = Color.WHITE;
-    public static final int PROTEIN_LIST_START_X = 12;
-    public static final int PROTEIN_LIST_END_X = 485;
-    public static final int PROTEIN_LIST_START_Y = 430;
-    public static final int PROTEIN_LIST_END_Y = 470;
+
 
     // those related to button commands
     public static final String REMOVE_PROTEIN = "Remove Protein";
@@ -106,7 +105,8 @@ public class IonexView extends JPanel implements IonexViewInterface,
     private JPanel addProteinPanel;
     private JPanel removeProteinPanel;
     private JPanel controlPanel;
-    private JLabel ionexImage;
+    private JLabel columnImage;
+    private JLabel graphImage;
 
     // helper components for the GUI
     private IonexColumn column;
@@ -117,12 +117,8 @@ public class IonexView extends JPanel implements IonexViewInterface,
     // other needed classes
     private Set< IonexProtein > proteinsInColumn;
     private IonexModel model;
-    private boolean needToClear = false;
-
-    // for showing the NaCl concentration
-    private double topNaCl = DEFAULT_START_NACL_CONCENTRATION;
-    private double bottomNaCl = DEFAULT_END_NACL_CONCENTRATION;
-    // end instance variables
+    private boolean needToClearColumn = false;
+    private boolean needToClearGraph = false;
 
     public IonexView() {
 	proteinsInColumn = new HashSet< IonexProtein >();
@@ -138,79 +134,87 @@ public class IonexView extends JPanel implements IonexViewInterface,
      * Makes the components that perform drawing within the Ionex image
      */
     protected void makeDrawingComponents() {
-	column = new IonexColumn( ionexImage,
+	column = new IonexColumn( columnImage,
 				  COLUMN_START_X,
 				  COLUMN_START_Y,
 				  COLUMN_END_X,
 				  COLUMN_END_Y );
-	solutionConcentration = new LineGraph( ionexImage,
+	solutionConcentration = new LineGraph( graphImage,
 					       CONCENTRATION_COLOR );
-	detectorResponse = new LineGraph( ionexImage,
+	detectorResponse = new LineGraph( graphImage,
 					  DETECTOR_COLOR );
-	/*activeProteinList = new GraphicalList( ionexImage,
-					       PROTEIN_LIST_START_X,
-					       PROTEIN_LIST_START_Y,
-					       PROTEIN_LIST_END_X,
-					       PROTEIN_LIST_END_Y ); */
     }
 
-    /**
-     * Makes the ionex image
-     */
-    protected JLabel makeIonexImage() {
-	return new JLabel( new ImageIcon( IONEX_PICTURE_PATH ) ) {
+    protected JLabel makeImage( final String imagePath,
+				final int width,
+				final int height ) {
+	return new JLabel( new ImageIcon( imagePath ) ) {
 	    public void setBounds( int x, int y, int w, int h ) {
 		super.setBounds( x, 
 				 y, 
-				 IONEX_LABEL_WIDTH, 
-				 IONEX_LABEL_HEIGHT );
+				 width, 
+				 height );
 	    }
 	    public void paintComponent( Graphics g ) {
 		super.paintComponent( g );
 		if ( model != null ) {
-		    if ( needToClear ) {
-			clearView( g );
-			needToClear = false;
+		    if ( imagePath == IONEX_COLUMN_PICTURE_PATH ) {
+			column.blankColumn( g );
+			updateColumn( g );
+		    } else if ( imagePath == IONEX_GRAPH_PICTURE_PATH ) {
+			if ( needToClearGraph ) {
+			    initializeGraphs();
+			    needToClearGraph = false;
+			}
+			updateGraph( g );
 		    }
-		    updateView( g );
 		}
 	    }
 	};
     }
 
-    public void clearGraphs( Graphics g ) {
-	// NOTE: assumes that detector and concentration are on top
-	// of each other
-	Color originalColor = g.getColor();
-	g.setColor( BACKGROUND_COLOR );
-	g.fillRect( DETECTOR_START_X,
-		    DETECTOR_START_Y,
-		    DETECTOR_END_X - DETECTOR_START_X,
-		    DETECTOR_END_Y - DETECTOR_START_Y );
-	g.setColor( originalColor );
-	solutionConcentration.reset();
-	detectorResponse.reset();
+    protected JLabel makeColumnImage() {
+	return makeImage( IONEX_COLUMN_PICTURE_PATH,
+			  IONEX_COLUMN_WIDTH,
+			  IONEX_COLUMN_HEIGHT );
     }
 
-    public void clearView( Graphics g ) {
-	//activeProteinList.clearArea( BACKGROUND_COLOR, g );
-	column.blankColumn( g );
-	clearGraphs( g );
+    protected JLabel makeGraphImage() {
+	return makeImage( IONEX_GRAPH_PICTURE_PATH,
+			  IONEX_GRAPH_WIDTH,
+			  IONEX_GRAPH_HEIGHT );
     }
-	
-    public void updateView( Graphics g ) {
-	//activeProteinList.paintComponent( g );
+
+    public void updateColumn( Graphics g ) {
+	Pair< Double, Double > conc = model.getConcNaCl();
 	column.paintComponent( model.getProteinBands(), g );
-	solutionConcentration.paintComponent( g );
-	detectorResponse.paintComponent( g );
-	drawNumber( topNaCl,
+	drawNumber( conc.first,
 		    TOP_NACL_READ_X,
 		    TOP_NACL_READ_Y,
 		    g ); // top [NaCl]
-	drawNumber( bottomNaCl,
+	drawNumber( conc.second,
 		    BOTTOM_NACL_READ_X,
 		    BOTTOM_NACL_READ_Y,
 		    g ); // bottom [NaCl]
+    }
+
+    /**
+     * Adds the points needed to draw the current frame for both graphs
+     */
+    protected void initializeGraphs() {
+	detectorResponse.reset();
+	solutionConcentration.reset();
+	for( int frame = 0; frame < IonexModel.NUM_FRAMES; frame++ ) {
+	    detectorResponse.addPoint( getDetectorX( frame ),
+				       getDetectorY( frame ) );
+	    solutionConcentration.addPoint( getConcentrationX( frame ),
+					    getConcentrationY( frame ) );
+	}
+    }
+
+    public void updateGraph( Graphics g ) {
+	solutionConcentration.paintComponent( g, model.getCurrentFrame() );
+	detectorResponse.paintComponent( g, model.getCurrentFrame() );
     }
 
     /**
@@ -225,12 +229,16 @@ public class IonexView extends JPanel implements IonexViewInterface,
 	allControls.add( addProteinPanel );
 	allControls.add( removeProteinPanel );
 	allControls.add( controlPanel );
-	
+	allControls.setPreferredSize( new Dimension( IONEX_GRAPH_WIDTH - IONEX_COLUMN_WIDTH, 
+						     IONEX_COLUMN_HEIGHT ) );
+
 	// now actually make the main panel
-	this.setLayout( new GridLayout( 1, 2 ) );
-	this.add( ionexImage );
-	this.add( allControls );
-	this.setPreferredSize( new Dimension( 500, 500 ) );
+	this.setLayout( new BorderLayout() );
+	this.add( columnImage, BorderLayout.WEST );
+	this.add( allControls, BorderLayout.EAST );
+	this.add( graphImage, BorderLayout.SOUTH );
+	this.setPreferredSize( new Dimension( IONEX_GRAPH_WIDTH,
+					      IONEX_COLUMN_HEIGHT + IONEX_GRAPH_HEIGHT + 10) );
     }
 
     /**
@@ -279,10 +287,11 @@ public class IonexView extends JPanel implements IonexViewInterface,
      */
     protected JPanel makeRemoveProteinPanel() {
 	JPanel retval = new JPanel();
-	retval.setLayout( new GridLayout( 1, 3 ) );
-	retval.add( new JLabel( "Remove Protein:" ) );
-	retval.add( new JScrollPane( columnProteins ) );
-	retval.add( removeProtein );
+	//retval.setLayout( new GridLayout( 1, 3 ) );
+	retval.setLayout( new BorderLayout() );
+	retval.add( new JLabel( "Remove Protein:" ), BorderLayout.WEST );
+	retval.add( new JScrollPane( columnProteins ), BorderLayout.CENTER );
+	retval.add( removeProtein, BorderLayout.EAST );
 	return retval;
     }
 
@@ -338,7 +347,8 @@ public class IonexView extends JPanel implements IonexViewInterface,
      * Initializes all GUI components
      */
     protected void initializeGUIComponents() {
-	ionexImage = makeIonexImage();
+	columnImage = makeColumnImage();
+	graphImage = makeGraphImage();
 	solventA = makeFloatingPointField( DEFAULT_START_NACL_CONCENTRATION,
 					   MIN_NACL_CONCENTRATION,
 					   MAX_NACL_CONCENTRATION,
@@ -437,6 +447,12 @@ public class IonexView extends JPanel implements IonexViewInterface,
 				double top = getDoubleFromField( solventA );
 				if ( retval.doubleValue() < top ) {
 				    retval = new Double( top );
+				}
+			    } else {
+				// is top
+				double bottom = getDoubleFromField( solventB );
+				if ( retval.doubleValue() > bottom ) {
+				    retval = new Double( bottom );
 				}
 			    }
 			}
@@ -545,10 +561,10 @@ public class IonexView extends JPanel implements IonexViewInterface,
 				proteins,
 				this );
 	columnProteins.repaint();
-	//writeOutProteins( model.getProteinBands() );
 	start.setEnabled( true );
 	pause.setEnabled( false );
-	needToClear = true;
+	needToClearColumn = true;
+	needToClearGraph = true;
     }
 
     /**
@@ -659,39 +675,19 @@ public class IonexView extends JPanel implements IonexViewInterface,
     }
 
     /**
-     * Makes a white box around the given area
-     * intended for clearing the NaCl concentrations
-     */
-    protected void clearNaClArea( int x, int y ) {
-	Graphics g = ionexImage.getGraphics();
-	int size = 30;
-
-	if ( g != null ) {
-	    Color originalColor = g.getColor();
-	    g.setColor( IonexColumn.DEFAULT_COLUMN_COLOR );
-	    g.fillRect( x,
-			y - size / 2,
-		        size, size );
-	    g.setColor( originalColor );
-	}
-    }
-
-    /**
      * Updates the position of a protein in the view.
      * Note that the model calls this
      */
     public void updateProteinPosition() {
-	detectorResponse.addPoint( getDetectorX(),
-				   getDetectorY() );
-	ionexImage.repaint();
+	columnImage.repaint();
+	graphImage.repaint();
     }
 
     /**
      * Updates the top NaCl concentration
      */
     public void updateTopNaClConcentration( double conc ) {
-	topNaCl = conc;
-	ionexImage.repaint();
+	graphImage.repaint();
     }
 
     /**
@@ -713,10 +709,7 @@ public class IonexView extends JPanel implements IonexViewInterface,
      * Updates the bottom NaCl concentration
      */
     public void updateBottomNaClConcentration( double conc ) {
-	bottomNaCl = conc;
-	solutionConcentration.addPoint( getConcentrationX(),
-					getConcentrationY() );
-	ionexImage.repaint();
+	graphImage.repaint();
     }
 
     /**
@@ -748,13 +741,17 @@ public class IonexView extends JPanel implements IonexViewInterface,
 
 	return asString;
     }
-    
-    public int getDetectorX() {
+
+    /**
+     * Initializes the detector and concentration arrays
+     */
+    public int getDetectorX( int frame ) {
 	int retval;
 
 	if ( model != null ) {
-	    retval = DETECTOR_START_X + (int)( model.getPercentageThrough() * 
-					       ( DETECTOR_END_X - DETECTOR_START_X ) );
+	    retval = DETECTOR_START_X + 
+		(int)( model.getPercentageThrough( frame ) * 
+		       ( DETECTOR_END_X - DETECTOR_START_X ) );
 	} else {
 	    retval = DETECTOR_START_X;
 	}
@@ -762,17 +759,18 @@ public class IonexView extends JPanel implements IonexViewInterface,
 	return retval;
     }
 
-    public int getDetectorY() {
+    public int getDetectorY( int frame ) {
 	int retval;
 
 	if ( model != null ) {
 	    double amountEluting = 0.0;
 	    
-	    for( IonexProteinBand current : model.getProteinBands() ) {
-		amountEluting = Math.max( amountEluting,
-					  model.amountEluting( current ) );
+	    for( IonexProteinBand current : model.getProteinBands( frame ) ) {
+		amountEluting += model.amountEluting( current, frame );
 	    }
-	    retval = DETECTOR_END_Y - (int)( ( DETECTOR_END_Y - DETECTOR_START_Y ) * amountEluting );
+	    amountEluting /= model.getNumProteins();
+	    retval = DETECTOR_END_Y - 
+		(int)( ( DETECTOR_END_Y - DETECTOR_START_Y ) * amountEluting );
 	} else {
 	    retval = DETECTOR_END_Y;
 	}
@@ -780,12 +778,13 @@ public class IonexView extends JPanel implements IonexViewInterface,
 	return retval;
     }
 
-    public int getConcentrationX() {
+    public int getConcentrationX( int frame ) {
 	int retval;
 
 	if ( model != null ) {
-	    retval =  CONCENTRATION_START_X + (int)( model.getPercentageThrough() *
-			     ( CONCENTRATION_END_X - CONCENTRATION_START_X ) );
+	    retval =  CONCENTRATION_START_X + 
+		(int)( model.getPercentageThrough( frame ) *
+		       ( CONCENTRATION_END_X - CONCENTRATION_START_X ) );
 	} else {
 	    retval = CONCENTRATION_START_X;
 	}
@@ -793,14 +792,19 @@ public class IonexView extends JPanel implements IonexViewInterface,
 	return retval;
     }
 
-    public int getConcentrationY() {
+    public int getConcentrationY( int frame ) {
 	int retval;
 
-	int yDiff = CONCENTRATION_END_Y - CONCENTRATION_START_Y;
-	double maxConcDiff = MAX_NACL_CONCENTRATION - MIN_NACL_CONCENTRATION;
-	double percentY = bottomNaCl / maxConcDiff; // the percentage of the y difference used
-	retval = (int)( CONCENTRATION_END_Y - ( percentY * yDiff ) );
-	
+	if ( model != null ) {
+	    Pair< Double, Double > conc = model.getConcNaCl( frame );
+	    int yDiff = CONCENTRATION_END_Y - CONCENTRATION_START_Y;
+	    double maxConcDiff = MAX_NACL_CONCENTRATION - MIN_NACL_CONCENTRATION;
+	    double percentY = conc.second / maxConcDiff; 
+	    retval = (int)( CONCENTRATION_END_Y - ( percentY * yDiff ) );
+	} else {
+	    retval = CONCENTRATION_END_Y;
+	}
+
 	return retval;
     }
 

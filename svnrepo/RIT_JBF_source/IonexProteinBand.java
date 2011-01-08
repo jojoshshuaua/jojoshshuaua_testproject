@@ -14,7 +14,8 @@ import java.awt.*;
  */
 public class IonexProteinBand {
     // begin constants
-    public static final int UNBOUND_BAND_WIDTH = 3;
+    public static final double INCREMENT = 2.36;
+    public static final int BAND_WIDTH = 3;
     public static final double UNBINDING_NACL = 100;
     
     // colors which we don't want to assign because they are hard to
@@ -37,31 +38,20 @@ public class IonexProteinBand {
     // end statics
 
     // begin instance variables
-    private int maxBandWidth = 0; // the maximum bandwidth ever set
-    private int oldPosition; // the band's old position in the column
-    private int position; // the band's position in the column
-    private int oldBandWidth = 0; // the previous width of the protein band
-    private int bandWidth = 0; // the width of the protein band
+    private IonexModel model; // the model we are associated with
+    private double[] position; // given a frame, returns the protein's position
     private Color color; // the color of the protein band
     private IonexProtein protein; // the actual protein
-    private boolean isBound; // if the protein in the band is bound
     // end instance variables
-
-    /**
-     * Creates a new, unbound protein.
-     */
-    public IonexProteinBand( IonexProtein protein ) {
-	this( protein, false );
-    }
 
     /**
      * Creates a new protein band.
      */
     public IonexProteinBand( IonexProtein protein,
-			     boolean isBound ) {
+			     IonexModel model ) {
+	this.model = model;
 	this.protein = protein;
-	setBandWidth( UNBOUND_BAND_WIDTH );
-	setBound( isBound );
+	initializePosition();
 	color = colorGetter.getNextColor(); 
 	assignedBands.put( protein, this );
     }
@@ -87,6 +77,19 @@ public class IonexProteinBand {
     }
 
     /**
+     * initializes the position array
+     */
+    protected void initializePosition() {
+	double unbindingConc = getUnbindingConc( model.solvent.pH,
+						 model.resin );
+	position = new double[ IonexModel.NUM_FRAMES ];
+	for( int frame = 0; frame < position.length; frame++ ) {
+	    position[ frame ] = model.getPosition( unbindingConc,
+						   frame ) * INCREMENT;
+	}
+    }
+
+    /**
      * gets the color of the protein
      */
     public Color getColor() {
@@ -94,77 +97,52 @@ public class IonexProteinBand {
     }
 
     /**
-     * Sets the band width
-     */
-    public void setBandWidth( int bandWidth ) {
-	oldBandWidth = this.bandWidth;
-	this.bandWidth = bandWidth;
-	maxBandWidth = Math.max( bandWidth, maxBandWidth );
-    }
-
-    /**
-     * Gets the width of the band, without any attempt to recalculate it.
-     */
-    public int getBandWidth() {
-	return bandWidth;
-    }
-
-    /**
-     * Sets whether or not the protein is bound.
-     */
-    public void setBound( boolean isBound ) {
-	this.isBound = isBound;
-    }
-
-    /**
-     * Sets whether or not this protein is bound, based on the
-     * current experimental conditions
+     * Gets the concentration at which the given protein will unbind for
+     * the given resin and pH.  Note that if the protein will not bind, it will
+     * return 0.
      *
-     * @param pH The pH it is at
-     * @param concNaCl The concentration of NaCl
-     * @param resin The resin that it can bind to
+     * @param pH The pH the protein is in
+     * @param resin The resin the protein is in.
+     *
+     * @return The [NaCl] the protein will unbind at
      */
-    public void setBound( double pH,
-			  double concNaCl,
-			  Resin resin ) {
+    public double getUnbindingConc( double pH,
+				    Resin resin ) {
 	double charge = protein.getCharge( pH );
+	double retval;
 
-	// a protein is not bound if it has the same charge as
-	// the resin or if its charge is less than the initial
-	// salt concentration
-	setBound( ( resin.charge == Resin.CHARGE.POSITIVE && 
-		    charge < -concNaCl * UNBINDING_NACL ) ||
-		  ( resin.charge == Resin.CHARGE.NEGATIVE && 
-		    charge > concNaCl *  UNBINDING_NACL ) );
+	if ( ( resin.charge == Resin.CHARGE.POSITIVE &&
+	       charge > 0 ) ||
+	     ( resin.charge == Resin.CHARGE.NEGATIVE &&
+	       charge < 0 ) ) {
+	    // won't stick no matter what
+	    retval = 0;
+	} else {
+	    retval = Math.abs( charge / UNBINDING_NACL );
+	}
+
+	return retval;
     }
-
+	     
     /**
      * Gets whether or not this protein is bound
      */
-    public boolean isBound() {
-	return isBound;
+    public boolean isBound( int frame ) {
+	return position[ frame ] <= 0.0;
     }
 
     /**
-     * Gets the position of this band
+     * Gets the position of this band for the current frame
      */
     public int getPosition() {
-	return position;
+	return getPosition( model.getCurrentFrame() );
     }
 
     /**
-     * Sets the position of this band
+     * Gets the position of this band for the given frame
      */
-    public void setPosition( int position ) {
-	oldPosition = this.position;
-	this.position = position;
-    }
-
-    /**
-     * Increments the protein's position
-     */
-    public void incrementPosition() {
-	setPosition( getPosition() + 1 );
+    public int getPosition( int frame ) {
+	return (int)Math.round( position[ frame ] );
     }
 
     /**
@@ -172,18 +150,6 @@ public class IonexProteinBand {
      */
     public IonexProtein getProtein() {
 	return protein;
-    }
-
-    public int getOldPosition() {
-	return oldPosition;
-    }
-
-    public int getOldBandWidth() {
-	return oldBandWidth;
-    }
-
-    public int getMaxBandWidth() {
-	return maxBandWidth;
     }
 
     public String toString() {
