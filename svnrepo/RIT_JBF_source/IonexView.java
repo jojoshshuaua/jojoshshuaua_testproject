@@ -23,7 +23,8 @@ import java.io.*;
  * @author Kristen Cotton
  */
 public class IonexView extends JPanel implements IonexViewInterface,
-						 ActionListener {
+						 ActionListener,
+						 ChangeListener {
     // begin constants
     public static final double DEFAULT_PROTEIN_AMOUNT = 0.0;
     public static final double DEFAULT_START_NACL_CONCENTRATION = 0.0;
@@ -98,6 +99,7 @@ public class IonexView extends JPanel implements IonexViewInterface,
     private JButton reset; // resets the settings (removes proteins, and sets
                            // [NaCl] to zero
     private JButton load; // loads the experiment - preps it for simulation
+    private JSlider frameSlider; // allows for quick getting/setting of frame
 
     // the different panels within the GUI
     private JPanel solventsPanel;
@@ -105,6 +107,7 @@ public class IonexView extends JPanel implements IonexViewInterface,
     private JPanel addProteinPanel;
     private JPanel removeProteinPanel;
     private JPanel controlPanel;
+    private JPanel sliderPanel;
     private JLabel columnImage;
     private JLabel graphImage;
 
@@ -128,6 +131,25 @@ public class IonexView extends JPanel implements IonexViewInterface,
 	setVisible( true );
 	makeDrawingComponents();
 	removeProtein.setEnabled( false );
+    }
+
+    /**
+     * Makes the components for the slider
+     */
+    protected void makeSliderComponents() {
+	JLabel label = new JLabel( "Frame", JLabel.CENTER );
+	label.setAlignmentX( Component.CENTER_ALIGNMENT );
+	frameSlider = new JSlider( 0, IonexModel.NUM_FRAMES, 0 );
+	frameSlider.setMajorTickSpacing( IonexModel.NUM_FRAMES / 10 );
+	frameSlider.setMinorTickSpacing( IonexModel.NUM_FRAMES / 100 );
+	frameSlider.setPaintTicks( true );
+	frameSlider.setPaintLabels( true );
+	frameSlider.addChangeListener( this );
+	sliderPanel = new JPanel();
+	sliderPanel.setLayout( new BoxLayout( sliderPanel, 
+					      BoxLayout.PAGE_AXIS ) );
+	sliderPanel.add( label );
+	sliderPanel.add( frameSlider );
     }
 
     /**
@@ -233,12 +255,17 @@ public class IonexView extends JPanel implements IonexViewInterface,
 						     IONEX_COLUMN_HEIGHT ) );
 
 	// now actually make the main panel
+	JPanel bottom = new JPanel();
+	bottom.setLayout( new BoxLayout( bottom, BoxLayout.PAGE_AXIS ) );
+	bottom.add( graphImage );
+	bottom.add( sliderPanel );
+
 	this.setLayout( new BorderLayout() );
 	this.add( columnImage, BorderLayout.WEST );
 	this.add( allControls, BorderLayout.EAST );
-	this.add( graphImage, BorderLayout.SOUTH );
+	this.add( bottom, BorderLayout.SOUTH );
 	this.setPreferredSize( new Dimension( IONEX_GRAPH_WIDTH,
-					      IONEX_COLUMN_HEIGHT + IONEX_GRAPH_HEIGHT + 10) );
+					      IONEX_COLUMN_HEIGHT + IONEX_GRAPH_HEIGHT + 80 ) );
     }
 
     /**
@@ -361,6 +388,7 @@ public class IonexView extends JPanel implements IonexViewInterface,
 	resin = makeResinsBox();
 	protein = makeProteinsBox();
 	columnProteins = makeProteinsList();
+	makeSliderComponents();
 	initializeButtons();
     }
 
@@ -652,6 +680,16 @@ public class IonexView extends JPanel implements IonexViewInterface,
     }
 
     /**
+     * Responds to the user moving the slider.
+     */
+    public void stateChanged( ChangeEvent e ) {
+	if ( !frameSlider.getValueIsAdjusting() &&
+	     model != null ) {
+	    model.setFrame( frameSlider.getValue() );
+	}
+    }
+
+    /**
      * Code for responding to user button input
      */
     public void actionPerformed( ActionEvent e ) {
@@ -681,6 +719,22 @@ public class IonexView extends JPanel implements IonexViewInterface,
     public void updateProteinPosition() {
 	columnImage.repaint();
 	graphImage.repaint();
+	updateSliderPosition();
+    }
+
+    /**
+     * Updates the position of the slider
+     */
+    public void updateSliderPosition() {
+	int amount;
+
+	if ( model != null ) {
+	    amount = model.getCurrentFrame();
+	} else {
+	    amount = 0;
+	}
+
+	frameSlider.setValue( amount );
     }
 
     /**

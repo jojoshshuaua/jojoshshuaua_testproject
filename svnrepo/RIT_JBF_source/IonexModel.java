@@ -50,10 +50,6 @@ public class IonexModel implements IonexModelInterface, Runnable {
     private Thread runner; // runs the model
     private boolean running = false; // set to true if we are running
     private int currentFrame = 0;
-    private double topConcNaCl; // concentration of NaCl at the
-                                // top of the column (currently)
-    private double bottomConcNaCl; // concentration of NaCl at the bottom
-                                   // of the column (currently)
     private List< Pair< Double, Double > > concTable; // index is frame, item is the top and bottom [NaCl]
     private IonexProteinBand[] allProteins;
     // end instance variables
@@ -72,9 +68,6 @@ public class IonexModel implements IonexModelInterface, Runnable {
 	this.solvent = solvent;
 	this.resin = resin;
 	this.view = view;
-
-	// at the start, the top and bottom have the starting concentration
-	topConcNaCl = bottomConcNaCl = startConcNaCl;
 
 	concTable = Arrays.asList( makeConcTable() );
 	boundProteinBand = makeBoundProteinBand();
@@ -130,7 +123,8 @@ public class IonexModel implements IonexModelInterface, Runnable {
 	    }
 	}
 
-	if ( retval.size() < allProteins.length ) {
+	if ( allProteins.length > 0 &&
+	     retval.size() < allProteins.length ) {
 	    // some proteins must be bound
 	    retval.add( boundProteinBand );
 	}
@@ -151,8 +145,9 @@ public class IonexModel implements IonexModelInterface, Runnable {
      * Updates the NaCl concentrations on the view
      */
     public void updateViewNaClConcentrations() {
-	view.updateTopNaClConcentration( topConcNaCl );
-	view.updateBottomNaClConcentration( bottomConcNaCl );
+	Pair< Double, Double > conc = getConcNaCl();
+	view.updateTopNaClConcentration( conc.first );
+	view.updateBottomNaClConcentration( conc.second );
     }
 
     /**
@@ -311,17 +306,39 @@ public class IonexModel implements IonexModelInterface, Runnable {
     }
 
     /**
+     * Sets and processes the given frame
+     */
+    protected void setAndProcessFrame( int frame ) {
+	setCurrentFrame( frame );
+	processFrame( frame );
+    }
+
+    /**
+     * Sets the current frame to be the given frame
+     */
+    public void setCurrentFrame( int frame ) {
+	currentFrame = frame;
+	if ( !running ) {
+	    processFrame( currentFrame );
+	}
+    }
+
+    /**
+     * Increments the current frame.
+     */
+    public void incrementCurrentFrame() {
+	setCurrentFrame( getCurrentFrame() + 1 );
+    }
+
+    /**
      * Performs all the work neccessary to process the given frame
      */
-    public void processFrame( int frame ) {
-	adjustNaClConc( frame );
+    protected void processFrame( int frame ) {
+	adjustNaClConc();
 	moveProteins( frame );
     }
 
-    public void adjustNaClConc( int frame ) {
-	Pair< Double, Double > concNaCl = getConcNaCl( frame );
-	topConcNaCl = concNaCl.first;
-	bottomConcNaCl = concNaCl.second;
+    public void adjustNaClConc() {
 	updateViewNaClConcentrations();
     }
 
@@ -333,7 +350,7 @@ public class IonexModel implements IonexModelInterface, Runnable {
      * Moves on to the next frame
      */
     public void advanceFrame() {
-	currentFrame++;
+	incrementCurrentFrame();
 	processFrame( currentFrame );
     }
 
