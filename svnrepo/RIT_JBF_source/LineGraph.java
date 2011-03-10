@@ -4,84 +4,159 @@
 
 import java.util.*;
 import java.awt.*;
+import javax.swing.*;
 
 /**
  * A simple line graph.  Utilizes lines in a Graphics object.
  *
  * @author Kyle Dewey
  */
-public class LineGraph {
-    private class Point {
-	public int x;
-	public int y;
-	public Point( int x, int y ) {
-	    this.x = x;
-	    this.y = y;
-	}
-    }
+public class LineGraph extends JLabel {
     // begin constants
-    public static final Color DEFAULT_COLOR = Color.BLACK;
-    public static final Color BACKGROUND_COLOR = IonexView.BACKGROUND_COLOR;
+    public static final String IONEX_GRAPH_PICTURE_PATH = "graph.gif";
+    public static final String DETECTOR_NAME = "DETECTOR";
+    public static final Color DETECTOR_COLOR = Color.BLUE;
+    public static final String CONCENTRATION_NAME = "CONCENTRATION";
+    public static final Color CONCENTRATION_COLOR = Color.RED;
+    public static final Map< String, Color > DEFAULT_COLOR_MAP =
+	new HashMap< String, Color >() {
+	{
+	    put( DETECTOR_NAME, DETECTOR_COLOR );
+	    put( CONCENTRATION_NAME, CONCENTRATION_COLOR );
+	}
+    };
     // end constants
 
     // begin instance variables
-    private Component parent; // what to draw the lines on
-    private Color color; // the color to make the graph
-    private java.util.List< Point > points; // the points to draw
+    protected IonexView view; // view this graph is associated with
+    protected Map< String, Color > colors; // color of each line
+    protected Map< String, java.util.List< Point > > points; // points for each line
     // end instance variables
 
     /**
-     * Creates a new line graph of DEFAULT_COLOR
+     * Creates a new line graph that is associated with the given view,
+     * and that has the given line names.
+     * @param view The view we are associated with
+     * @param colors The colors for each line
      */
-    public LineGraph( Component parent ) {
-	this( parent,
-	      DEFAULT_COLOR );
+    public LineGraph( IonexView view,
+		      Map< String, Color > colors ) {
+	super( new ImageIcon( IONEX_GRAPH_PICTURE_PATH ) );
+	this.view = view;
+	this.colors = colors;
+	points = colorsToPoints( colors );
     }
 
     /**
-     * Creates a new line graph of the given color
+     * Creates a new line graph with DEFAULT_COLOR_MAP
      */
-    public LineGraph( Component parent,
-		      Color color ) {
-	this.parent = parent;
-	this.color = color;
-	points = new ArrayList< Point >();
+    public LineGraph( IonexView view ) {
+	this( view,
+	      DEFAULT_COLOR_MAP );
+    }
+
+    public Set< String > lineNames() {
+	return colors.keySet();
     }
 
     /**
-     * Resets the graph
+     * Verifies that the given name is valid
+     */
+    public void verifyName( String name ) throws UnknownLineException {
+	if ( !colors.containsKey( name ) ) {
+	    throw new UnknownLineException( "Unknown line with name: " + name );
+	}
+    }
+
+    /**
+     * Resets all graphs
      */
     public void reset() {
-	points.clear();
+	try {
+	    for( String current : colors.keySet() ) {
+		reset( current );
+	    }
+	} catch ( UnknownLineException e ) {
+	    // shouldn't be possible
+	    System.err.println( e );
+	}
+    }
+
+    /**
+     * Resets the graph with the given name
+     */
+    public void reset( String name ) throws UnknownLineException {
+	verifyName( name );
+	points.get( name ).clear();
+    }
+
+    public void addPoint( String name,
+			  int x, int y ) throws UnknownLineException {
+	addPoint( name,
+		  new Point( x, y ) );
     }
 
     /**
      * Adds a point to the given graph.  Note that it does not
      * actually update the graph
      */
-    public void addPoint( int x, int y ) {
-	points.add( new Point( x, y ) );
+    public void addPoint( String name, 
+			  Point point ) throws UnknownLineException {
+	verifyName( name );
+	points.get( name ).add( point );
     }
 
     /**
-     * Draws up to the given point.
+     * Draws all lines up to the current frame.
      */
-    public void paintComponent( Graphics g, 
-				int cutoff ) {
-	paintComponent( color, 
-			g, 
-			cutoff );
+    public void paintComponent( Graphics graphics ) {
+	super.paintComponent( graphics );
+	IonexModel model = view.getModel();
+	if ( model != null ) {
+	    paintComponent( model.getCurrentFrame(),
+			    graphics );
+	}
+    }
+
+    /**
+     * Draws all lines up to the given cutoff
+     */
+    public void paintComponent( int cutoff,
+				Graphics graphics ) {
+	try {
+	    for( String name : colors.keySet() ) {
+		paintComponent( name,
+				cutoff,
+				graphics );
+	    }
+	} catch ( UnknownLineException e ) {
+	    // shouldn't be possible
+	    System.err.println( e );
+	}
+    }
+
+    /**
+     * Draws the given line up to the given point.
+     */
+    public void paintComponent( String name,
+				int cutoff,
+				Graphics graphics ) throws UnknownLineException {
+	verifyName( name );
+	paintComponent( colors.get( name ),
+			points.get( name ),
+			cutoff,
+			graphics );
     }
 
     /**
      * Draws a line of a given color
      */
     public void paintComponent( Color color,
-				Graphics g,
-				int cutoff ) {
+				java.util.List< Point > points,
+				int cutoff,
+				Graphics graphics ) {
 	int size = points.size();
 	int limit = ( cutoff < size ) ? cutoff : size;
-
 	if ( size >= 2 ) {
 	    Point first = points.get( 0 );
 	    for( int x = 1; x < limit; x++ ) {
@@ -89,7 +164,7 @@ public class LineGraph {
 		drawLine( first, 
 			  current, 
 			  color,
-			  g );
+			  graphics );
 		first = current;
 	    }
 	}
@@ -104,5 +179,19 @@ public class LineGraph {
 	g.drawLine( first.x, first.y,
 		    second.x, second.y );
 	g.setColor( originalColor );
+    }
+    
+    /**
+     * Given a mapping of line names to colors of those lines,
+     * it will return a mapping of the same names to empty lists
+     */
+    public static Map< String, java.util.List< Point > > 
+	colorsToPoints( Map< String, Color > colors ) {
+	Map< String, java.util.List< Point > > retval = 
+	    new HashMap< String, java.util.List< Point > >( colors.size() );
+	for( String name : colors.keySet() ) {
+	    retval.put( name, new ArrayList< Point >() );
+	}
+	return retval;
     }
 }

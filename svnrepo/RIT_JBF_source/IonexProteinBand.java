@@ -12,7 +12,7 @@ import java.awt.*;
  * @author John Manning
  * @author Kristen Cotton
  */
-public class IonexProteinBand {
+public class IonexProteinBand implements Comparable< IonexProteinBand > {
     // begin constants
     public static final double INCREMENT = 2.36;
     public static final int BAND_WIDTH = 3;
@@ -38,12 +38,19 @@ public class IonexProteinBand {
     // end statics
 
     // begin instance variables
-    private IonexModel model; // the model we are associated with
-    private double[] position; // given a frame, returns the protein's position
-    private Color color; // the color of the protein band
-    private IonexProtein protein; // the actual protein
+    private IonexModel model = null; // the model we are associated with
+    private double[] position = null; // given a frame, returns the protein's position
+    private Color color = null; // the color of the protein band
+    private IonexProtein protein = null; // the actual protein
     // end instance variables
 
+    /**
+     * Dud constructor.  In some cases, we need to perform certain
+     * operations that require an adaptor of a band. (i.e. searching
+     * for proteins with a given position using binarySearch)
+     */
+    private IonexProteinBand() {}
+	
     /**
      * Creates a new protein band.
      */
@@ -54,26 +61,6 @@ public class IonexProteinBand {
 	initializePosition();
 	color = colorGetter.getNextColor(); 
 	assignedBands.put( protein, this );
-    }
-
-    public static IonexProteinBand getBand( IonexProtein protein ) {
-	return assignedBands.get( protein );
-    }
-
-    /**
-     * Clears out the colors that have been assigned to this protein
-     */
-    public static void resetColors() {
-	colorGetter = new ColorGradient( BAD_COLORS );
-    }
-
-    public static void resetBands() {
-	assignedBands.clear();
-    }
-
-    public static void reset() {
-	resetColors();
-	resetBands();
     }
 
     /**
@@ -154,5 +141,48 @@ public class IonexProteinBand {
 
     public String toString() {
 	return protein.toString();
+    }
+
+    /**
+     * Compares this protein to another using the underlying protein.
+     */
+    public int compareTo( IonexProteinBand other ) {
+	return getProtein().compareTo( other.getProtein() );
+    }
+
+    public static IonexProteinBand getBand( IonexProtein protein ) {
+	return assignedBands.get( protein );
+    }
+
+    /**
+     * Clears out the colors that have been assigned to this protein
+     */
+    public static void resetColors() {
+	colorGetter = new ColorGradient( BAD_COLORS );
+    }
+
+    public static void resetBands() {
+	assignedBands.clear();
+    }
+
+    public static void reset() {
+	resetColors();
+	resetBands();
+    }
+
+    /**
+     * Creates a special "fake" band that always returns the given
+     * position for both getPosition functions.
+     * Note that this returns null for everything else
+     */
+    public static IonexProteinBand makePositionProtein( final int position ) {
+	return new IonexProteinBand() {
+	    public int getPosition() {
+		return position;
+	    }
+	    public int getPosition( int frame ) {
+		return position;
+	    }
+	};
     }
 }

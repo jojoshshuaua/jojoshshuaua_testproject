@@ -38,6 +38,15 @@ public class IonexModel implements IonexModelInterface, Runnable {
 		    return Double.NEGATIVE_INFINITY;
 		}
 	};
+
+    // compares pairs holding top and bottom [NaCl] by frame
+    public static final Comparator< Pair< Double, Double > > 
+	DOUBLE_PAIR_COMPARE = new Comparator< Pair< Double, Double > >() {
+	public int compare( Pair< Double, Double > one,
+			    Pair< Double, Double > two ) {
+	    return one.first.compareTo( two.first );
+	}
+    };
     // end constants
 
     // begin instance variables
@@ -51,7 +60,10 @@ public class IonexModel implements IonexModelInterface, Runnable {
     private boolean running = false; // set to true if we are running
     private int currentFrame = 0;
     private List< Pair< Double, Double > > concTable; // index is frame, item is the top and bottom [NaCl]
-    private IonexProteinBand[] allProteins;
+    private List< IonexProteinBand > allProteins;
+
+    // which proteins are eluting for a given frame
+    private List< Set< IonexProteinBand > > proteinsEluting; 
     // end instance variables
 
     /**
@@ -74,6 +86,7 @@ public class IonexModel implements IonexModelInterface, Runnable {
 	// put the proteins into bands
 	allProteins = proteinsToBands( proteins );
 	sortByCharge( allProteins );
+	proteinsEluting = calcProteinsEluting();
 
 	// reflect that we are ready in the view
 	updateView();
@@ -100,16 +113,38 @@ public class IonexModel implements IonexModelInterface, Runnable {
     }
 
     public int getNumProteins() {
-	return allProteins.length;
+	return allProteins.size();
     }
 
+    /**
+     * For each frame, holds a set of proteins that are eluting for
+     * the given frame.  The set will be empty for a frame at which no
+     * proteins are eluting.
+     */
+    protected List< Set< IonexProteinBand > > calcProteinsEluting() {
+	List< Set< IonexProteinBand > > retval = 
+	    new ArrayList< Set< IonexProteinBand > >( getNumProteins() );
+	for( int frame = 0; frame < NUM_FRAMES; frame++ ) {
+	    Set< IonexProteinBand > elutingHere = 
+		new HashSet< IonexProteinBand >();
+	    for( IonexProteinBand current : allProteins ) {
+		if ( amountEluting( current, frame ) > 0.0 ) {
+		    elutingHere.add( current );
+		}
+	    }
+	    retval.add( elutingHere );
+	}
+	
+	return retval;
+    }
+	
     /**
      * Gets the protein bands for the current frame
      */
     public List< IonexProteinBand > getProteinBands() {
 	return getProteinBands( getCurrentFrame() );
     }
-
+    
    /**
     * Gets the protein bands that should be drawn.  
     * This is intended for the view.
@@ -123,8 +158,8 @@ public class IonexModel implements IonexModelInterface, Runnable {
 	    }
 	}
 
-	if ( allProteins.length > 0 &&
-	     retval.size() < allProteins.length ) {
+	if ( allProteins.size() > 0 &&
+	     retval.size() < allProteins.size() ) {
 	    // some proteins must be bound
 	    retval.add( boundProteinBand );
 	}
@@ -153,11 +188,11 @@ public class IonexModel implements IonexModelInterface, Runnable {
     /**
      * Converts the given proteins into a parallel list of protein bands.
      */
-    protected IonexProteinBand[] proteinsToBands( IonexProtein[] proteins ) {
-	IonexProteinBand[] retval = new IonexProteinBand[ proteins.length ];
+    protected List< IonexProteinBand > proteinsToBands( IonexProtein[] proteins ) {
+	List< IonexProteinBand > retval = new ArrayList< IonexProteinBand >( proteins.length );
 	
-	for( int x = 0; x < retval.length; x++ ) {
-	    retval[ x ] = new IonexProteinBand( proteins[ x ], this );
+	for( IonexProtein current : proteins ) {
+	    retval.add( new IonexProteinBand( current, this ) );
 	}
 
 	return retval;
@@ -168,11 +203,8 @@ public class IonexModel implements IonexModelInterface, Runnable {
      * positively charged proteins will be at the front of the list.
      * Destructive.
      */
-    protected void sortByCharge( IonexProteinBand[] proteins ) {
-	// according to Java API, changes to the list write through
-	// to the array
-	List< IonexProteinBand > asList = Arrays.asList( proteins );
-	Collections.sort( asList,
+    protected void sortByCharge( List< IonexProteinBand > proteins ) {
+	Collections.sort( proteins,
 			  new Comparator< IonexProteinBand >() {
 			      public int compare( IonexProteinBand first,
 						  IonexProteinBand second ) {
@@ -262,22 +294,53 @@ public class IonexModel implements IonexModelInterface, Runnable {
     }
     
     /**
-     * Given an index into the concentration table, it will get the largest
-     * index in the table at which the top [NaCl] is equal to the top [NaCl]
-     * for the given index.  For instance, if given the list:
-     * [1,2,2,3,4], and an index of 1, this will return 2.  But with
-     * [1,2,3,4] and 1, it will return 1.
+     * Post-binary search tool.  For use with lists that contain repeats.
+     * With a list with repeats, if we find a repeated element, there is no
+     * guarentee which element was chosen.  This provides a way to get the first
+     * or last repeat.
+     * @param list The list of items
+     * @param index The index returned by the binary search.  If it's negative,
+     * it will simply return <code>-index - 1</code>
+     * @param increment The increment to use on the index.
+     * @param compare Compares items in the list
+     * @return The last index X, where <code>compare.compare( list.get( index ), list.get( X ) ) == 0</code>
      */
-    public static int getBiggestIndex( int index,
-				List< Pair< Double, Double > > table ) {
-	double value = table.get( index ).first.doubleValue();
-	int x = index + 1;
-	while( x < table.size() &&
-	       value == table.get( x ).first.doubleValue() ) {
-	    x++;
+    public static < T > int getIndex( List< T > list,
+				      int index,
+				      int increment,
+				      Comparator< T > compare ) {
+	if ( index < 0 ) {
+	    return -index - 1;
 	}
 
-	return x - 1;
+	int retval = index + increment;
+
+	while( retval >= 0 &&
+	       retval < list.size() &&
+	       compare.compare( list.get( index ),
+				list.get( retval ) ) == 0 ) {
+	    retval += increment;
+	}
+
+	return retval - increment;
+    }
+
+    public static < T > int getBiggestIndex( List< T > list,
+					     int index,
+					     Comparator< T > compare ) {
+	return getIndex( list,
+			 index,
+			 1,
+			 compare );
+    }
+
+    public static < T > int getSmallestIndex( List< T > list,
+					      int index,
+					      Comparator< T > compare ) {
+	return getIndex( list,
+			 index,
+			 -1,
+			 compare );
     }
 
     /**
@@ -288,17 +351,10 @@ public class IonexModel implements IonexModelInterface, Runnable {
 					List< Pair< Double, Double > > table ) {
 	int retval = Collections.binarySearch( table,
 					       new Pair< Double, Double >( conc, 0.0 ),
-					       new Comparator< Pair< Double, Double > >() {
-						   public int compare( Pair< Double, Double > one,
-								       Pair< Double, Double > two ) {
-						       return one.first.compareTo( two.first );
-						   }
-					       } );
-	if ( retval < 0 ) {
-	    retval = -retval + 1;
-	}
-
-	return getBiggestIndex( retval, table );
+					       DOUBLE_PAIR_COMPARE );
+	return getBiggestIndex( table, 
+				retval,
+				DOUBLE_PAIR_COMPARE );
     }
 
     public int frameWhenTopNaCl( double conc ) {
@@ -431,5 +487,19 @@ public class IonexModel implements IonexModelInterface, Runnable {
 	    retval = (double)Math.abs( COLUMN_HIGH_Y - ( position + bandWidth ) ) / bandWidth;
 	}
 	return retval;
+    }
+
+    /**
+     * gets the proteins that are eluting for the given frame.
+     */
+    public Set< IonexProteinBand > getProteinsEluting( int frame ) {
+	return proteinsEluting.get( frame );
+    }
+
+    /**
+     * Gets the proteins that are eluting for the current frame.
+     */
+    public Set< IonexProteinBand > getProteinsEluting() {
+	return getProteinsEluting( getCurrentFrame() );
     }
 } // IonexModel

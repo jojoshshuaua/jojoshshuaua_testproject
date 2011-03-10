@@ -89,50 +89,57 @@ public class AminoAcid {
 	new HashMap< AMINO_ACID_TYPE, AminoAcid >( NUM_AMINO_ACIDS ) {
 	{
 	    put( AMINO_ACID_TYPE.ARG, 
-		 new AminoAcid( CHARGE.POSITIVE, 12.10, 9.00, 2.03 ) );
+		 new AminoAcid( "R", "Arg", CHARGE.POSITIVE, 
+				12.10, 9.00, 2.03 ) );
 	    put( AMINO_ACID_TYPE.HIS, 
-		 new AminoAcid( CHARGE.POSITIVE, 6.04, 9.09, 1.70 ) );
+		 new AminoAcid( "H", "His", CHARGE.POSITIVE, 
+				6.04, 9.09, 1.70 ) );
 	    put( AMINO_ACID_TYPE.LYS, 
-		 new AminoAcid( CHARGE.POSITIVE, 10.67, 9.16, 2.15 ) );
+		 new AminoAcid( "K", "Lys", CHARGE.POSITIVE, 
+				10.67, 9.16, 2.15 ) );
 	    put( AMINO_ACID_TYPE.ASP, 
-		 new AminoAcid( CHARGE.NEGATIVE, 3.71, 9.66, 1.95 ) );
+		 new AminoAcid( "D", "Asp", CHARGE.NEGATIVE, 
+				3.71, 9.66, 1.95 ) );
 	    put( AMINO_ACID_TYPE.GLU, 
-		 new AminoAcid( CHARGE.NEGATIVE, 4.15, 9.58, 2.16 ) );
+		 new AminoAcid( "E", "Glu", CHARGE.NEGATIVE, 
+				4.15, 9.58, 2.16 ) );
 	    put( AMINO_ACID_TYPE.SER, 
-		 new AminoAcid( 9.05, 2.13 ) );
+		 new AminoAcid( "S", "Ser", 9.05, 2.13 ) );
 	    put( AMINO_ACID_TYPE.THR, 
-		 new AminoAcid( 8.96, 2.20 ) );
+		 new AminoAcid( "T", "Thr", 8.96, 2.20 ) );
 	    put( AMINO_ACID_TYPE.ASN, 
-		 new AminoAcid( 8.76, 2.16 ) );
+		 new AminoAcid( "N", "Asn", 8.76, 2.16 ) );
 	    put( AMINO_ACID_TYPE.GLN, 
-		 new AminoAcid( 9.00, 2.18 ) );
+		 new AminoAcid( "Q", "Gln", 9.00, 2.18 ) );
 	    put( AMINO_ACID_TYPE.CYS, 
-		 new AminoAcid( 10.28, 1.91 ) );
+		 new AminoAcid( "C", "Cys", 10.28, 1.91 ) );
 	    put( AMINO_ACID_TYPE.GLY, 
-		 new AminoAcid( 9.58, 2.34 ) );
+		 new AminoAcid( "G", "Gly", 9.58, 2.34 ) );
 	    put( AMINO_ACID_TYPE.PRO, 
-		 new AminoAcid( 10.47, 1.95 ) );
+		 new AminoAcid( "P", "Pro", 10.47, 1.95 ) );
 	    put( AMINO_ACID_TYPE.ALA, 
-		 new AminoAcid( 9.71, 2.33 ) );
+		 new AminoAcid( "A", "Ala", 9.71, 2.33 ) );
 	    put( AMINO_ACID_TYPE.ILE, 
-		 new AminoAcid( 9.60, 2.26 ) );
+		 new AminoAcid( "I", "Ile", 9.60, 2.26 ) );
 	    put( AMINO_ACID_TYPE.LEU, 
-		 new AminoAcid( 9.58, 2.32 ) );
+		 new AminoAcid( "L", "Leu", 9.58, 2.32 ) );
 	    put( AMINO_ACID_TYPE.MET, 
-		 new AminoAcid( 9.08, 2.16 ) );
+		 new AminoAcid( "M", "Met", 9.08, 2.16 ) );
 	    put( AMINO_ACID_TYPE.PHE, 
-		 new AminoAcid( 9.09, 2.18 ) );
+		 new AminoAcid( "F", "Phe", 9.09, 2.18 ) );
 	    put( AMINO_ACID_TYPE.TRP, 
-		 new AminoAcid( 9.34, 2.38 ) );
+		 new AminoAcid( "W", "Trp", 9.34, 2.38 ) );
 	    put( AMINO_ACID_TYPE.TYR, 
-		 new AminoAcid( 9.04, 2.24 ) );
+		 new AminoAcid( "Y", "Tyr", 9.04, 2.24 ) );
 	    put( AMINO_ACID_TYPE.VAL, 
-		 new AminoAcid( 9.52, 2.27 ) );
+		 new AminoAcid( "V", "Val", 9.52, 2.27 ) );
 	}
     };
     // end constants
 
     // begin instance variables
+    public final String oneLetterCode;
+    public final String threeLetterCode;
     public final CHARGE charge;
     public final double sideChainPKa; // if charged; NaN if it's not
     public final double carboxylPKa; // applies to all
@@ -143,16 +150,22 @@ public class AminoAcid {
      * Creates a new Amino Acid with a given pKa.  Note that it is hidden
      * to force calling code to use the method to get singletons.
      * 
+     * @param oneLetterCode The single letter code
+     * @param threeLetterCode The three letter code
      * @param charge The charge of the amino acid
      * @param sideChainPKa The pKa of the side chain.  Use NO_CHARGE 
      * for uncharged side chains
      * @param aminoPKa The pKa of the NH2
      * @param carboxylPKa The pKa of the COOH
      */
-    private AminoAcid( CHARGE charge,
+    private AminoAcid( String oneLetterCode,
+		       String threeLetterCode,
+		       CHARGE charge,
 		       double sideChainPKa,
 		       double aminoPKa,
 		       double carboxylPKa ) {
+	this.oneLetterCode = oneLetterCode;
+	this.threeLetterCode = threeLetterCode;
 	this.charge = charge;
 	this.sideChainPKa = sideChainPKa;
 	this.aminoPKa = aminoPKa;
@@ -162,12 +175,18 @@ public class AminoAcid {
     /**
      * Creates a new uncharged amino acid.
      *
+     * @param oneLetterCode Single letter amino acid code
+     * @param threeLetterCode Three letter amino acid code
      * @param aminoPKa The PKa of the NH2
      * @param carboxylPKa The pKa of the COOH
      */
-    private AminoAcid( double aminoPKa,
+    private AminoAcid( String oneLetterCode,
+		       String threeLetterCode,
+		       double aminoPKa,
 		       double carboxylPKa ) {
-	this( CHARGE.UNCHARGED,
+	this( oneLetterCode,
+	      threeLetterCode,
+	      CHARGE.UNCHARGED,
 	      NO_CHARGE,
 	      aminoPKa,
 	      carboxylPKa );
@@ -256,6 +275,3 @@ public class AminoAcid {
 			  pH );
     }
 }
-
-
-    

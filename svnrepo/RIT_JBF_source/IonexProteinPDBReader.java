@@ -79,7 +79,7 @@ public class IonexProteinPDBReader implements IonexProteinReader {
 	    retval = matcher.group( NAME_GROUP );
 	}
 
-	return retval;
+	return ( retval == null ) ? retval : retval.trim();
     }
 	
     public IonexProtein readProtein( File file ) throws FileNotFoundException,

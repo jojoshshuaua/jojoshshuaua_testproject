@@ -2,6 +2,7 @@
  * IonexProtein.java
  */
 
+import java.net.URI;
 import java.io.*;
 import java.util.*;
 
@@ -15,6 +16,7 @@ public class IonexProtein implements Comparable< IonexProtein > {
     public static final String PDB_FILE_EXTENSION = ".PDB";
     public static final String GENBANK_FILE_EXTENSION = ".GB";
     public static final String FASTA_FILE_EXTENSION = ".FASTA";
+    public static final String THREE_LETTER_CODE_DELIM = " - ";
     public static final Map< String, IonexProteinReader > READERS =
 	new HashMap< String, IonexProteinReader >() {
 	{
@@ -33,7 +35,9 @@ public class IonexProtein implements Comparable< IonexProtein > {
     // begin instance variables
     private String name; // the name of the protein
     private AminoAcid[] sequence; // the sequence of the protein
-    private Cache<Double,Double> chargeCache;
+    private String oneLetterSequence = null;
+    private String threeLetterSequence = null;
+    private Cache< Double, Double > chargeCache;
     // end instance variables
 
     /**
@@ -109,6 +113,42 @@ public class IonexProtein implements Comparable< IonexProtein > {
      */
     public int compareTo( IonexProtein other ) {
 	return name.compareTo( other.getName() );
+    }
+
+    /**
+     * Gets a string of the single letter codes
+     */
+    public String oneLetterCodes() {
+	if ( oneLetterSequence == null ) {
+	    oneLetterSequence = calculateOneLetterCodes();
+	}
+	return oneLetterSequence;
+    }
+
+    /**
+     * Makes a string of all the one letter codes
+     */
+    public String calculateOneLetterCodes() {
+	String retval = "";
+	for( AminoAcid current : sequence ) {
+	    retval += current.oneLetterCode;
+	}
+	return retval;
+    }
+
+    public String tripleLetterCodes() {
+	if ( threeLetterSequence == null ) {
+	    threeLetterSequence = calculateTripleLetterCodes();
+	}
+	return threeLetterSequence;
+    }
+
+    public String calculateTripleLetterCodes() {
+	String retval = "";
+	for( AminoAcid current : sequence ) {
+	    retval += current.threeLetterCode + THREE_LETTER_CODE_DELIM;
+	}
+	return retval.substring( 0, THREE_LETTER_CODE_DELIM.length() );
     }
 
     /**
