@@ -13,6 +13,10 @@ import java.util.regex.*;
  */
 public class IonexProteinFASTAReader implements IonexProteinReader {
     // begin constants
+    public static final String[] FASTA_FILE_EXTENSIONS =
+	new String[]{ ".FASTA", ".FAA" };
+    public static final FileFilter FASTA_FILE_FILTER =
+	new ExtensionFileFilter( FASTA_FILE_EXTENSIONS );
     public static final Pattern ANNOTATION_LINE = 
 	Pattern.compile( "^>(.*).*" );
     public static final int ANNOTATION_LINE_GROUP = 1;
@@ -33,6 +37,10 @@ public class IonexProteinFASTAReader implements IonexProteinReader {
 	}
 
 	return retval;
+    }
+
+    public FileFilter getFileFilter() {
+	return FASTA_FILE_FILTER;
     }
 
     public IonexProtein readProtein( File file ) 

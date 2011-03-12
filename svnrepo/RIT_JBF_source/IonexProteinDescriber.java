@@ -38,6 +38,7 @@ public class IonexProteinDescriber
 	this.proteins = new ArrayList< IonexProteinBand >( proteins );
 	Collections.sort( this.proteins );
 	visualList = new JList( proteins.toArray() );
+	visualList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION );
 	sequence = new JTextArea( "", 0, NUM_COLUMNS_SEQUENCE );
 	sequence.setEditable( false );
 	sequence.setFont( new Font( "Monospaced",
@@ -45,10 +46,9 @@ public class IonexProteinDescriber
 				    sequence.getFont().getSize() ) );
 	
 	setLayout( new GridLayout( 2, 1 ) );
-	add( visualList );
-	add( new JScrollPane( sequence,
-			      ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-			      ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED ) );
+	add( new JScrollPane( visualList ) );
+			      
+	add( new JScrollPane( sequence ) );
 	visualList.addListSelectionListener( this );
 	visualList.setSelectedIndex( 0 );
     }

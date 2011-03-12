@@ -98,10 +98,10 @@ public class IonexColumn extends JLabel implements MouseListener {
 	int position = protein.getPosition();
 	int bandWidth = IonexProteinBand.BAND_WIDTH;
 	
-	if ( position != IonexModel.BEYOND_COLUMN ) {
+	if ( position < IonexModel.COLUMN_HIGH_Y ) {
 	    g.setColor( protein.getColor() );
 	    g.fillRect( columnStartX,
-			position,
+			position + IonexModel.COLUMN_LOW_Y,
 			columnEndX - columnStartX,
 			bandWidth );
 	    g.setColor( originalColor );

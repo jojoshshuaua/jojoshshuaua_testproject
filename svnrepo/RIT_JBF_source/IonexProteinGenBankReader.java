@@ -13,6 +13,10 @@ import java.util.regex.*;
  */
 public class IonexProteinGenBankReader implements IonexProteinReader {
     // begin constants
+    public static final String[] GENBANK_FILE_EXTENSIONS = 
+	new String[]{ ".GB" };
+    public static final FileFilter GENBANK_FILE_FILTER =
+	new ExtensionFileFilter( GENBANK_FILE_EXTENSIONS );
     public static final String ORIGIN = "ORIGIN";
 
     // for determining if this is a DNA or protein file
@@ -195,6 +199,10 @@ public class IonexProteinGenBankReader implements IonexProteinReader {
 	}
 	
 	return retval.trim();
+    }
+
+    public FileFilter getFileFilter() {
+	return GENBANK_FILE_FILTER;
     }
 
     public IonexProtein readProtein( File file ) 

@@ -111,9 +111,11 @@ public class ClickableLineGraph extends LineGraph implements MouseListener {
     }
 
     public void mouseClicked( MouseEvent e ) {
-	int frame = getClickedFrame( e );
-	if ( frame != NO_FRAME ) {
-	    showProteins( frame );
+	if ( view.getModel() != null ) {
+	    int frame = getClickedFrame( e );
+	    if ( frame != NO_FRAME ) {
+		showProteins( frame );
+	    }
 	}
     }
 

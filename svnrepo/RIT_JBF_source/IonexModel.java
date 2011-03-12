@@ -22,10 +22,9 @@ public class IonexModel implements IonexModelInterface, Runnable {
     public static final int FRAME_DELAY = 100; // milliseconds between frames
 
     // related to the column itself
-    public static final int COLUMN_LOW_Y = 25;
-    public static final int COLUMN_HIGH_Y = 497;
+    public static final int COLUMN_LOW_Y = 28;
+    public static final int COLUMN_HIGH_Y = 473;
     public static final int COLUMN_SIZE_Y = COLUMN_HIGH_Y - COLUMN_LOW_Y;
-    public static final int BEYOND_COLUMN = -1;
 
     // represents all bound proteins, in a single band
     // for simplicity, it is put in the list of unbound proteins, but it
@@ -122,17 +121,22 @@ public class IonexModel implements IonexModelInterface, Runnable {
      * proteins are eluting.
      */
     protected List< Set< IonexProteinBand > > calcProteinsEluting() {
+	// initialize retval
 	List< Set< IonexProteinBand > > retval = 
 	    new ArrayList< Set< IonexProteinBand > >( getNumProteins() );
 	for( int frame = 0; frame < NUM_FRAMES; frame++ ) {
-	    Set< IonexProteinBand > elutingHere = 
-		new HashSet< IonexProteinBand >();
-	    for( IonexProteinBand current : allProteins ) {
-		if ( amountEluting( current, frame ) > 0.0 ) {
-		    elutingHere.add( current );
+	    retval.add( new HashSet< IonexProteinBand >() );
+	}
+
+	// add the proteins to it
+	for( IonexProteinBand current : allProteins ) {
+	    List< Integer > elutingFrames = current.getElutingFrames();
+	    for( Integer frame : elutingFrames ) {
+		if ( frame.intValue() > 0 &&
+		     frame.intValue() < retval.size() ) {
+		    retval.get( frame.intValue() ).add( current );
 		}
 	    }
-	    retval.add( elutingHere );
 	}
 	
 	return retval;
@@ -345,16 +349,17 @@ public class IonexModel implements IonexModelInterface, Runnable {
 
     /**
      * Finds the frame at which the top NaCl is at least the given value, using
-     * the given list of concentrations at frames.
+     * the given list of concentrations at frames.  Returns the first frame
+     * at which this is true.
      */
     public static int frameWhenTopNaCl( double conc,
 					List< Pair< Double, Double > > table ) {
 	int retval = Collections.binarySearch( table,
 					       new Pair< Double, Double >( conc, 0.0 ),
 					       DOUBLE_PAIR_COMPARE );
-	return getBiggestIndex( table, 
-				retval,
-				DOUBLE_PAIR_COMPARE );
+	return getSmallestIndex( table, 
+				 retval,
+				 DOUBLE_PAIR_COMPARE );
     }
 
     public int frameWhenTopNaCl( double conc ) {
@@ -466,27 +471,7 @@ public class IonexModel implements IonexModelInterface, Runnable {
     }
 
     public double amountEluting( IonexProteinBand protein ) {
-	return amountEluting( protein,
-			      getCurrentFrame() );
-    }
-
-    /**
-     * Gets the amount of the protein that is eluting, a percentage between 0-1.
-     * This correlates to how much of the Y axis should be consumed by a given
-     * protein.
-     */
-    public double amountEluting( IonexProteinBand protein, int frame ) {
-	int position = protein.getPosition( frame );
-	int bandWidth = IonexProteinBand.BAND_WIDTH;
-	double retval;
-	
-	if ( position + bandWidth < COLUMN_HIGH_Y ||
-	     position > COLUMN_HIGH_Y ) {
-	    retval = 0.0;
-	} else {
-	    retval = (double)Math.abs( COLUMN_HIGH_Y - ( position + bandWidth ) ) / bandWidth;
-	}
-	return retval;
+	return protein.amountEluting( getCurrentFrame() );
     }
 
     /**

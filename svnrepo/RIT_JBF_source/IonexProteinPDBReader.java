@@ -13,6 +13,11 @@ import java.util.regex.*;
  */
 public class IonexProteinPDBReader implements IonexProteinReader {
     // begin constants
+    public static final String[] PDB_FILE_EXTENSIONS =
+	new String[]{ ".PDB", ".ENT" };
+    public static final FileFilter PDB_FILTER =
+	new ExtensionFileFilter( PDB_FILE_EXTENSIONS );
+
     // must begin with ATOM and be the alpha carbon.  Captures the
     // three letter code
     public static final Pattern AMINO_ACID_LINE = 
@@ -81,7 +86,11 @@ public class IonexProteinPDBReader implements IonexProteinReader {
 
 	return ( retval == null ) ? retval : retval.trim();
     }
-	
+
+    public FileFilter getFileFilter() {
+	return PDB_FILTER;
+    }
+
     public IonexProtein readProtein( File file ) throws FileNotFoundException,
 							IonexProteinFormatException,
 							IOException {

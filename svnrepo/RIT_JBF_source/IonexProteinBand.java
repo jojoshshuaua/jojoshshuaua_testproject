@@ -17,7 +17,21 @@ public class IonexProteinBand implements Comparable< IonexProteinBand > {
     public static final double INCREMENT = 2.36;
     public static final int BAND_WIDTH = 3;
     public static final double UNBINDING_NACL = 100;
-    
+    public static final Comparator< Double > POSITION_COMPARE =
+	new Comparator< Double >() {
+	public int compare( Double first,
+			    Double second ) {
+	    double diff = first.doubleValue() - second.doubleValue();
+	    if ( diff < 0.0 ) {
+		return -1;
+	    } else if ( diff > 0.0 ) {
+		return 1;
+	    } else {
+		return 0;
+	    }
+	}
+    };
+
     // colors which we don't want to assign because they are hard to
     // see
     public static final Set< Color > BAD_COLORS =
@@ -39,7 +53,7 @@ public class IonexProteinBand implements Comparable< IonexProteinBand > {
 
     // begin instance variables
     private IonexModel model = null; // the model we are associated with
-    private double[] position = null; // given a frame, returns the protein's position
+    private java.util.List< Double > position = null; // given a frame, returns the protein's position
     private Color color = null; // the color of the protein band
     private IonexProtein protein = null; // the actual protein
     // end instance variables
@@ -69,10 +83,11 @@ public class IonexProteinBand implements Comparable< IonexProteinBand > {
     protected void initializePosition() {
 	double unbindingConc = getUnbindingConc( model.solvent.pH,
 						 model.resin );
-	position = new double[ IonexModel.NUM_FRAMES ];
-	for( int frame = 0; frame < position.length; frame++ ) {
-	    position[ frame ] = model.getPosition( unbindingConc,
-						   frame ) * INCREMENT;
+	position = new ArrayList< Double >( IonexModel.NUM_FRAMES );
+	for( int frame = 0; frame < IonexModel.NUM_FRAMES; frame++ ) {
+	    
+	    position.add( new Double( model.getPosition( unbindingConc,
+							 frame ) * INCREMENT ) );
 	}
     }
 
@@ -99,11 +114,11 @@ public class IonexProteinBand implements Comparable< IonexProteinBand > {
 	double retval;
 
 	if ( ( resin.charge == Resin.CHARGE.POSITIVE &&
-	       charge > 0 ) ||
+	       charge > 0.0 ) ||
 	     ( resin.charge == Resin.CHARGE.NEGATIVE &&
-	       charge < 0 ) ) {
+	       charge < 0.0 ) ) {
 	    // won't stick no matter what
-	    retval = 0;
+	    retval = 0.0;
 	} else {
 	    retval = Math.abs( charge / UNBINDING_NACL );
 	}
@@ -115,7 +130,7 @@ public class IonexProteinBand implements Comparable< IonexProteinBand > {
      * Gets whether or not this protein is bound
      */
     public boolean isBound( int frame ) {
-	return position[ frame ] <= 0.0;
+	return position.get( frame ).doubleValue() <= 0.0;
     }
 
     /**
@@ -129,7 +144,7 @@ public class IonexProteinBand implements Comparable< IonexProteinBand > {
      * Gets the position of this band for the given frame
      */
     public int getPosition( int frame ) {
-	return (int)Math.round( position[ frame ] );
+	return (int)Math.round( position.get( frame ).doubleValue() );
     }
 
     /**
@@ -150,6 +165,57 @@ public class IonexProteinBand implements Comparable< IonexProteinBand > {
 	return getProtein().compareTo( other.getProtein() );
     }
 
+    /**
+     * Gets the amount of the protein that is eluting, a percentage between 0-1.
+     * This correlates to how much of the Y axis should be consumed by a given
+     * protein.
+     */
+    public double amountEluting( int frame ) {
+	int pos = getPosition( frame );
+	int bandWidth = IonexProteinBand.BAND_WIDTH;
+	double retval;
+	
+	if ( pos + bandWidth < IonexModel.COLUMN_HIGH_Y ||
+	     pos > IonexModel.COLUMN_HIGH_Y ) {
+	    retval = 0.0;
+	} else {
+	    retval = (double)Math.abs( IonexModel.COLUMN_HIGH_Y - ( pos + bandWidth ) ) / bandWidth;
+	}
+	return retval;
+    }
+
+    /**
+     * Determines the frame at which this protein starts eluting.
+     */
+    public int calcStartEluting() {
+	int index = Collections.binarySearch( position,
+					      new Double( IonexModel.COLUMN_HIGH_Y ),
+					      POSITION_COMPARE );
+	int retval = IonexModel.getSmallestIndex( position,
+						  index,
+						  POSITION_COMPARE ) - 1;
+	if ( retval < 0 ) {
+	    retval = 0;
+	}
+	return retval;
+    }
+    
+    /**
+     * Gets the frames during which this protein is eluting.
+     */
+    public java.util.List< Integer > getElutingFrames() {
+	java.util.List< Integer > retval = new ArrayList< Integer >();
+	int frame = calcStartEluting();
+	
+	while( frame < IonexModel.NUM_FRAMES &&
+	       amountEluting( frame ) > 0.0 ) {
+	    retval.add( new Integer( frame ) );
+	    frame++;
+	}
+
+	return retval;
+    }
+	
     public static IonexProteinBand getBand( IonexProtein protein ) {
 	return assignedBands.get( protein );
     }

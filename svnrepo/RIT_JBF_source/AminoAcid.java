@@ -16,7 +16,7 @@ public class AminoAcid {
     // begin constants
     public static final int NUM_AMINO_ACIDS = 20;
     public static final double NO_CHARGE = Double.NaN;
-    public enum CHARGE { POSITIVE, NEGATIVE, UNCHARGED };
+    public enum CHARGE { POSITIVE, NEGATIVE, UNCHARGED, UNKNOWN };
     public enum AMINO_ACID_TYPE { ARG, // arginine
     	    HIS, // histadine
 	    LYS, // lysine
@@ -36,7 +36,11 @@ public class AminoAcid {
 	    PHE, // phenylalanine
 	    TRP, // tryptophan
 	    TYR, // tyrosine
-	    VAL // valine
+	    VAL, // valine
+	    ASX, // asparagine or aspartic acid
+	    GLX, // glutamine or glutamic acid
+	    XLE, // leucine or isoleucine
+	    UNK // unknown; note that Xaa is also appropriate
 	    };
 
     private static final Map< String, AMINO_ACID_TYPE > codes =
@@ -82,6 +86,15 @@ public class AminoAcid {
 	    put( "Y", AMINO_ACID_TYPE.TYR );
 	    put( "VAL", AMINO_ACID_TYPE.VAL );
 	    put( "V", AMINO_ACID_TYPE.VAL );
+	    put( "ASX", AMINO_ACID_TYPE.ASX );
+	    put( "B", AMINO_ACID_TYPE.ASX );
+	    put( "GLX", AMINO_ACID_TYPE.GLX );
+	    put( "Z", AMINO_ACID_TYPE.GLX );
+	    put( "XLE", AMINO_ACID_TYPE.XLE );
+	    put( "J", AMINO_ACID_TYPE.XLE );
+	    put( "XAA", AMINO_ACID_TYPE.UNK );
+	    put( "UNK", AMINO_ACID_TYPE.UNK );
+	    put( "X", AMINO_ACID_TYPE.UNK );
 	}
     };
 
@@ -133,6 +146,14 @@ public class AminoAcid {
 		 new AminoAcid( "Y", "Tyr", 9.04, 2.24 ) );
 	    put( AMINO_ACID_TYPE.VAL, 
 		 new AminoAcid( "V", "Val", 9.52, 2.27 ) );
+	    put( AMINO_ACID_TYPE.ASX,
+		 new AmbiguousAminoAcid( "B", "Asx" ) );
+	    put( AMINO_ACID_TYPE.GLX,
+		 new AmbiguousAminoAcid( "Z", "Glx" ) );
+	    put( AMINO_ACID_TYPE.XLE,
+		 new AmbiguousAminoAcid( "J", "Xle" ) );
+	    put( AMINO_ACID_TYPE.UNK,
+		 new AmbiguousAminoAcid( "X", "Unk" ) );
 	}
     };
     // end constants
@@ -145,6 +166,20 @@ public class AminoAcid {
     public final double carboxylPKa; // applies to all
     public final double aminoPKa; // applies to all
     // end instance variables
+
+    /**
+     * Dud constructor.
+     * Intended for ambiguous amino acids.
+     */
+    protected AminoAcid( String oneLetterCode,
+			 String threeLetterCode ) {
+	this( oneLetterCode,
+	      threeLetterCode,
+	      CHARGE.UNKNOWN,
+	      0.0,
+	      0.0,
+	      0.0 );
+    }
 
     /**
      * Creates a new Amino Acid with a given pKa.  Note that it is hidden
@@ -227,9 +262,9 @@ public class AminoAcid {
      * @return The charge of the group, or 0.0 if the charge was neither 
      * positive nor negative
      */
-    public static double getCharge( CHARGE charge,
-				    double pKa,
-				    double pH ) {
+    public static double getChargeStatic( CHARGE charge,
+					  double pKa,
+					  double pH ) {
 	double retval = 0.0;
 
 	if ( charge == CHARGE.POSITIVE ||
@@ -245,6 +280,14 @@ public class AminoAcid {
 	return retval;
     }
     
+    public double getCharge( CHARGE charge,
+			     double pKa,
+			     double pH ) {
+	return getChargeStatic( charge,
+				pKa,
+				pH );
+    }
+
     /**
      * Gets the charge of the amino acid's side chain.
      * Merely passes the side chain information to getCharge()

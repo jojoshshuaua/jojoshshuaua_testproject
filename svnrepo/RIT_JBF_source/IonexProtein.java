@@ -13,18 +13,23 @@ import java.util.*;
 public class IonexProtein implements Comparable< IonexProtein > {
     // begin constants
     public static final String PDB_DIRECTORY_PATH = "pdb/";
-    public static final String PDB_FILE_EXTENSION = ".PDB";
-    public static final String GENBANK_FILE_EXTENSION = ".GB";
-    public static final String FASTA_FILE_EXTENSION = ".FASTA";
     public static final String THREE_LETTER_CODE_DELIM = " - ";
-    public static final Map< String, IonexProteinReader > READERS =
-	new HashMap< String, IonexProteinReader >() {
+    public static final IonexProteinReader PDB_READER = 
+	new IonexProteinPDBReader();
+    public static final IonexProteinReader FASTA_READER =
+	new IonexProteinFASTAReader();
+    public static final IonexProteinReader GENBANK_READER = 
+	new IonexProteinGenBankReader();
+    public static final Map< FileFilter, IonexProteinReader > PROTEIN_READERS =
+	new HashMap< FileFilter, IonexProteinReader >() {
 	{
-	    put( PDB_FILE_EXTENSION, new IonexProteinPDBReader() );
-	    put( GENBANK_FILE_EXTENSION, new IonexProteinGenBankReader() );
-	    put( FASTA_FILE_EXTENSION, new IonexProteinFASTAReader() );
+	    put( PDB_READER.getFileFilter(), PDB_READER );
+	    put( FASTA_READER.getFileFilter(), FASTA_READER );
+	    put( GENBANK_READER.getFileFilter(), GENBANK_READER );
 	}
     };
+    public static final CompositeFileFilter PROTEIN_FILE_FILTER =
+	new CompositeFileFilter( PROTEIN_READERS.keySet() );
     // end constants
 
     // begin statics
@@ -152,24 +157,6 @@ public class IonexProtein implements Comparable< IonexProtein > {
     }
 
     /**
-     * Determines if the given file is a pdb file
-     */
-    public static boolean isPDBFile( File file ) {
-	return file.getName().toUpperCase().endsWith( PDB_FILE_EXTENSION );
-    }
-
-    /**
-     * Creates a new file filter that is specific to PDB files
-     */
-    public static FileFilter makePDBFileFilter() {
-	return new FileFilter() {
-	    public boolean accept( File file ) {
-		return isPDBFile( file );
-	    }
-	};
-    }
-
-    /**
      * Gets all the available proteins there are
      */
     public static IonexProtein[] getAvailableProteins() {
@@ -195,28 +182,44 @@ public class IonexProtein implements Comparable< IonexProtein > {
     /**
      * Loads in all proteins from the given directory path
      */
-    public static Set< IonexProtein > loadAvailableProteins( String path ) 
+    public static Set< IonexProtein > loadAvailableProteins( String path,
+							     IonexProteinLoadProgressResponder progress ) 
 	throws FileNotFoundException,
 	IonexProteinFormatException,
 	IOException {
+	int proteinNum = 0;
 	Set< IonexProtein > proteins = new HashSet< IonexProtein >();
-	File dirAsFile = new File( path );
-	
-	for( File currentFile : dirAsFile.listFiles() ) {
-	    IonexProtein current = loadProtein( currentFile );
+	File[] proteinFiles = new File( path ).listFiles( PROTEIN_FILE_FILTER );
+	while( proteinNum < proteinFiles.length &&
+	       !progress.stopLoadingProteins() ) {
+	    File currentFile = proteinFiles[ proteinNum ];
+	    progress.loadingProtein( new IonexProteinLoadProgress( currentFile.getName(),
+								   proteinNum,
+								   proteinFiles.length ) );
+	    IonexProtein currentProtein = loadProtein( currentFile );
 
-	    if ( current != null ) {
-		proteins.add( current );
+	    if ( currentProtein != null ) {
+		proteins.add( currentProtein );
 	    }
+	    proteinNum++;
 	}
 
 	return proteins;
     }
 
+    public static Set< IonexProtein > loadAvailableProteins( String path ) 
+	throws FileNotFoundException,
+	IonexProteinFormatException,
+	IOException {
+	return loadAvailableProteins( path,
+				      new DefaultIonexProteinLoadProgressResponder() );
+    }
+
     /**
      * Version of loadAvailableProteins that won't throw any exceptions.
      */
-    public static Set< IonexProtein > loadAvailableProteinsNoError( String path ) {
+    public static Set< IonexProtein > loadAvailableProteinsNoError( String path,
+								    IonexProteinLoadProgressResponder progress ) {
 	Set< IonexProtein > retval = new HashSet< IonexProtein >();
 
 	try {
@@ -232,30 +235,25 @@ public class IonexProtein implements Comparable< IonexProtein > {
 	return retval;
     }
 
-    /**
-     * Gets the extension from the given file.
-     * @return The file extension, or "" if there is no extension
-     */
-    public static String getExtension( File file ) {
-	String retval = "";
-	String name = file.getName().toUpperCase();
-	int last = name.lastIndexOf( "." );
-
-	if ( last != -1 ) {
-	    retval = name.substring( last );
-	}
-
-	return retval;
+    public static Set< IonexProtein > loadAvailableProteinsNoError( String path ) {
+	return loadAvailableProteinsNoError( path,
+					     new DefaultIonexProteinLoadProgressResponder() );
     }
-	
-	
+
     /**
      * gets a reader that can understand the given file
      * @return A reader that can understand the given file, or null if
      * there is no such reader
      */
     public static IonexProteinReader getReader( File file ) {
-	return READERS.get( getExtension( file ) );
+	IonexProteinReader retval = null;
+	FileFilter match = PROTEIN_FILE_FILTER.getAcceptingFilter( file );
+
+	if ( match != null ) {
+	    retval = PROTEIN_READERS.get( match );
+	}
+
+	return retval;
     }
 
     /**

@@ -5,11 +5,17 @@
 import java.io.*;
 
 /**
- * Interface that describes a class that can read in an ionex protein
- *
+ * Interface that describes a class that can read in an ionex protein.
+ * It is intended that there is a different reader for each type of
+ * file.
  * @author Kyle Dewey
  */
 public interface IonexProteinReader {
+    /**
+     * Gets a file filter that recognizes this given type of file.
+     */
+    public FileFilter getFileFilter();
+
     /**
      * Reads in a protein from the given file.
      *

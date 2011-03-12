@@ -446,6 +446,12 @@ public class IonexView extends JPanel implements IonexViewInterface,
 	}
     }
 
+    public void addProteins( Collection< IonexProtein > toAdd ) {
+	for( IonexProtein current : toAdd ) {
+	    addProtein( current );
+	}
+    }
+
     /**
      * Adds the selected protein to the set of proteins that are in the column
      */
@@ -576,11 +582,52 @@ public class IonexView extends JPanel implements IonexViewInterface,
     }
 
     public void addProteomeFromDirectory( File directory ) {
-	String path = directory.getPath();
-	for( IonexProtein current : IonexProtein.loadAvailableProteinsNoError( path ) ) {
-	    IonexProtein.addAvailableProtein( current );
-	    addProtein( current );
-	}
+	// TODO: add IonexProteinLoadingMonitor
+	// The monitor has to run in the current threa, and a new thread
+	// must be made for the actual loading of proteins
+	// also note that the below commented out code would probably
+	// work on Java 1.6, but I'm stuck on 1.5
+	/*final String path = directory.getPath();
+	final IonexProteinLoadingMonitor monitor = 
+	    new IonexProteinLoadingMonitor( this );
+	try {
+	    SwingWorker< Set< IonexProtein >, Void > worker =
+		new SwingWorker< Set< IonexProtein >, Void >() {
+		public Set< IonexProtein > doInBackground() throws Exception {
+		    return IonexProtein.loadAvailableProteins( path, monitor );
+		}
+		public void done() {
+		    monitor.setProgress( 0 );
+		}
+	    };
+	    worker.execute();
+	    Set< IonexProtein > proteins = worker.get();
+	    if ( !monitor.isCanceled() ) {
+		addProteins( proteins );
+	    }
+	*/
+	try {
+	    addProteins( IonexProtein.loadAvailableProteins( directory.getPath() ) );
+	} catch ( FileNotFoundException e ) {
+	    showError( e );
+	} catch ( IonexProteinFormatException e ) {
+	    showError( e );
+	} catch ( IOException e ) {
+	    showError( e );
+	} /*finally {
+	    monitor.close();
+	    }*/
+    }
+
+    public void showError( String message ) {
+	JOptionPane.showMessageDialog( this,
+				       message,
+				       "Error Occurred",
+				       JOptionPane.ERROR_MESSAGE );
+    }
+
+    public void showError( Exception exception ) {
+	showError( exception.getMessage() );
     }
 
     public void addProteome() {
@@ -720,7 +767,7 @@ public class IonexView extends JPanel implements IonexViewInterface,
 	    double amountEluting = 0.0;
 	    
 	    for( IonexProteinBand current : proteinsEluting ) {
-		amountEluting += model.amountEluting( current, frame );
+		amountEluting += current.amountEluting( frame );
 	    }
 	    amountEluting /= proteinsEluting.size();
 	    retval = DETECTOR_END_Y - 
