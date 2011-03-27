@@ -107,7 +107,7 @@ public class SecondProteomeButton extends Canvas implements MouseListener {
     public void mouseClicked(MouseEvent e) {
 	//get the file to be parsed
 	electro2D.getSequenceData2();
-	PlayButtonSwingVersion.setCompare();
+	PlayButtonSwingVersion.setCompare(true);
     }
 
 }

@@ -115,8 +115,5 @@ public class DotThread extends Thread{
 	electro2D.resetPlay();
 	gel.paint( gel.getGraphic() );
 	gel.repaint();
-	if( electro2D.getFunctions2() != null ){
-	    gel.startDotBlink();
-	}
     }
 }

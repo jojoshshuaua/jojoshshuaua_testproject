@@ -1338,7 +1338,7 @@ public class Electro2D extends JPanel implements ActionListener {
                 sequenceTitles2.clear();
                 if(positionsTwo.get(0) > -1) {
                     for(int x = 0; x < positionsTwo.size(); x++) {
-                        sequenceTitles.add(copySequenceTitles2.get(positionsTwo.get(x)));
+                        sequenceTitles2.add(copySequenceTitles2.get(positionsTwo.get(x)));
                     }
                 }
             }
@@ -1491,5 +1491,10 @@ public class Electro2D extends JPanel implements ActionListener {
 	web.genFile( this.getLastFileLoaded() );
     }
 
+    public void resetBothProteinLists() {
+        proteinList = new java.awt.List();
+        proteinList2 = new java.awt.List();
+        sequencesReady = false;
+    }
 
 } //Electro2D

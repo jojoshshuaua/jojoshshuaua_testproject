@@ -6,6 +6,7 @@
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.*;
 
 public class RestartButtonSwingVersion extends JButton implements ActionListener {
 
@@ -41,6 +42,20 @@ public class RestartButtonSwingVersion extends JButton implements ActionListener
 	GelCanvasSwingVersion.setGreen();
 	GelCanvasSwingVersion.setBlue();
 	IEFProteinSwingVersion.resetTempWidth();
+        PlayButtonSwingVersion.setCompare(false);
+        electro2D.resetBothProteinLists();
+        electro2D.setSequences(new Vector());
+        electro2D.setSequenceTitles(new Vector());
+        electro2D.setMolecularWeights(new Vector());
+        electro2D.setPiValues(new Vector());
+        electro2D.setFunctionValues(new Vector());
+        electro2D.setSequences2(new Vector());
+        electro2D.setSequenceTitles2(new Vector());
+        electro2D.setMolecularWeights2(new Vector());
+        electro2D.setPiValues2(new Vector());
+        electro2D.setFunctionValues2(new Vector());
+        electro2D.refreshProteinList();
+        electro2D.refreshProteinList2();
 
     }
 

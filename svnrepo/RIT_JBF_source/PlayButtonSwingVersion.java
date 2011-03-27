@@ -45,8 +45,8 @@ public class PlayButtonSwingVersion extends JButton implements ActionListener {
 	sdsDrawn = false;
     }
 
-    public static void setCompare(){
-	compareFiles = true;
+    public static void setCompare(boolean bool){
+	compareFiles = bool;
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -68,7 +68,7 @@ public class PlayButtonSwingVersion extends JButton implements ActionListener {
 		    if( choice.equals( "IEF" )){
 			electro2D.getGel().prepare();
 			electro2D.resetBool();
-			if( compareFiles ){
+                        if( compareFiles ){
 			    electro2D.getGel().prepare2();
 			}
 		    }

@@ -18,7 +18,29 @@ public class StopButtonSwingVersion extends JButton implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        electro2D.stopThread();
-        electro2D.resetPlay();
+
+        GelCanvasSwingVersion g = electro2D.getGel();
+	g.clearIEF();
+	g.resetLocation();
+	g.resetRanges();
+	g.clearCanvas();
+	electro2D.resetIEF();
+	IEFProteinSwingVersion.resetProtein();
+
+	if( ProteinDotSwingVersion.getShow() ){
+	    ProteinDotSwingVersion.setShow();
+	    electro2D.stopThread();
+	}
+	g.restartCanvas();
+
+	electro2D.resetPlay();
+	electro2D.resetSdsStatus();
+	electro2D.setBool();
+	electro2D.clearpH();
+	electro2D.setIEF();
+	GelCanvasSwingVersion.setRed();
+	GelCanvasSwingVersion.setGreen();
+	GelCanvasSwingVersion.setBlue();
+	IEFProteinSwingVersion.resetTempWidth();
     }
 }

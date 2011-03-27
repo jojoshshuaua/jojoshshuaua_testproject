@@ -278,7 +278,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
 	}
 
         /**
-         * Convert the bar proteins into dot proteins and color them all yello
+         * Convert the bar proteins into dot proteins and color them all yellow
          * to designate them as being the ones from the second list that did
          * not match.
          */
@@ -393,11 +393,10 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
         // Then, draw the protein dots
         for(int i = 0; i < dotProteins.size(); i++) {
 	    ((ProteinDotSwingVersion)(dotProteins.elementAt(i))).draw(bufferImageGraphics);
-	}
-	if(dotProteins2 != null) {
-	    for(int i = 0; i < dotProteins2.size(); i++) {
-		((ProteinDotSwingVersion)(dotProteins2.elementAt(i))).draw(bufferImageGraphics);
-	    }
+        }
+
+	for(int i = 0; i < dotProteins2.size(); i++) {
+            ((ProteinDotSwingVersion)(dotProteins2.elementAt(i))).draw(bufferImageGraphics);
 	}
 
         // update the background
@@ -760,11 +759,15 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     }
 
     /**
-     * Called with the reset button, sets the y values for the protein dots back
-     * to their original locations.
+     * Called with the reset button, sets the dotProteins back to how they were
+     * when the application was first opened.
      */
     public void restartCanvas() {
-        for(int i = 0; i < dotProteins.size(); i++) {
+        barProteins = null;
+        dotProteins = null;
+        barProteins2 = null;
+        dotProteins2 = null;
+ /**       for(int i = 0; i < dotProteins.size(); i++) {
 	    ((ProteinDotSwingVersion)(dotProteins.elementAt(i))).restart();
 	}
         if(dotProteins2 != null) {
@@ -772,6 +775,7 @@ public class GelCanvasSwingVersion extends JPanel implements MouseListener {
     	    ((ProteinDotSwingVersion)(dotProteins2.elementAt(i))).restart();
             }
         }
+**/
         update(graphic);
 	repaint();
     }

@@ -178,7 +178,7 @@ public class ProteinListFrame extends JFrame {
             sequenceOneList.validate();
             sequenceTwoList.validate();
             updatePositions();
-            positionsOne = new Vector<Integer>();
+  //          positionsOne = new Vector<Integer>();
         }
     }
 
@@ -201,7 +201,7 @@ public class ProteinListFrame extends JFrame {
             sequenceOneList.validate();
             sequenceTwoList.validate();
             updatePositions();
-            positionsTwo = new Vector<Integer>();
+//            positionsTwo = new Vector<Integer>();
         }
     }
 

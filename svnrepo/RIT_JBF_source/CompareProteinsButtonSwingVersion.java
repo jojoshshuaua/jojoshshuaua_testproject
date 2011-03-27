@@ -22,7 +22,7 @@ public class CompareProteinsButtonSwingVersion extends JButton implements Action
     public void actionPerformed(ActionEvent e) {
 
 	electro2D.getSequenceData2();
-	PlayButtonSwingVersion.setCompare();
+	PlayButtonSwingVersion.setCompare(true);
 
     }
 }
