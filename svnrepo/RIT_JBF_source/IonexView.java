@@ -426,7 +426,9 @@ public class IonexView extends JPanel implements IonexViewInterface,
      */
     protected JComboBox makeProteinsBox() {
 	JComboBox retval = new JComboBox( IonexProtein.getAvailableProteins() );
-	retval.setSelectedIndex( 0 );
+	if ( retval.getItemCount() >= 1 ) {
+	    retval.setSelectedIndex( 0 );
+	}
 	return retval;
     }
 

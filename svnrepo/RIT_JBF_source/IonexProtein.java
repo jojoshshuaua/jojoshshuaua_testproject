@@ -12,7 +12,6 @@ import java.util.*;
  */
 public class IonexProtein implements Comparable< IonexProtein > {
     // begin constants
-    public static final String PDB_DIRECTORY_PATH = "pdb/";
     public static final String THREE_LETTER_CODE_DELIM = " - ";
     public static final IonexProteinReader PDB_READER = 
 	new IonexProteinPDBReader();
@@ -34,7 +33,7 @@ public class IonexProtein implements Comparable< IonexProtein > {
 
     // begin statics
     private static Set< IonexProtein > availableProteins = 
-	loadAvailableProteinsNoError( PDB_DIRECTORY_PATH );
+	new HashSet< IonexProtein >();
     // end statics
 
     // begin instance variables
