@@ -5,6 +5,7 @@
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
+import javax.swing.filechooser.FileFilter;
 
 /**
  * Reads in an Ionex protein from a PDB file
@@ -15,8 +16,9 @@ public class IonexProteinPDBReader implements IonexProteinReader {
     // begin constants
     public static final String[] PDB_FILE_EXTENSIONS =
 	new String[]{ ".PDB", ".ENT" };
-    public static final FileFilter PDB_FILTER =
-	new ExtensionFileFilter( PDB_FILE_EXTENSIONS );
+    public static final javax.swing.filechooser.FileFilter PDB_FILTER =
+	new ExtensionFileFilter( PDB_FILE_EXTENSIONS,
+				 "PDB files" );
 
     // must begin with ATOM and be the alpha carbon.  Captures the
     // three letter code
@@ -87,7 +89,7 @@ public class IonexProteinPDBReader implements IonexProteinReader {
 	return ( retval == null ) ? retval : retval.trim();
     }
 
-    public FileFilter getFileFilter() {
+    public javax.swing.filechooser.FileFilter getFileFilter() {
 	return PDB_FILTER;
     }
 

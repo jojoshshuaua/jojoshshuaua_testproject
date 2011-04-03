@@ -5,6 +5,7 @@
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
+import javax.swing.filechooser.FileFilter;
 
 /**
  * Reads in a protein from a FASTA file.
@@ -15,8 +16,9 @@ public class IonexProteinFASTAReader implements IonexProteinReader {
     // begin constants
     public static final String[] FASTA_FILE_EXTENSIONS =
 	new String[]{ ".FASTA", ".FAA" };
-    public static final FileFilter FASTA_FILE_FILTER =
-	new ExtensionFileFilter( FASTA_FILE_EXTENSIONS );
+    public static final javax.swing.filechooser.FileFilter FASTA_FILE_FILTER =
+	new ExtensionFileFilter( FASTA_FILE_EXTENSIONS,
+				 "FASTA files" );
     public static final Pattern ANNOTATION_LINE = 
 	Pattern.compile( "^>(.*).*" );
     public static final int ANNOTATION_LINE_GROUP = 1;
@@ -39,7 +41,7 @@ public class IonexProteinFASTAReader implements IonexProteinReader {
 	return retval;
     }
 
-    public FileFilter getFileFilter() {
+    public javax.swing.filechooser.FileFilter getFileFilter() {
 	return FASTA_FILE_FILTER;
     }
 

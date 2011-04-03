@@ -5,6 +5,7 @@
 import java.net.URI;
 import java.io.*;
 import java.util.*;
+import javax.swing.filechooser.FileFilter;
 
 /**
  * Represents a protein made up of AminoAcid objects.
@@ -19,8 +20,8 @@ public class IonexProtein implements Comparable< IonexProtein > {
 	new IonexProteinFASTAReader();
     public static final IonexProteinReader GENBANK_READER = 
 	new IonexProteinGenBankReader();
-    public static final Map< FileFilter, IonexProteinReader > PROTEIN_READERS =
-	new HashMap< FileFilter, IonexProteinReader >() {
+    public static final Map< javax.swing.filechooser.FileFilter, IonexProteinReader > PROTEIN_READERS =
+	new HashMap< javax.swing.filechooser.FileFilter, IonexProteinReader >() {
 	{
 	    put( PDB_READER.getFileFilter(), PDB_READER );
 	    put( FASTA_READER.getFileFilter(), FASTA_READER );
@@ -28,7 +29,8 @@ public class IonexProtein implements Comparable< IonexProtein > {
 	}
     };
     public static final CompositeFileFilter PROTEIN_FILE_FILTER =
-	new CompositeFileFilter( PROTEIN_READERS.keySet() );
+	new CompositeFileFilter( PROTEIN_READERS.keySet(),
+				 "Protein files" );
     // end constants
 
     // begin statics
@@ -278,5 +280,23 @@ public class IonexProtein implements Comparable< IonexProtein > {
 	}
 
 	return retval;
+    }
+
+    /**
+     * Gets all file filters that understand protein files.
+     * They are sorted by their descriptions.
+     * @return All file filters that understand protein files
+     */
+    public static javax.swing.filechooser.FileFilter[] getProteinFileFilters() {
+	List< javax.swing.filechooser.FileFilter > retval = 
+	    new ArrayList< javax.swing.filechooser.FileFilter >( PROTEIN_READERS.keySet() );
+	Collections.sort( retval,
+			  new Comparator< javax.swing.filechooser.FileFilter >() {
+			      public int compare( javax.swing.filechooser.FileFilter first,
+						  javax.swing.filechooser.FileFilter second ) {
+				  return first.getDescription().compareTo( second.getDescription() );
+			      }
+			  } );
+	return retval.toArray( new javax.swing.filechooser.FileFilter[ 0 ] );
     }
 }

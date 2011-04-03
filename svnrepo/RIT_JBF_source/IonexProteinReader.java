@@ -2,7 +2,10 @@
  * IonexProteinReader.java
  */
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.File;
+import javax.swing.filechooser.FileFilter;
 
 /**
  * Interface that describes a class that can read in an ionex protein.

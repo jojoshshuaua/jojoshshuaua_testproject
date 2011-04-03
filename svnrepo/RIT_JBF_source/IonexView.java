@@ -64,7 +64,7 @@ public class IonexView extends JPanel implements IonexViewInterface,
     // those related to button commands
     public static final String REMOVE_PROTEIN = "Remove Protein";
     public static final String ADD_PROTEIN = "Add Protein";
-    public static final String ADD_PROTEOME = "Add Proteome";
+    public static final String ADD_PROTEOME = "Load Protein(s)";
     public static final String START = "Start";
     public static final String PAUSE = "Pause";
     public static final String LOAD_EXPERIMENT = "Load Experiment";
@@ -314,6 +314,7 @@ public class IonexView extends JPanel implements IonexViewInterface,
 	buffer = makeSolventsBox();
 	resin = makeResinsBox();
 	protein = makeProteinsBox();
+	resetProteinsBox();
 	columnProteins = makeProteinsList();
 	makeSliderComponents();
 	initializeButtons();
@@ -425,11 +426,23 @@ public class IonexView extends JPanel implements IonexViewInterface,
      * Creates a JComboBox for proteins
      */
     protected JComboBox makeProteinsBox() {
-	JComboBox retval = new JComboBox( IonexProtein.getAvailableProteins() );
-	if ( retval.getItemCount() >= 1 ) {
-	    retval.setSelectedIndex( 0 );
+	return new JComboBox();
+    }
+
+    /**
+     * Resets the combo box.
+     */
+    protected void resetProteinsBox() {
+	java.util.List< IonexProtein > proteins = 
+	    new ArrayList< IonexProtein >( Arrays.asList( IonexProtein.getAvailableProteins() ) );
+	Collections.sort( proteins );
+	protein.removeAllItems();
+	for( IonexProtein current : proteins ) {
+	    protein.addItem( current );
 	}
-	return retval;
+	if ( protein.getItemCount() >= 1 ) {
+	    protein.setSelectedIndex( 0 );
+	}
     }
 
     /**
@@ -567,19 +580,18 @@ public class IonexView extends JPanel implements IonexViewInterface,
 		try { 
 		    IonexProtein current = IonexProtein.loadProtein( new File( line ) );
 		    IonexProtein.addAvailableProtein( current );
-		    addProtein( current );
 		} catch ( FileNotFoundException e ) {
-		    System.err.println( e );
+		    showError( e );
 		} catch ( IonexProteinFormatException e ) {
-		    System.err.println( e );
+		    showError( e );
 		} catch ( IOException e ) {
-		    System.err.println( e );
+		    showError( e );
 		}
 	    }
 	} catch ( FileNotFoundException e ) {
-	    System.err.println( e );
+	    showError( e );
 	} catch ( IOException e ) {
-	    System.err.println( e );
+	    showError( e );
 	}
     }
 
@@ -609,7 +621,9 @@ public class IonexView extends JPanel implements IonexViewInterface,
 	    }
 	*/
 	try {
-	    addProteins( IonexProtein.loadAvailableProteins( directory.getPath() ) );
+	    for( IonexProtein current : IonexProtein.loadAvailableProteins( directory.getPath() ) ) {
+		IonexProtein.addAvailableProtein( current );
+	    }
 	} catch ( FileNotFoundException e ) {
 	    showError( e );
 	} catch ( IonexProteinFormatException e ) {
@@ -632,28 +646,56 @@ public class IonexView extends JPanel implements IonexViewInterface,
 	showError( exception.getMessage() );
     }
 
-    public void addProteome() {
-	JFileChooser chooser = new JFileChooser( PDB_START_DIRECTORY );
-	chooser.setFileSelectionMode( JFileChooser.FILES_AND_DIRECTORIES );
-	chooser.setFileFilter( new javax.swing.filechooser.FileFilter() {
+    public JFileChooser makeProteinFileChooser() {
+	JFileChooser retval = new JFileChooser( PDB_START_DIRECTORY );
+	retval.setFileSelectionMode( JFileChooser.FILES_AND_DIRECTORIES );
+	retval.setMultiSelectionEnabled( true );
+	for( javax.swing.filechooser.FileFilter filter : IonexProtein.getProteinFileFilters() ) {
+	    retval.addChoosableFileFilter( filter );
+	}
+	retval.setFileFilter( new javax.swing.filechooser.FileFilter() {
 		public boolean accept( File file ) {
 		    return ( file.isDirectory() || 
-			     isProteomeFile( file.getName() ) );
+			     isProteomeFile( file.getName() ) ||
+			     IonexProtein.PROTEIN_FILE_FILTER.accept( file ) );
 		}
 		public String getDescription() {
-		    return "Proteome files or PDB directory paths";
+		    return IonexProtein.PROTEIN_FILE_FILTER.getDescription();
 		}
 	    } );
+	return retval;
+    }
+
+    public void loadAndAddProteinFile( File file ) {
+	try {
+	    IonexProtein protein = IonexProtein.loadProtein( file );
+	    if ( protein != null ) {
+		IonexProtein.addAvailableProtein( protein );
+	    }
+	} catch( FileNotFoundException e ) {
+	    showError( e );
+	} catch( IonexProteinFormatException e ) {
+	    showError( e );
+	} catch( IOException e ) {
+	    showError( e );
+	}
+    }
+
+    public void addProteome() {
+	JFileChooser chooser = makeProteinFileChooser();
 	int chooserRetval = chooser.showOpenDialog( addProteome );
 	
 	if ( chooserRetval == JFileChooser.APPROVE_OPTION ) {
-	    File selected = chooser.getSelectedFile();
-
-	    if ( selected.isDirectory() ) {
-		addProteomeFromDirectory( selected );
-	    } else if ( isProteomeFile( selected.getName() ) ) {
-		addProteomeFromProteomeFile( selected );
+	    for( File selected : chooser.getSelectedFiles() ) {
+		if ( selected.isDirectory() ) {
+		    addProteomeFromDirectory( selected );
+		} else if ( isProteomeFile( selected.getName() ) ) {
+		    addProteomeFromProteomeFile( selected );
+		} else {
+		    loadAndAddProteinFile( selected );
+		}
 	    }
+	    resetProteinsBox();
 	}
     }
 

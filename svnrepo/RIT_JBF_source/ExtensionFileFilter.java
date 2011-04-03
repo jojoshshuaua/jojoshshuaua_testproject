@@ -10,17 +10,21 @@ import java.util.*;
  * If a listed extension matches, then it accepts it.
  * @author Kyle Dewey
  */
-public class ExtensionFileFilter implements FileFilter {
+public class ExtensionFileFilter extends DescriptionFileFilter {
     // begin instance variables
     private Set< String > extensions; // recognized extensions
     // end instance variables
 
-    public ExtensionFileFilter( Collection< String > extensions ) {
+    public ExtensionFileFilter( Collection< String > extensions,
+				String description ) {
+	super( description );
 	this.extensions = new HashSet< String >( extensions );
     }
 
-    public ExtensionFileFilter( String[] extensions ) {
-	this( Arrays.asList( extensions ) );
+    public ExtensionFileFilter( String[] extensions,
+				String description ) {
+	this( Arrays.asList( extensions ),
+	      description );
     }
 
     public boolean accept( File file ) {

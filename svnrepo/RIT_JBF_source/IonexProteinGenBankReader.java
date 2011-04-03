@@ -5,6 +5,7 @@
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
+import javax.swing.filechooser.FileFilter;
 
 /**
  * Reads in a protein from a GenBank file.
@@ -14,9 +15,10 @@ import java.util.regex.*;
 public class IonexProteinGenBankReader implements IonexProteinReader {
     // begin constants
     public static final String[] GENBANK_FILE_EXTENSIONS = 
-	new String[]{ ".GB" };
-    public static final FileFilter GENBANK_FILE_FILTER =
-	new ExtensionFileFilter( GENBANK_FILE_EXTENSIONS );
+	new String[]{ ".GB", ".GBK" };
+    public static final javax.swing.filechooser.FileFilter GENBANK_FILE_FILTER =
+	new ExtensionFileFilter( GENBANK_FILE_EXTENSIONS,
+				 "Genbank files" );
     public static final String ORIGIN = "ORIGIN";
 
     // for determining if this is a DNA or protein file
@@ -201,7 +203,7 @@ public class IonexProteinGenBankReader implements IonexProteinReader {
 	return retval.trim();
     }
 
-    public FileFilter getFileFilter() {
+    public javax.swing.filechooser.FileFilter getFileFilter() {
 	return GENBANK_FILE_FILTER;
     }
 
