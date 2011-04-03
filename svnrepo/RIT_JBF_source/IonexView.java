@@ -77,7 +77,7 @@ public class IonexView extends JPanel implements IonexViewInterface,
     private JFormattedTextField solventB; // ending [NaCl]
     private JComboBox buffer; // the buffer to use, i.e. Tris
     private JComboBox resin; // the resin to use, i.e. CM-Sephadex
-    private JComboBox protein; // what protein to add
+    private JList protein; // what protein to add
     private JList columnProteins; // the proteins to be put in the column
     private JButton addProtein; // adds a protein
     private JButton addProteome; // loads in a proteome
@@ -232,7 +232,7 @@ public class IonexView extends JPanel implements IonexViewInterface,
 	JPanel retval = new JPanel();
 	retval.setLayout( new GridLayout( 1, 4 ) );
 	retval.add( new JLabel( "Add Protein:" ) );
-	retval.add( protein );
+	retval.add( new JScrollPane( protein ) );
 	retval.add( addProtein );
 	retval.add( addProteome );
 	return retval;
@@ -313,8 +313,8 @@ public class IonexView extends JPanel implements IonexViewInterface,
 					   true );
 	buffer = makeSolventsBox();
 	resin = makeResinsBox();
-	protein = makeProteinsBox();
-	resetProteinsBox();
+	protein = makeAvailableProteinsList();
+	resetAvailableProteinsList();
 	columnProteins = makeProteinsList();
 	makeSliderComponents();
 	initializeButtons();
@@ -425,24 +425,25 @@ public class IonexView extends JPanel implements IonexViewInterface,
     /**
      * Creates a JComboBox for proteins
      */
-    protected JComboBox makeProteinsBox() {
-	return new JComboBox();
+    protected JList makeAvailableProteinsList() {
+	return new JList();
     }
 
     /**
      * Resets the combo box.
      */
-    protected void resetProteinsBox() {
-	java.util.List< IonexProtein > proteins = 
+    protected void resetAvailableProteinsList() {
+	final java.util.List< IonexProtein > proteins = 
 	    new ArrayList< IonexProtein >( Arrays.asList( IonexProtein.getAvailableProteins() ) );
 	Collections.sort( proteins );
-	protein.removeAllItems();
-	for( IonexProtein current : proteins ) {
-	    protein.addItem( current );
-	}
-	if ( protein.getItemCount() >= 1 ) {
-	    protein.setSelectedIndex( 0 );
-	}
+	protein.setModel( new AbstractListModel() {
+		public Object getElementAt( int index ) {
+		    return proteins.get( index );
+		}
+		public int getSize() {
+		    return proteins.size();
+		}
+	    } );
     }
 
     /**
@@ -468,10 +469,12 @@ public class IonexView extends JPanel implements IonexViewInterface,
     }
 
     /**
-     * Adds the selected protein to the set of proteins that are in the column
+     * Adds the selected proteins to the set of proteins that are in the column
      */
     public void addProtein() {
-	addProtein( (IonexProtein)protein.getSelectedItem() );
+	for( Object current : protein.getSelectedValues() ) {
+	    addProtein( (IonexProtein)current );
+	}
     }
 
     /**
@@ -695,7 +698,7 @@ public class IonexView extends JPanel implements IonexViewInterface,
 		    loadAndAddProteinFile( selected );
 		}
 	    }
-	    resetProteinsBox();
+	    resetAvailableProteinsList();
 	}
     }
 
