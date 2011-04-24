@@ -29,11 +29,13 @@ public class JBioFrameworkSwingVersion extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         electro2D = new Electro2D();
-	ionex = new IonexView();
+        ionex = new IonexView();
+
         tabbedPane = new JTabbedPane();
 
         tabbedPane.addTab("Electro2D", electro2D);
-	tabbedPane.addTab( "Ionex", ionex );
+        tabbedPane.addTab("Ion Exchange", ionex);
+
         add(tabbedPane);
 
         /**
