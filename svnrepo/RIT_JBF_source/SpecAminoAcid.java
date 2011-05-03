@@ -4,7 +4,8 @@
  * is fully protenated.
  *
  * version 3
- *  ** masses obtained from http:www.i-mass.com/guide/aamass.html on 1/5/2010
+ *  ** masses obtained from http:www.i-mass.com/guide/aamass.html on 1/5/2011
+ *  ** pKa's obtained from http://www.cem.msu.edu/~cem252/sp97/ch24/ch24aa.html on 5/3/2011
  */
 
 /**
@@ -15,6 +16,9 @@ public class SpecAminoAcid {
 
     private String name;
     private double mass;
+    private double COOHpKa;
+    private double NHHpKa;
+    private double sidechainPKa;
     private int charge;
     int hits;
 
@@ -25,6 +29,7 @@ public class SpecAminoAcid {
      * @throws AminoException When given a symbol that doesn't represent an
      *                        amino acid.
      */
+
     public SpecAminoAcid(char code) throws AminoException {
             translate(code);
     }
@@ -37,6 +42,7 @@ public class SpecAminoAcid {
      * @throws AminoException When given a symbol that doesn't represent an
      *                        amino acid or given more than one symbol.
      */
+
     public SpecAminoAcid(String input) throws AminoException {
         if(input.length() > 1) {
             throw new AminoException("String input too long; must be single char.");
@@ -57,26 +63,26 @@ public class SpecAminoAcid {
      */
     private void translate(char code) throws AminoException {
         switch(code) {
-            case 'H':   setName("Histidiine");    setMass(138.14); setCharge(1); break;
-            case 'K':   setName("Lysine");        setMass(129.17); setCharge(1); break;
-            case 'R':   setName("Arginine");      setMass(157.19); setCharge(1); break;
-            case 'E':   setName("Glutamate");     setMass(130.16); setCharge(0); break;
-            case 'D':   setName("Aspartate");     setMass(115.09); setCharge(0); break;
-            case 'P':   setName("Proline");       setMass(98.12);  setCharge(0); break;
-            case 'V':   setName("Valine");        setMass(99.13);  setCharge(0); break;
-            case 'M':   setName("Methionine");    setMass(131.20); setCharge(0); break;
-            case 'S':   setName("Serine");        setMass(87.07);  setCharge(0); break;
-            case 'Q':   setName("Glutamine");     setMass(128.13); setCharge(0); break;
-            case 'N':   setName("Asparagine");    setMass(114.10); setCharge(0); break;
-            case 'L':   setName("Leucine");       setMass(113.16); setCharge(0); break;
-            case 'I':   setName("Isoleucine");    setMass(113.16); setCharge(0); break;
-            case 'A':   setName("Alanine");       setMass(71.08);  setCharge(0); break;
-            case 'G':   setName("Glycine");       setMass(57.05);  setCharge(0); break;
-            case 'F':   setName("Phenylalanine"); setMass(147.18); setCharge(0); break;
-            case 'Y':   setName("Tyrosine");      setMass(163.18); setCharge(0); break;
-            case 'W':   setName("Tryptophan");    setMass(186.21); setCharge(0); break;
-            case 'T':   setName("Threonine");     setMass(101.11); setCharge(0); break;
-            case 'C':   setName("Cysteine");      setMass(103.14); setCharge(0); break;
+            case 'H':   setName("Histidine");     setMass(138.14); setCharge(1); setCOOHpKa(1.77); setNHHpKa(9.18);   setSidechainPKa(6.10);  break;
+            case 'K':   setName("Lysine");        setMass(129.17); setCharge(1); setCOOHpKa(2.18); setNHHpKa(8.95);   setSidechainPKa(10.53); break;
+            case 'R':   setName("Arginine");      setMass(157.19); setCharge(1); setCOOHpKa(2.01); setNHHpKa(9.04);   setSidechainPKa(12.48); break;
+            case 'E':   setName("Glutamate");     setMass(130.16); setCharge(1); setCOOHpKa(2.10); setNHHpKa(9.46);   setSidechainPKa(4.07);  break;
+            case 'D':   setName("Aspartate");     setMass(115.09); setCharge(1); setCOOHpKa(2.10); setNHHpKa(9.82);   setSidechainPKa(3.86);  break;
+            case 'P':   setName("Proline");       setMass(98.12);  setCharge(0); setCOOHpKa(2.00); setNHHpKa(10.60);  setSidechainPKa(-1);    break;
+            case 'V':   setName("Valine");        setMass(99.13);  setCharge(0); setCOOHpKa(2.29); setNHHpKa(9.72);   setSidechainPKa(-1);    break;
+            case 'M':   setName("Methionine");    setMass(131.20); setCharge(0); setCOOHpKa(2.28); setNHHpKa(9.21);   setSidechainPKa(-1);    break;
+            case 'S':   setName("Serine");        setMass(87.07);  setCharge(0); setCOOHpKa(2.21); setNHHpKa(9.15);   setSidechainPKa(-1);    break;
+            case 'Q':   setName("Glutamine");     setMass(128.13); setCharge(0); setCOOHpKa(2.17); setNHHpKa(9.13);   setSidechainPKa(-1);    break;
+            case 'N':   setName("Asparagine");    setMass(114.10); setCharge(0); setCOOHpKa(2.02); setNHHpKa(8.80);   setSidechainPKa(-1);    break;
+            case 'L':   setName("Leucine");       setMass(113.16); setCharge(0); setCOOHpKa(2.33); setNHHpKa(9.74);   setSidechainPKa(-1);    break;
+            case 'I':   setName("Isoleucine");    setMass(113.16); setCharge(0); setCOOHpKa(2.32); setNHHpKa(9.76);   setSidechainPKa(-1);    break;
+            case 'A':   setName("Alanine");       setMass(71.08);  setCharge(0); setCOOHpKa(2.35); setNHHpKa(9.87);   setSidechainPKa(-1);    break;
+            case 'G':   setName("Glycine");       setMass(57.05);  setCharge(0); setCOOHpKa(2.35); setNHHpKa(9.78);   setSidechainPKa(-1);    break;
+            case 'F':   setName("Phenylalanine"); setMass(147.18); setCharge(0); setCOOHpKa(2.58); setNHHpKa(9.24);   setSidechainPKa(-1);    break;
+            case 'Y':   setName("Tyrosine");      setMass(163.18); setCharge(0); setCOOHpKa(2.20); setNHHpKa(9.11);   setSidechainPKa(10.07); break;
+            case 'W':   setName("Tryptophan");    setMass(186.21); setCharge(0); setCOOHpKa(2.38); setNHHpKa(9.39);   setSidechainPKa(-1);    break;
+            case 'T':   setName("Threonine");     setMass(101.11); setCharge(0); setCOOHpKa(2.09); setNHHpKa(9.10);   setSidechainPKa(-1);    break;
+            case 'C':   setName("Cysteine");      setMass(103.14); setCharge(0); setCOOHpKa(2.05); setNHHpKa(10.25);  setSidechainPKa(8.00);  break;
             default:    throw new AminoException("Incorrect symbol for amino acid = "
                         + code);
         }
@@ -117,6 +123,36 @@ public class SpecAminoAcid {
      */
     public void setHits(int h) {
         hits = h;
+    }
+
+    /**
+     * Used by the translate method to set the alpha-Carboxylic Acid group's pKa
+     * value for the amino acid.
+     *
+     * @param k The pKa value.
+     */
+    private void setCOOHpKa(double k) {
+        COOHpKa = k;
+    }
+
+    /**
+     * Used by teh translate method to set the alpha-Amino grou's pKa value for
+     * the amino acid.
+     *  
+     * @param k The pKa value.
+     */
+    private void setNHHpKa(double k) {
+        NHHpKa = k;
+    }
+
+    /**
+     * Used by the translate method to set the sidechain pKa value for the amino
+     * acid if it has one. If it does not, a value of -1 is substituted instead.
+     *
+     * @param k The pKa value, or the non-value.
+     */
+    private void setSidechainPKa(double k) {
+        sidechainPKa = k;
     }
 
     /**
@@ -164,4 +200,39 @@ public class SpecAminoAcid {
     public double getMassChargeRatio() {
         return mass/(double)charge;
     }
+
+    /**
+     * Used to return the alpha-carboxylic acid pKa of the amino acid.
+     * (Not used in the spectrometer simulation, but put in for making
+     * SpecAminoAcid more complete)
+     *
+     * @return COOHpKa
+     */
+    public double getCOOHpKa() {
+        return COOHpKa;
+    }
+
+    /**
+     * Used to return the alpha-amino pKa of the amino acid.
+     * (Not used in the spectrometer simulation, but put in for making
+     * SpecAminoAcid more complete)
+     *
+     * @return NHHpKa
+     */
+    public double getNHHpKa() {
+        return NHHpKa;
+    }
+
+    /**
+     * Used to return the amino acid's sidechain pKa value. If the amino acid
+     * does not have a sidechain pKa, then a value of -1 is returned instead.
+     * (Not used in the spectrometer simulation, but put in for making
+     * SpecAminoAcid more complete)
+     * 
+     * @return sidechainPKa
+     */
+    public double getSidechainPKa() {
+        return sidechainPKa;
+    }
+
 }
