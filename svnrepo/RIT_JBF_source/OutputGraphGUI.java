@@ -4,7 +4,7 @@
  * be added to the MainPanelGUI. OutputGraphGUI also sets each Ion's xCoordinate
  * instance variable.
  *
- * version 2
+ * version 2, working on adding peak clickability for version 3
  */
 
 /**
@@ -12,16 +12,17 @@
  * @author Amanda Fisher
  */
 import javax.swing.JPanel;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.event.MouseEvent;
 
-public class OutputGraphGUI extends JPanel {
 
-//private ArrayList<double[]> peakLines;
+public class OutputGraphGUI extends JPanel implements MouseListener {
+
     private ArrayList<Ion> peakLines;
-    int mostHits;
+    double mostHits;
     int width;
     int height;
     int xAxisWidth;
@@ -29,7 +30,17 @@ public class OutputGraphGUI extends JPanel {
     int xAxisStartingPoint;
     int yAxisStartingPoint;
     int halfHashMarkLength;
-    
+
+    /**
+     * The constructor's only purpose is to add itself as its own mouse
+     * listener, so the user's clicks can be registered.
+     */
+    public OutputGraphGUI() {
+        super();
+        addMouseListener(this);
+    }
+
+
     /**
      * setPeaks is called by the Spectrometer class to tell OutputGraphGUI where
      * to draw the lines that represent ion peaks.
@@ -40,7 +51,7 @@ public class OutputGraphGUI extends JPanel {
      * @param mH Spectrometer gives the int number of the most hits for a specific
      * ion occuring so intensity of each peak can be calculated.
      */
-    public void setPeaks(ArrayList<Ion> pL, int mH) {
+    public void setPeaks(ArrayList<Ion> pL, double mH) {
         peakLines = pL;
         mostHits = mH;
         repaint();
@@ -111,15 +122,61 @@ public class OutputGraphGUI extends JPanel {
      */
     public void drawPeaks(Graphics g) {
         g.setColor(Color.BLACK);
+        int xPos;
+        int yPos;
         if (peakLines != null) {
             for(Ion ion : peakLines) {
-                int xPos = xAxisStartingPoint + xAxisWidth *
-                        (int)ion.getMassChargeRatio()/1700;
-                int yPos = yAxisStartingPoint + yAxisHeight -
-                          (yAxisHeight * (ion.getHits()/mostHits));
+                xPos = (int)(xAxisStartingPoint + xAxisWidth *
+                        ion.getMassChargeRatio()/1700);
+                yPos = (int)(yAxisStartingPoint + yAxisHeight - yAxisHeight *
+                        ion.getHits()/mostHits);
                 ion.setXCoordinate(xPos);
                 g.drawLine(xPos, yAxisStartingPoint + yAxisHeight, xPos, yPos);
             }
         }
     }
+
+    /**
+     * mouseClicked is invoked whenever the user clicks on the outputGraphGUI.
+     *
+     * @param e The event created by the user's click; can be used to find the
+     *          x and y coordinates of the click for use with peak picking.
+     */
+    public void mouseClicked(MouseEvent e) {
+        pickPeak(e.getX());
+    }
+
+    /**
+     * peakPick is called by the mouseClicked method to identify which peak, if
+     * any, the user has clicked on (or around).
+     * 
+     * Right now also displays the peak's m/e on standard output.
+     * 
+     * @param x The x coordinate of the click.
+     */
+    private void pickPeak(int x) {
+        if(peakLines != null) {
+            for(Ion ion : peakLines) {
+                if(ion.getXCoordinate()+ 2 > x && ion.getXCoordinate() - 2 < x) {
+                    System.out.println(ion.getMassChargeRatio());
+                }
+            }
+        }
+    }
+
+    /**
+     * The following four methods are stubbed out so the MouseListener class can
+     * be implemented.
+     *
+     * @param e unused.
+     */
+    public void mouseEntered(MouseEvent e) {
+    }
+    public void mouseExited(MouseEvent e) {
+    }
+    public void mousePressed(MouseEvent e) {
+    }
+    public void mouseReleased(MouseEvent e) {
+    }
+
 }

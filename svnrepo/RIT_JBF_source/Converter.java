@@ -1,7 +1,7 @@
 /*
  * This class takes a string that represents an ion and converts it in to an
  * instance of the Ion class by turning each character in the string in to
- * an SpecAminoAcid and adding it to an instance of the ion class. The string given
+ * a SpecAminoAcid and adding it to an instance of the ion class. The string given
  * has already been cut by a protease.
  * 
  * version 3

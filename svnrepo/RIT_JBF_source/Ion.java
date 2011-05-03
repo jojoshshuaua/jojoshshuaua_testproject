@@ -4,7 +4,7 @@
  * it contains, and calculates and sets its own mass/charge ratio. The variable
  * hits is set by Spectrometer as it counts how many of each type of ion it has.
  * Hits is used to determine the ion's intensity on the OutputGraphGUI. Ion also
- * knows its possition on the OutputGraphGUI so the user can click on individual
+ * knows its position on the OutputGraphGUI so the user can click on individual
  * peaks.
  * 
  * version 3
@@ -22,12 +22,12 @@ public class Ion extends ArrayList<SpecAminoAcid> {
     // totalCharge starts at 1 because all ions will have at least a charge of 1
     // due to the trailing amino group.
     int totalCharge = 1;
-    int hits;
+    double hits;
     int xCoordinate;
 
     /**
      * Adds the SpecAminoAcid to the end of the Ion. Ion adds its mass and charge
-     * to the appropriate instance variables and calculates its massChargeRatio.
+     * to the appropriate instance variables.
      *
      * @param a SpecAminoAcid to be added to the end of the Ion.
      * @return true if successfully added AmmionAcid.
@@ -64,7 +64,7 @@ public class Ion extends ArrayList<SpecAminoAcid> {
      *
      * @param i New hits count.
      */
-    public void setHits(int i) {
+    public void setHits(double i) {
         hits = i;
     }
 
@@ -109,7 +109,7 @@ public class Ion extends ArrayList<SpecAminoAcid> {
      *
      * @return hits.
      */
-    public int getHits() {
+    public double getHits() {
         return hits;
     }
 
