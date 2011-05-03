@@ -20,7 +20,11 @@ public class Spectrometer {
     /**
      * runAnalysis directs the simulation in evaluating the protein sequence.
      *
-     * @param sequence The protein sequence to be run.
+     * @param sequence       The protein sequence to be run.
+     * @param outputGraph    The graph on which to display the results of
+     *                       evaluating the sequence.
+     * @param proteaseChoice The user's choice of which protease they would like
+     *                       to digest their sequence with.
      */
     public static void runAnalysis(String sequence, OutputGraphGUI outputGraph,
                                    String proteaseChoice) {
