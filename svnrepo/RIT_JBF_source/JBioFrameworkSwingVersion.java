@@ -16,6 +16,7 @@ public class JBioFrameworkSwingVersion extends JFrame {
     public static final long serialVersionUID = 1L;
     private JTabbedPane tabbedPane;
     private Electro2D electro2D;
+    private MainPanelGUI spectrometer;
     private IonexView ionex;
 
     public static void main(String[] args) {
@@ -29,11 +30,13 @@ public class JBioFrameworkSwingVersion extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         electro2D = new Electro2D();
+        spectrometer = new MainPanelGUI();
         ionex = new IonexView();
 
         tabbedPane = new JTabbedPane();
 
         tabbedPane.addTab("Electro2D", electro2D);
+        tabbedPane.addTab("Mass Spectrometer", spectrometer);
         tabbedPane.addTab("Ion Exchange", ionex);
 
         add(tabbedPane);

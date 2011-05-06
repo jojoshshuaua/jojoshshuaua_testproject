@@ -4,7 +4,10 @@
  * is fully protenated.
  *
  * version 3
- *  ** masses obtained from http:www.i-mass.com/guide/aamass.html on 1/5/2011
+ *  ** base masses of amino acids in daltons obtained from
+ *     http://www.encorbio.com/protocols/Prot-MW.htm on 5/4/2011. Amino acids
+ *     with an extra charge were given an extra 1.00774 Da for hydrogen
+ *     presence.
  *  ** pKa's obtained from http://www.cem.msu.edu/~cem252/sp97/ch24/ch24aa.html on 5/3/2011
  */
 
@@ -55,34 +58,34 @@ public class SpecAminoAcid {
 
     /**
      * Method that does the heavy lifting. Takes a char and interprets it,
-     * assigning the correct name, mass, and charge to the instance of
-     * SpecAminoAcid based on the symbol given.
+     * assigning the correct name, mass in Daltons, and charge to the instance
+     * of SpecAminoAcid based on the symbol given.
      *
      * @param code Symbol to be turned in to an SpecAminoAcid.
      * @throws AminoException
      */
     private void translate(char code) throws AminoException {
-        switch(code) {
-            case 'H':   setName("Histidine");     setMass(138.14); setCharge(1); setCOOHpKa(1.77); setNHHpKa(9.18);   setSidechainPKa(6.10);  break;
-            case 'K':   setName("Lysine");        setMass(129.17); setCharge(1); setCOOHpKa(2.18); setNHHpKa(8.95);   setSidechainPKa(10.53); break;
-            case 'R':   setName("Arginine");      setMass(157.19); setCharge(1); setCOOHpKa(2.01); setNHHpKa(9.04);   setSidechainPKa(12.48); break;
-            case 'E':   setName("Glutamate");     setMass(130.16); setCharge(1); setCOOHpKa(2.10); setNHHpKa(9.46);   setSidechainPKa(4.07);  break;
-            case 'D':   setName("Aspartate");     setMass(115.09); setCharge(1); setCOOHpKa(2.10); setNHHpKa(9.82);   setSidechainPKa(3.86);  break;
-            case 'P':   setName("Proline");       setMass(98.12);  setCharge(0); setCOOHpKa(2.00); setNHHpKa(10.60);  setSidechainPKa(-1);    break;
-            case 'V':   setName("Valine");        setMass(99.13);  setCharge(0); setCOOHpKa(2.29); setNHHpKa(9.72);   setSidechainPKa(-1);    break;
-            case 'M':   setName("Methionine");    setMass(131.20); setCharge(0); setCOOHpKa(2.28); setNHHpKa(9.21);   setSidechainPKa(-1);    break;
-            case 'S':   setName("Serine");        setMass(87.07);  setCharge(0); setCOOHpKa(2.21); setNHHpKa(9.15);   setSidechainPKa(-1);    break;
-            case 'Q':   setName("Glutamine");     setMass(128.13); setCharge(0); setCOOHpKa(2.17); setNHHpKa(9.13);   setSidechainPKa(-1);    break;
-            case 'N':   setName("Asparagine");    setMass(114.10); setCharge(0); setCOOHpKa(2.02); setNHHpKa(8.80);   setSidechainPKa(-1);    break;
-            case 'L':   setName("Leucine");       setMass(113.16); setCharge(0); setCOOHpKa(2.33); setNHHpKa(9.74);   setSidechainPKa(-1);    break;
-            case 'I':   setName("Isoleucine");    setMass(113.16); setCharge(0); setCOOHpKa(2.32); setNHHpKa(9.76);   setSidechainPKa(-1);    break;
-            case 'A':   setName("Alanine");       setMass(71.08);  setCharge(0); setCOOHpKa(2.35); setNHHpKa(9.87);   setSidechainPKa(-1);    break;
-            case 'G':   setName("Glycine");       setMass(57.05);  setCharge(0); setCOOHpKa(2.35); setNHHpKa(9.78);   setSidechainPKa(-1);    break;
-            case 'F':   setName("Phenylalanine"); setMass(147.18); setCharge(0); setCOOHpKa(2.58); setNHHpKa(9.24);   setSidechainPKa(-1);    break;
-            case 'Y':   setName("Tyrosine");      setMass(163.18); setCharge(0); setCOOHpKa(2.20); setNHHpKa(9.11);   setSidechainPKa(10.07); break;
-            case 'W':   setName("Tryptophan");    setMass(186.21); setCharge(0); setCOOHpKa(2.38); setNHHpKa(9.39);   setSidechainPKa(-1);    break;
-            case 'T':   setName("Threonine");     setMass(101.11); setCharge(0); setCOOHpKa(2.09); setNHHpKa(9.10);   setSidechainPKa(-1);    break;
-            case 'C':   setName("Cysteine");      setMass(103.14); setCharge(0); setCOOHpKa(2.05); setNHHpKa(10.25);  setSidechainPKa(8.00);  break;
+        switch(code) { // adding hydrogens as I go
+            case 'H':   setName("Histidine");     setMass(157.17191); setCharge(2); setCOOHpKa(1.77); setNHHpKa(9.18);   setSidechainPKa(6.10);  break;
+            case 'K':   setName("Lysine");        setMass(148.20794); setCharge(2); setCOOHpKa(2.18); setNHHpKa(8.95);   setSidechainPKa(10.53); break;
+            case 'R':   setName("Arginine");      setMass(176.21794); setCharge(2); setCOOHpKa(2.01); setNHHpKa(9.04);   setSidechainPKa(12.48); break;
+            case 'E':   setName("Glutamate");     setMass(148.13578); setCharge(1); setCOOHpKa(2.10); setNHHpKa(9.46);   setSidechainPKa(4.07);  break;
+            case 'D':   setName("Aspartate");     setMass(134.10578); setCharge(1); setCOOHpKa(2.10); setNHHpKa(9.82);   setSidechainPKa(3.86);  break;
+            case 'P':   setName("Proline");       setMass(116.13794); setCharge(1); setCOOHpKa(2.00); setNHHpKa(10.60);  setSidechainPKa(-1);    break;
+            case 'V':   setName("Valine");        setMass(118.15794); setCharge(1); setCOOHpKa(2.29); setNHHpKa(9.72);   setSidechainPKa(-1);    break;
+            case 'M':   setName("Methionine");    setMass(150.21794); setCharge(1); setCOOHpKa(2.28); setNHHpKa(9.21);   setSidechainPKa(-1);    break;
+            case 'S':   setName("Serine");        setMass(106.09794); setCharge(1); setCOOHpKa(2.21); setNHHpKa(9.15);   setSidechainPKa(-1);    break;
+            case 'Q':   setName("Glutamine");     setMass(147.14794); setCharge(1); setCOOHpKa(2.17); setNHHpKa(9.13);   setSidechainPKa(-1);    break;
+            case 'N':   setName("Asparagine");    setMass(133.12794); setCharge(1); setCOOHpKa(2.02); setNHHpKa(8.80);   setSidechainPKa(-1);    break;
+            case 'L':   setName("Leucine");       setMass(132.17794); setCharge(1); setCOOHpKa(2.33); setNHHpKa(9.74);   setSidechainPKa(-1);    break;
+            case 'I':   setName("Isoleucine");    setMass(132.17794); setCharge(1); setCOOHpKa(2.32); setNHHpKa(9.76);   setSidechainPKa(-1);    break;
+            case 'A':   setName("Alanine");       setMass(90.09794);  setCharge(1); setCOOHpKa(2.35); setNHHpKa(9.87);   setSidechainPKa(-1);    break;
+            case 'G':   setName("Glycine");       setMass(76.07794);  setCharge(1); setCOOHpKa(2.35); setNHHpKa(9.78);   setSidechainPKa(-1);    break;
+            case 'F':   setName("Phenylalanine"); setMass(166.19794); setCharge(1); setCOOHpKa(2.58); setNHHpKa(9.24);   setSidechainPKa(-1);    break;
+            case 'Y':   setName("Tyrosine");      setMass(182.19794); setCharge(1); setCOOHpKa(2.20); setNHHpKa(9.11);   setSidechainPKa(10.07); break;
+            case 'W':   setName("Tryptophan");    setMass(205.23794); setCharge(1); setCOOHpKa(2.38); setNHHpKa(9.39);   setSidechainPKa(-1);    break;
+            case 'T':   setName("Threonine");     setMass(120.12794); setCharge(1); setCOOHpKa(2.09); setNHHpKa(9.10);   setSidechainPKa(-1);    break;
+            case 'C':   setName("Cysteine");      setMass(122.16794); setCharge(1); setCOOHpKa(2.05); setNHHpKa(10.25);  setSidechainPKa(8.00);  break;
             default:    throw new AminoException("Incorrect symbol for amino acid = "
                         + code);
         }

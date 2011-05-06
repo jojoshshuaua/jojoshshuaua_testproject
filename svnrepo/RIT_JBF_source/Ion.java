@@ -18,12 +18,10 @@ import java.util.ArrayList;
 
 public class Ion extends ArrayList<SpecAminoAcid> {
 
-    double totalMass;
-    // totalCharge starts at 1 because all ions will have at least a charge of 1
-    // due to the trailing amino group.
-    int totalCharge = 1;
-    double hits;
-    int xCoordinate;
+    double totalMass = 0;
+    int totalCharge = 0;
+    double hits = 0;
+    int xCoordinate = 0;
 
     /**
      * Adds the SpecAminoAcid to the end of the Ion. Ion adds its mass and charge
@@ -35,8 +33,16 @@ public class Ion extends ArrayList<SpecAminoAcid> {
     @Override
     public boolean add(SpecAminoAcid a) {
         super.add(a);
-        setMass(totalMass + a.getMass());
-        setCharge(totalCharge + a.getCharge());
+        if(this.size() > 0) {
+            // subtract the mass in Daltons of OH group if the chain is not empty
+            setMass(totalMass - 17.00734);
+        }
+        // Add the mass of the new amino acid, minus the weight in Daltons of
+        // two hydrogens.
+        setMass(totalMass + a.getMass() - 2.01588);
+        // Add the charge of the amino acid, minus one positive charge to
+        // represent the new amino acid no longer having a positive amino group.
+        setCharge(totalCharge + a.getCharge() - 1);
         return true;
     }
 

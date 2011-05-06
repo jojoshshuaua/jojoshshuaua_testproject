@@ -158,7 +158,7 @@ public class OutputGraphGUI extends JPanel implements MouseListener {
         if(peakLines != null) {
             for(Ion ion : peakLines) {
                 if(ion.getXCoordinate()+ 2 > x && ion.getXCoordinate() - 2 < x) {
-                    System.out.println(ion.getMassChargeRatio());
+                    System.out.println(ion.getMass());
                 }
             }
         }
