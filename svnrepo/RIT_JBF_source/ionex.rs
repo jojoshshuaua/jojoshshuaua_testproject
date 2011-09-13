@@ -1,4 +1,0 @@
-ImageCanvas
-CProtein
-ionex
-proteinFile

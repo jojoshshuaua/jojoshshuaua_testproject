@@ -17,8 +17,7 @@ public class JBioFrameworkSwingVersion extends JFrame {
     private JTabbedPane tabbedPane;
     private Electro2D electro2D;
     private MainPanelGUI spectrometer;
-    private IonexView ionex;
-
+    
     public static void main(String[] args) {
         JBioFrameworkSwingVersion jbfSwing = new JBioFrameworkSwingVersion();
     }
@@ -31,13 +30,11 @@ public class JBioFrameworkSwingVersion extends JFrame {
 
         electro2D = new Electro2D();
         spectrometer = new MainPanelGUI();
-        ionex = new IonexView();
-
+        
         tabbedPane = new JTabbedPane();
 
         tabbedPane.addTab("Electro2D", electro2D);
         tabbedPane.addTab("Mass Spectrometer", spectrometer);
-        tabbedPane.addTab("Ion Exchange", ionex);
 
         add(tabbedPane);
 

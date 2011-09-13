@@ -19,7 +19,7 @@ public class Trypsin extends Protease {
     /**
      * The cut method takes an input sequence and cuts it in to different Strings
      * at points dependent on the type of Protease using the method. It uses
-     * the makeIon method to turn the ArrayList of collectd characters in to
+     * the makeIon method to turn the ArrayList of collected characters in to
      * a String.
      *
      * @param sequence String sequence representing an amino acid chain.

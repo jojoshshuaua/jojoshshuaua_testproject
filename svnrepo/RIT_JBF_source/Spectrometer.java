@@ -2,7 +2,7 @@
  * This class repsonds when a user wishes to run a sequence. After error checking
  * the sequence, Spectrometer retrieves the protease the user wants to cut with
  * and directs it to chop up the sequence. The sequences are then given to Converter
- * to be turned in to instances of the Ion class. Each instance's mass charge
+ * to be turned into instances of the Ion class. Each instance's mass charge
  * ratio and intensity is turned in to a two element array of doubles and given
  * to the outputGraph to be displayed to the user.
  *

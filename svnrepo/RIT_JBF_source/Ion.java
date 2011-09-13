@@ -33,16 +33,18 @@ public class Ion extends ArrayList<SpecAminoAcid> {
     @Override
     public boolean add(SpecAminoAcid a) {
         super.add(a);
-        if(this.size() > 0) {
-            // subtract the mass in Daltons of OH group if the chain is not empty
-            setMass(totalMass - 17.00734);
+        // add the mass and charge of the amino acid to the ion
+        setMass(totalMass + a.getMass());
+        setCharge(totalCharge + a.getCharge());
+        // if this is the second or greater amino acid added to the chain;
+        if(this.size() > 1) {
+            // subtract the mass in Daltons of H2O as the amino acids dehydrate
+            // together to form the chain
+            setMass(totalMass - 18.01528);
+            // subtract one charge to signify the added amino acid no longer has
+            // a positive amino group.
+            setCharge(totalCharge - 1);
         }
-        // Add the mass of the new amino acid, minus the weight in Daltons of
-        // two hydrogens.
-        setMass(totalMass + a.getMass() - 2.01588);
-        // Add the charge of the amino acid, minus one positive charge to
-        // represent the new amino acid no longer having a positive amino group.
-        setCharge(totalCharge + a.getCharge() - 1);
         return true;
     }
 
