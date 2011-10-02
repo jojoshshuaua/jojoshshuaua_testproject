@@ -52,12 +52,15 @@ public class Spectrometer {
                 protease = new Trypsin();
             }
 
-            // Begin sequencing.
+            // Begin sequencing. Each fragment must have a charge of one and
+            // only one.
             ArrayList<Ion> ions = new ArrayList<Ion>();
             try {
                 ArrayList<String> ionStrings = protease.cut(sequence);
                 for (String ion : ionStrings) {
-                    ions.add(Converter.convert(ion));
+                    Ion newIon = Converter.convert(ion);
+                    newIon.setCharge(1);
+                    ions.add(newIon);
                 }
             } catch(ProteaseException ex) {
                 System.out.println(ex.getMessage());
@@ -81,6 +84,7 @@ public class Spectrometer {
 
             //Have outputGraph draw the peaks.
             outputGraph.setPeaks(ions, mostHits);
+            
         }
 
     }

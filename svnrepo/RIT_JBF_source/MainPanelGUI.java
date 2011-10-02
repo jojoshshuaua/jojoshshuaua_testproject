@@ -3,8 +3,6 @@
  * the JBioFramework program interface. It holds the main user interface for
  * the Spectrometer simulation.
  *
- * version 2
- * NOTE: Update to Version 3!
  */
 
 /**
@@ -30,21 +28,22 @@ public class MainPanelGUI extends JPanel {
     private String[] proteaseChoices = {"Trypsin", "Chymotrypsin"};
     private JTextArea inputArea;
     private JComboBox proteaseBox;
+    private TandemGraphGUI tandemGraph;
+    private JLabel infoScreen;
     private OutputGraphGUI outputGraph;
-
+    
     /**
-     * The constructor uses a GridBagLayout to arrange the five different elements
-     * of the GUI. TO FIX: The last element in the x = 0 column will be dragged downward
-     * when the window is resized, but the other elements in its column stay put
-     * where they're supposed to. Figure out how to get the runButton to stay right
-     * below the other elements.
+     * The constructor uses a GridBagLayout to arrange the eight different
+     * elements of the GUI- the label explaining the input box, the input box,
+     * the label OR, the button to load a sequence, the protease selection
+     * drop down box, the info label, the big graph and the small graph.
      */
     public MainPanelGUI() {
         super();
         GridBagLayout grid = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
         setLayout(grid);
-        constraints.insets = new Insets(10, 10, 10, 10);
+        constraints.insets = new Insets(5, 5, 5, 5);
 
         JLabel inputLabel = new JLabel("Input protein sequence to be analyzed: ");
         constraints.gridx = 0;
@@ -70,30 +69,54 @@ public class MainPanelGUI extends JPanel {
         add(loadButton);
 
         JLabel proteaseLabel = new JLabel("Select protease: ");
-        constraints.gridy = 3;
+        constraints.gridy = 4;
         grid.setConstraints(proteaseLabel, constraints);
         add(proteaseLabel);
 
         proteaseBox = new JComboBox(proteaseChoices);
-        constraints.gridy = 4;
+        constraints.gridy = 5;
         grid.setConstraints(proteaseBox, constraints);
         add(proteaseBox);
 
         RunButton runButton = new RunButton();
-        constraints.gridy = 5;
+        constraints.gridy = 6;
         grid.setConstraints(runButton, constraints);
         add(runButton);
 
-        outputGraph = new OutputGraphGUI();
+        infoScreen = new JLabel("<html> Mass: N/A <P> <P> Charge: N/A <P> <P>");
+        constraints.gridy = 7;
+        constraints.fill = GridBagConstraints.BOTH;
+        grid.setConstraints(infoScreen, constraints);
+        add(infoScreen);
+
+        tandemGraph = new TandemGraphGUI();
         constraints.gridy = 0;
         constraints.gridx = 1;
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridheight = GridBagConstraints.REMAINDER;
-        constraints.weightx = 1.0;
+        constraints.gridheight = 7;
         constraints.weighty = 1.0;
+        constraints.weightx = 1.0;
+        grid.setConstraints(tandemGraph, constraints);
+        add(tandemGraph);
+
+        outputGraph = new OutputGraphGUI(this);
+        constraints.gridy = 7;
+        constraints.gridheight = 1;
         grid.setConstraints(outputGraph, constraints);
         add(outputGraph);
 
+    }
+
+    /**
+     * runTandem changes the information displayed in the infoScreen Jlabel
+     * when a user clicks on a peak in the OutputGraphGUI. It also alerts
+     * TandemGraphGUI that there is peptide sequencing to be done.
+     *
+     * @param ion The ion the user selected for peptide sequencing.
+     */
+    public void runTandem(Ion ion) {
+        infoScreen.setText("<html> Mass: " + ion.getMass() + "<P> <P> Charge: " 
+                + ion.getCharge());
+        tandemGraph.drawSequencePeaks(ion);
     }
 
    /**

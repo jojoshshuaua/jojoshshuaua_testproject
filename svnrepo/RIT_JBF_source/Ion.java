@@ -7,7 +7,6 @@
  * knows its position on the OutputGraphGUI so the user can click on individual
  * peaks.
  * 
- * version 3
  */
 
 /**
@@ -24,8 +23,9 @@ public class Ion extends ArrayList<SpecAminoAcid> {
     int xCoordinate = 0;
 
     /**
-     * Adds the SpecAminoAcid to the end of the Ion. Ion adds its mass and charge
-     * to the appropriate instance variables.
+     * Adds the SpecAminoAcid to the end of the Ion. Ion adds its mass to 
+     * the appropriate instance variable. Charge of an Ion will always be one in
+     * peptide sequencing.
      *
      * @param a SpecAminoAcid to be added to the end of the Ion.
      * @return true if successfully added AmmionAcid.
@@ -33,17 +33,13 @@ public class Ion extends ArrayList<SpecAminoAcid> {
     @Override
     public boolean add(SpecAminoAcid a) {
         super.add(a);
-        // add the mass and charge of the amino acid to the ion
+        // add the mass of the amino acid to the ion
         setMass(totalMass + a.getMass());
-        setCharge(totalCharge + a.getCharge());
         // if this is the second or greater amino acid added to the chain;
         if(this.size() > 1) {
             // subtract the mass in Daltons of H2O as the amino acids dehydrate
             // together to form the chain
             setMass(totalMass - 18.01528);
-            // subtract one charge to signify the added amino acid no longer has
-            // a positive amino group.
-            setCharge(totalCharge - 1);
         }
         return true;
     }
@@ -58,7 +54,8 @@ public class Ion extends ArrayList<SpecAminoAcid> {
     }
 
     /**
-     * Used only by Ion in add method to keep a running total of the charge.
+     * Used only by Spectrometer in RunAnalysis to set the charge of the ion to
+     * one. Look for a better way to ensure that all ions only have a charge of one.
      *
      * @param charge New totalCharge.
      */
@@ -95,7 +92,8 @@ public class Ion extends ArrayList<SpecAminoAcid> {
     }
 
     /**
-     * Used to return the Ion's charge.
+     * Used to return the Ion's charge. Should always return one; think about
+     * removing this function.
      *
      * @return totalCharge.
      */
@@ -104,7 +102,8 @@ public class Ion extends ArrayList<SpecAminoAcid> {
     }
 
     /**
-     * Used to return the Ion's mass charge ratio.
+     * Used to return the Ion's mass charge ratio. Should always just be mass
+     * over one. Think about removing this method.
      *
      * @return massChargeRatio.
      */
