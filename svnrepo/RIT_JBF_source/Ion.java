@@ -1,11 +1,13 @@
 /*
  * This class extends ArrayList to function as a 'holder' for AminoAcids.
  * Ion knows the total mass and charge of itself, based on the AminoAcids
- * it contains, and calculates and sets its own mass/charge ratio. The variable
- * hits is set by Spectrometer as it counts how many of each type of ion it has.
- * Hits is used to determine the ion's intensity on the OutputGraphGUI. Ion also
- * knows its position on the OutputGraphGUI so the user can click on individual
- * peaks.
+ * it contains, and calculates and sets its own mass/charge ratio. Ion also 
+ * knows the color it should be when displayed on a graph (black for initial
+ * fragmetnation, blue for b fragments and red for y fragmetns in sequencing.
+ * The variable hits is set by Spectrometer as it counts how many of each type
+ * of ion it has. Hits is used to determine the ion's intensity on the
+ * OutputGraphGUI and TandemGraphGUI. Ion also knows its position on the
+ * OutputGraphGUI and TandemGraphGUI so the user can click on individual peaks.
  * 
  */
 
@@ -14,6 +16,7 @@
  * @author Amanda Fisher
  */
 import java.util.ArrayList;
+import java.awt.Color;
 
 public class Ion extends ArrayList<SpecAminoAcid> {
 
@@ -21,6 +24,7 @@ public class Ion extends ArrayList<SpecAminoAcid> {
     int totalCharge = 0;
     double hits = 0;
     int xCoordinate = 0;
+    Color color = Color.BLACK;
 
     /**
      * Adds the SpecAminoAcid to the end of the Ion. Ion adds its mass to 
@@ -45,11 +49,14 @@ public class Ion extends ArrayList<SpecAminoAcid> {
     }
 
     /**
-     * Used only by Ion in add method to keep a running total of the mass.
+     * Used by Ion in add method to keep a running total of the mass, and by
+     * TandemGraphGUI to adjust the molecular weight of an ion after
+     * sequencing fragmentation (single H gets taken away/put on depending on
+     * if it is a b or y fragment).
      *
      * @param mass New totalMass.
      */
-    private void setMass(double mass) {
+    public void setMass(double mass) {
         totalMass = mass;
     }
 
@@ -129,4 +136,22 @@ public class Ion extends ArrayList<SpecAminoAcid> {
         return xCoordinate;
     }
 
+    /**
+     * Used by TandemGraphGUI to set b fragments to blue and y fragments to red.
+     *
+     * @param c desired color for the Ion's peak on a graph
+     */
+    public void setColor(Color c) {
+        color = c;
+    }
+
+    /**
+     * Used by TandemGraphGUI to draw the peaks on its graph with the
+     * appropriate color coding for b and y fragments.
+     *
+     * @return color this Ion's peak should be on a graph
+     */
+    public Color getColor() {
+        return color;
+    }
 }

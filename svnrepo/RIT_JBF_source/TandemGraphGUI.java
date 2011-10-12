@@ -25,6 +25,8 @@ public class TandemGraphGUI extends JPanel {
     int startingPoint = 0;
 
     private ArrayList<Ion> peakLines;
+    private boolean blueBs = true;
+    private boolean redYs = true;
 
     /**
      * paintComponent is overridden from the JComponent class to allow
@@ -81,7 +83,10 @@ public class TandemGraphGUI extends JPanel {
             g.drawString(markNumber, xStart-25, yPos+5);
         }
 
-        drawPeaks(g);
+        if (peakLines != null) {
+            drawPeaks(g);
+            drawArrows(g);
+        }
     }
 
     /**
@@ -112,34 +117,44 @@ public class TandemGraphGUI extends JPanel {
      */
     public void drawSequencePeaks(Ion ion) {
         peakLines = new ArrayList<Ion>();
-        // First, make the b-fragment ions.
-        Ion bIon;
-        for (int i = 0; i < ion.size(); i++) {
-            bIon = new Ion();
-            for (int j = 0; j < i; j++) {
-                bIon.add(ion.get(j));
+        // First, make the b-fragment ions if the user wants them displayed.
+        if(blueBs) {
+            Ion bIon;
+            for (int i = 0; i < ion.size(); i++) {
+                bIon = new Ion();
+                for (int j = 0; j < i; j++) {
+                    bIon.add(ion.get(j));
+                }
+                bIon.add(ion.get(i));
+                bIon.setMass(bIon.getMass() - 17.00734);
+                bIon.setCharge(1);
+                bIon.setColor(Color.BLUE);
+                peakLines.add(bIon);
             }
-            bIon.add(ion.get(i));
-            bIon.setCharge(1);
-            peakLines.add(bIon);
         }
 
-        // Next, make the y-fragment ions.
-        Ion yIon;
-        for (int i = ion.size()-1; i > -1; i--) {
-            yIon = new Ion();
-            for (int j = ion.size()-1; j > i; j--) {
-                yIon.add(ion.get(j));
+        // Next, make the y-fragment ions if the user wants them displayed
+        if(redYs) {
+            Ion yIon;
+            for (int i = ion.size()-1; i > -1; i--) {
+                yIon = new Ion();
+                for (int j = ion.size()-1; j > i; j--) {
+                    yIon.add(ion.get(j));
+                }
+                yIon.add(ion.get(i));
+                yIon.setMass(yIon.getMass() + 1.00794);
+                yIon.setCharge(1);
+                yIon.setColor(Color.RED);
+                peakLines.add(yIon);
             }
-            yIon.add(ion.get(i));
-            yIon.setCharge(1);
-            peakLines.add(yIon);
         }
-
-        // Resize the x axis.
-        resizeXAxis();
+        if (!peakLines.isEmpty()) {
+            // Resize the x axis.
+            resizeXAxis();
+        }
         // Finally,  put the ions on the graph.
         repaint();
+        
     }
 
     /**
@@ -148,7 +163,6 @@ public class TandemGraphGUI extends JPanel {
      * @param g Used like a paintbrush to draw the lines.
      */
     public void drawPeaks(Graphics g) {
-        g.setColor(Color.BLACK);
         int xPos;
         int yPos;
         if (peakLines != null) {
@@ -163,6 +177,7 @@ public class TandemGraphGUI extends JPanel {
                 // even.
                 yPos = (int)(yAxisStartingPoint + yAxisHeight - yAxisHeight);
                 ion.setXCoordinate(xPos);
+                g.setColor(ion.getColor());
                 g.drawLine(xPos, yAxisStartingPoint + yAxisHeight, xPos, yPos);
             }
         }
@@ -191,7 +206,7 @@ public class TandemGraphGUI extends JPanel {
 
         // Determine the numerical separation between the hash marks
         startingPoint = (int)smallestme - 1;
-        startingPoint = startingPoint - (startingPoint % 5);
+        startingPoint = startingPoint - (startingPoint % 5) - 10;
         int end = (int)biggestme + 1;
         int deltame = end - startingPoint;
         // Make sure the numerical separation is always at least 1.
@@ -204,4 +219,103 @@ public class TandemGraphGUI extends JPanel {
 
     }
 
+    /**
+     * paintComponent calls drawArrows after drawPeaks to draw the informative
+     * arrows between peaks of b fragements and y fragments that display the
+     * difference in those peaks' molecular weights.
+     * 
+     * @param g
+     */
+    private void drawArrows(Graphics g) {
+        int firstX;
+        double firstME;
+        int secondX = -1; // secondX and secondME are reset to -1 at the end
+        double secondME = -1; // of the for loop to keep the code from trying
+        int xDifference;  // to access an element past the end of the arrayList.
+        double meDifference;
+
+        int arrowFirstStart; // The arrows will have a gap in their middle
+        int arrowFirstEnd; // where the difference in m/e's will be written
+        int arrowSecondStart;
+        int arrowSecondEnd;
+        int height;
+
+        for(int i = 0; i < peakLines.size(); i++) {
+            firstX = peakLines.get(i).getXCoordinate();
+            firstME = peakLines.get(i).getMassChargeRatio();
+            for(int j = i+1; j < peakLines.size(); j++) {
+                // Only draw an arrow between peaks of the same color
+                if(peakLines.get(j).getColor() == peakLines.get(i).getColor()) {
+                    secondX = peakLines.get(j).getXCoordinate();
+                    secondME = peakLines.get(j).getMassChargeRatio();
+                    break; // only go until you find the next ion with the same color
+                }
+            }
+            // Only continue onward if it actually found a second peak of the same color
+            if(secondX != -1 && secondME != -1) {
+                xDifference = secondX - firstX;
+                arrowFirstStart = firstX + 2;
+                arrowFirstEnd = firstX + (xDifference/2) - 15;
+                arrowSecondStart = secondX - (xDifference/2) + 15;
+                arrowSecondEnd = secondX - 2;
+                meDifference = secondME - firstME;
+
+                // Draw the lines at different heights according to their colors
+                if(peakLines.get(i).getColor() == Color.BLUE) {
+                    height = yAxisStartingPoint +(int)(yAxisHeight *.05);
+                    g.setColor(Color.BLUE);
+                } else {
+                    height = yAxisStartingPoint +(int)(yAxisHeight *.25);
+                    g.setColor(Color.RED);
+                }
+                // Draw the triangle 'arrows'
+                int[] xArray = {arrowFirstStart + 3, arrowFirstStart, arrowFirstStart +3};
+                int[] yArray = {height - 3, height, height +3};
+                g.fillPolygon(xArray, yArray, 3);
+                xArray[0] = arrowSecondEnd - 3;
+                xArray[1] = arrowSecondEnd;
+                xArray[2] = arrowSecondEnd -3;
+                yArray[0] = height -3;
+                yArray[1] = height;
+                yArray[2] = height +3;
+                g.fillPolygon(xArray, yArray, 3);
+                // Draw the first part of the line
+                g.drawLine(arrowFirstStart, height, arrowFirstEnd, height);
+                // Draw the difference in molecular weights
+                String meString = String.valueOf(Math.round((float)meDifference));
+                if (meDifference < 100) {
+                    // Differentiate between big and small numbers to better
+                    // center them between the lines
+                    g.drawString(meString, arrowFirstEnd + 10, height + 5);
+                } else {
+                    g.drawString(meString, arrowFirstEnd + 5, height + 5);
+                }
+                // Draw the second part of the string
+                g.drawLine(arrowSecondStart, height, arrowSecondEnd, height);
+            }
+            // Reset secondX and secondME to -1 so it knows when it failed to
+            // find a second peak of the same color.
+            secondX = -1;
+            secondME = -1;
+        }
+    }
+
+    /**
+     * Used by MainPanelGUI's JCheckBoxes to toggle whether b fragments are seen.
+     * 
+     * @param state State of the check box.
+     */
+    public void setBlueBs(boolean state) {
+        blueBs = state;
+    }
+
+    /**
+     * Used by MainPanelGUI's JCheckBoxes to toggle whether y fragments are seen.
+     *
+     * @param state State of the check box.
+     */
+    public void setRedYs(boolean state) {
+        redYs = state;
+    }
 }
+

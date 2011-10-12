@@ -143,7 +143,7 @@ public class OutputGraphGUI extends JPanel implements MouseListener {
 
         // Determine the numerical separation between the hash marks
         startingPoint = (int)smallestme - 1;
-        startingPoint = startingPoint - (startingPoint % 5);
+        startingPoint = startingPoint - (startingPoint % 5) - 10;
         int end = (int)biggestme + 1;
         int deltame = end - startingPoint;
         // Make sure the numerical separation is always at least 1.

@@ -20,8 +20,11 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JCheckBox;
 
 public class MainPanelGUI extends JPanel {
 
@@ -29,8 +32,11 @@ public class MainPanelGUI extends JPanel {
     private JTextArea inputArea;
     private JComboBox proteaseBox;
     private TandemGraphGUI tandemGraph;
-    private JLabel infoScreen;
+    private JLabel massDisplay;
+    private ToggleFragmentButton blueBs;
+    private ToggleFragmentButton redYs;
     private OutputGraphGUI outputGraph;
+    private Ion ion;
     
     /**
      * The constructor uses a GridBagLayout to arrange the eight different
@@ -83,11 +89,20 @@ public class MainPanelGUI extends JPanel {
         grid.setConstraints(runButton, constraints);
         add(runButton);
 
-        infoScreen = new JLabel("<html> Mass: N/A <P> <P> Charge: N/A <P> <P>");
+        massDisplay = new JLabel("<html> Mass: N/A <P>");
         constraints.gridy = 7;
-        constraints.fill = GridBagConstraints.BOTH;
-        grid.setConstraints(infoScreen, constraints);
-        add(infoScreen);
+        grid.setConstraints(massDisplay, constraints);
+        add(massDisplay);
+
+        blueBs = new ToggleFragmentButton("B fragments", true);
+        constraints.gridy = 8;
+        grid.setConstraints(blueBs, constraints);
+        add(blueBs);
+
+        redYs = new ToggleFragmentButton("Y fragments", true);
+        constraints.gridy = 9;
+        grid.setConstraints(redYs, constraints);
+        add(redYs);
 
         tandemGraph = new TandemGraphGUI();
         constraints.gridy = 0;
@@ -95,12 +110,13 @@ public class MainPanelGUI extends JPanel {
         constraints.gridheight = 7;
         constraints.weighty = 1.0;
         constraints.weightx = 1.0;
+        constraints.fill = GridBagConstraints.BOTH;
         grid.setConstraints(tandemGraph, constraints);
         add(tandemGraph);
 
         outputGraph = new OutputGraphGUI(this);
         constraints.gridy = 7;
-        constraints.gridheight = 1;
+        constraints.gridheight = 3;
         grid.setConstraints(outputGraph, constraints);
         add(outputGraph);
 
@@ -113,9 +129,9 @@ public class MainPanelGUI extends JPanel {
      *
      * @param ion The ion the user selected for peptide sequencing.
      */
-    public void runTandem(Ion ion) {
-        infoScreen.setText("<html> Mass: " + ion.getMass() + "<P> <P> Charge: " 
-                + ion.getCharge());
+    public void runTandem(Ion selected) {
+        ion = selected;
+        massDisplay.setText("<html> Mass: " + ion.getMass());
         tandemGraph.drawSequencePeaks(ion);
     }
 
@@ -182,4 +198,45 @@ public class MainPanelGUI extends JPanel {
 
     } // End of RunButton
 
+    /**
+     * Inner class that repaints the TandemGraphGUI when the user clicks on it.
+     */
+    private class ToggleFragmentButton extends JCheckBox implements ItemListener {
+
+        /**
+         * Constructor passes the String to be displayed on the button to
+         * JCheckBox's constructor and registers itself as its own actionListener.
+         */
+        public ToggleFragmentButton(String text, boolean state) {
+            super(text, state);
+            addItemListener(this);
+        }
+
+        /**
+         * The actionPerformed method is called when the user clicks on the button.
+         * It repaints TandemGraphGUI.
+         *
+         * @param e Unused.
+         */
+        public void itemStateChanged(ItemEvent e) {
+            Object source = e.getItemSelectable();
+            if (source == blueBs) {
+                if (e.getStateChange() == ItemEvent.DESELECTED) {
+                    tandemGraph.setBlueBs(false);
+                } else {
+                    tandemGraph.setBlueBs(true);
+                }
+            } else {
+                if (e.getStateChange() == ItemEvent.DESELECTED) {
+                    tandemGraph.setRedYs(false);
+                } else {
+                    tandemGraph.setRedYs(true);
+                }
+            }
+            if(ion != null) {
+                tandemGraph.drawSequencePeaks(ion);
+            }
+        }
+
+    } // End of FragmentToggleButton
 }

@@ -6,8 +6,6 @@
  * ratio and intensity is turned in to a two element array of doubles and given
  * to the outputGraph to be displayed to the user.
  *
- * version 2
- * NOTE: Update to version 3!
  */
 
 /**

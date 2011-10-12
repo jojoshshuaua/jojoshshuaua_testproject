@@ -3,7 +3,6 @@
  * can possess. The instance variables assume that the amino acid in question
  * is fully protenated. NHHCHRCOOH is the assumed state of each individual residue.
  *
- * version 3
  *  ** base masses of amino acids in daltons obtained from
  *     http://www.encorbio.com/protocols/Prot-MW.htm on 5/4/2011. Amino acids
  *     with an extra charge were given an extra 1.00774 Da for hydrogen
