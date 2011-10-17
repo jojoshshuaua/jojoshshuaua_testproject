@@ -6,11 +6,17 @@
  *
  * @author Jill Zapoticznyj
  * @author Adam Bazinet
+ *
+ *
+ * 10/17/2011: Added functionality to let a protein's sequence be given to the
+ * tandem mass spec simulation. @author Amanda Fisher
  */
 
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ProteinFrame extends JFrame {
 
@@ -140,12 +146,32 @@ public class ProteinFrame extends JFrame {
         searchPanel.add(blstSearch);
         searchPanel.add(search);
         searchPanel.add(swsSearch);
+        searchPanel.add(new sendToSpec());
         this.setLayout(new BorderLayout());
         this.add(proteinInfoPanel, BorderLayout.NORTH);
         this.add(searchPanel, BorderLayout.CENTER);
 
         pack();
-        setSize(380, 150);
+        //setSize(420, 150);
+    }
+
+    private class sendToSpec extends JButton implements ActionListener {
+        public sendToSpec() {
+            super("Run Mass Spectrum");
+            addActionListener(this);
+        }
+
+        /**
+         * The actionPerformed method is called when the user clicks on the button.
+         * It begins the simulation.
+         *
+         * @param e Unused.
+         */
+        public void actionPerformed(ActionEvent e) {
+            JTextArea input = MainPanelGUI.getInputArea();
+            input.setText(sequenceString);
+            JOptionPane.showMessageDialog(null, "Protein sequence sent to mass spectrometer.");
+        }
     }
 
 }

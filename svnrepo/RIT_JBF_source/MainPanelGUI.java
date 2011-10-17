@@ -25,11 +25,12 @@ import java.awt.event.ItemEvent;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JCheckBox;
+import java.text.DecimalFormat;
 
 public class MainPanelGUI extends JPanel {
 
     private String[] proteaseChoices = {"Trypsin", "Chymotrypsin"};
-    private JTextArea inputArea;
+    private static JTextArea inputArea; // static so ProteinFrame can interact with it.
     private JComboBox proteaseBox;
     private TandemGraphGUI tandemGraph;
     private JLabel massDisplay;
@@ -131,7 +132,9 @@ public class MainPanelGUI extends JPanel {
      */
     public void runTandem(Ion selected) {
         ion = selected;
-        massDisplay.setText("<html> Mass: " + ion.getMass());
+        DecimalFormat massFormat = new DecimalFormat("##.##");
+        String mass = massFormat.format(ion.getMass());
+        massDisplay.setText("<html> Mass: " + mass);
         tandemGraph.drawSequencePeaks(ion);
     }
 
@@ -239,4 +242,15 @@ public class MainPanelGUI extends JPanel {
         }
 
     } // End of FragmentToggleButton
+
+    /**
+     * The ProteinFrame class from the Electro2D simulation of JBioFramework
+     * calls this to set the input area's text to the sequence of a protein the
+     * user clicked on in the gel canvas.
+     *
+     * @return The JTextArea that holds a protein's sequence.
+     */
+    public static JTextArea getInputArea() {
+        return inputArea;
+    }
 }
