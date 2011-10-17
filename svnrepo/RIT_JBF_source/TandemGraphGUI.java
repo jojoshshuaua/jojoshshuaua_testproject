@@ -238,7 +238,7 @@ public class TandemGraphGUI extends JPanel {
         int arrowFirstEnd; // where the difference in m/e's will be written
         int arrowSecondStart;
         int arrowSecondEnd;
-        int height;
+        int lineHeight;
 
         for(int i = 0; i < peakLines.size(); i++) {
             firstX = peakLines.get(i).getXCoordinate();
@@ -262,42 +262,92 @@ public class TandemGraphGUI extends JPanel {
 
                 // Draw the lines at different heights according to their colors
                 if(peakLines.get(i).getColor() == Color.BLUE) {
-                    height = yAxisStartingPoint +(int)(yAxisHeight *.05);
+                    lineHeight = yAxisStartingPoint +(int)(yAxisHeight *.05);
                     g.setColor(Color.BLUE);
                 } else {
-                    height = yAxisStartingPoint +(int)(yAxisHeight *.25);
+                    lineHeight = yAxisStartingPoint +(int)(yAxisHeight *.25);
                     g.setColor(Color.RED);
                 }
                 // Draw the triangle 'arrows'
                 int[] xArray = {arrowFirstStart + 3, arrowFirstStart, arrowFirstStart +3};
-                int[] yArray = {height - 3, height, height +3};
+                int[] yArray = {lineHeight - 3, lineHeight, lineHeight +3};
                 g.fillPolygon(xArray, yArray, 3);
                 xArray[0] = arrowSecondEnd - 3;
                 xArray[1] = arrowSecondEnd;
                 xArray[2] = arrowSecondEnd -3;
-                yArray[0] = height -3;
-                yArray[1] = height;
-                yArray[2] = height +3;
+                yArray[0] = lineHeight -3;
+                yArray[1] = lineHeight;
+                yArray[2] = lineHeight +3;
                 g.fillPolygon(xArray, yArray, 3);
                 // Draw the first part of the line
-                g.drawLine(arrowFirstStart, height, arrowFirstEnd, height);
+                g.drawLine(arrowFirstStart, lineHeight, arrowFirstEnd, lineHeight);
                 // Draw the difference in molecular weights
                 String meString = String.valueOf(Math.round((float)meDifference));
                 if (meDifference < 100) {
                     // Differentiate between big and small numbers to better
                     // center them between the lines
-                    g.drawString(meString, arrowFirstEnd + 10, height + 5);
+                    g.drawString(meString, arrowFirstEnd + 10, lineHeight + 5);
+                    // Draw the letter of the residue that has that meDifference.
+                    String letter = retrieveLetter(meDifference);
+                    if (letter.equals("Q or K")) {
+                        // Differentiate between longer and shorter strings
+                        // to better center the letter under the meDifference.
+                        g.drawString(letter, arrowFirstEnd - 2, lineHeight + 20);
+                    } else if (letter.equals("I or L")){
+                        g.drawString(letter, arrowFirstEnd + 3, lineHeight + 20);
+                    } else {
+                        g.drawString(letter, arrowFirstEnd + 12, lineHeight + 20);
+                    }
                 } else {
-                    g.drawString(meString, arrowFirstEnd + 5, height + 5);
+                    g.drawString(meString, arrowFirstEnd + 5, lineHeight + 5);
+                    // Draw the letter of the residue that has that meDifference.
+                    String letter = retrieveLetter(meDifference);
+                    if (letter.equals("Q or K")) {
+                        // Differentiate between longer and shorter strings
+                        // to better center the letter under the meDifference.
+                        g.drawString(letter, arrowFirstEnd - 2, lineHeight + 20);
+                    } else if (letter.equals("I or L")){
+                        g.drawString(letter, arrowFirstEnd + 3, lineHeight + 20);
+                    } else {
+                        g.drawString(letter, arrowFirstEnd + 12, lineHeight + 20);
+                    }
                 }
                 // Draw the second part of the string
-                g.drawLine(arrowSecondStart, height, arrowSecondEnd, height);
+                g.drawLine(arrowSecondStart, lineHeight, arrowSecondEnd, lineHeight);
             }
             // Reset secondX and secondME to -1 so it knows when it failed to
             // find a second peak of the same color.
             secondX = -1;
             secondME = -1;
         }
+    }
+
+    private String retrieveLetter(double meDifference) {
+        int diff = (int) meDifference;
+        String letter;
+        switch(diff) {
+            case 71: letter = "A"; break;
+            case 156: letter = "R"; break;
+            case 114: letter = "N"; break;
+            case 115: letter = "D"; break;
+            case 103: letter = "C"; break;
+            case 129: letter = "E"; break;
+            case 57: letter = "G"; break;
+            case 137: letter = "H"; break;
+            case 131: letter = "M"; break;
+            case 147: letter = "F"; break;
+            case 97: letter = "P"; break;
+            case 87: letter = "S"; break;
+            case 101: letter = "T"; break;
+            case 186: letter = "W"; break;
+            case 163: letter = "Y"; break;
+            case 99: letter = "V"; break;
+            case 128: letter = "Q or K"; break;
+            case 113: letter = "I or L"; break;
+            default:
+                letter = "X";
+        }
+        return letter;
     }
 
     /**
