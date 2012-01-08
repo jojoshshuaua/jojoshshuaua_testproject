@@ -117,8 +117,8 @@ public class Electro2D extends JPanel implements ActionListener {
 	secondProt = new CompareProteinsButtonSwingVersion(this);
 	searchButton = new SearchProteinFieldButtonSwingVersion(this);
 	csvButton = new CSVButtonSwingVersion( this );
-	helpButton = new HelpButtonSwingVersion(this);
-	aboutButton = new AboutButtonSwingVersion(this);
+	helpButton = new HelpButtonSwingVersion();
+	aboutButton = new AboutButtonSwingVersion();
 	addProteinButton = new AddProteinButtonSwingVersion(this);
 	removeProteinButton = new RemoveProteinButton(this);
 	colorkey = new ColorKeyButtonSwingVersion();
@@ -482,60 +482,54 @@ public class Electro2D extends JPanel implements ActionListener {
     }
 
     /**
-     * Brings up the help.html page.
-     */
-    public void showHelpPage() {
-	
-	//create a URL object
-        //catch and display any errors that occurred while assigning
-        //information to the URL
-
-
-	 
-	 // if no errors occurred, open a new window and display the help page
-	File f = new File( "HTML Files" + File.separator + "Help" + File.separator + "help.html" );
-	try{
-	    BrowserLauncher.openURL( f.toURL().toString() );
-	} catch(IOException e ){System.err.println( e.getMessage());}
-    }
-
-    /**
-     * Brings up the about.html page.
-     */
-    public void showAboutPage() {
-	
-	 // open a new window and display the about page
-	     File f = new File( "HTML Files" + File.separator + "about.html" );
-	     try{
-		 BrowserLauncher.openURL( f.toURL().toString() );
-	     }catch(IOException e ){System.err.println( e.getMessage()); e.printStackTrace();}
-    }
-
-    /**
      * Brings up a SwissProt-TrEMBL search for the particular protein
      * id provided
      */
     public void showSwsSearchPage( String id ){
-	URL searchPage = null;
-	String searchID = "http\u003A\u002F\u002Fus.expasy.org/cgi-bin/sprot-"
-	    + "search-ful?makeWild=&SEARCH=" + id;  //the URL address of the 
-	                                            //search page
 
-	try{
-	    //try to assign the search id to searchPage
-	    searchPage = new URL( searchID );
+        BufferedReader buffer = null;
+        String searchID = new String();
+
+        // Read in the address of Swiss search from the Search Addresses csv file
+        // in the HTML files folder. It is on the third line in the csv file.
+
+        try {
+            FileInputStream fileStream = new FileInputStream("HTML Files/Search Addresses.csv");
+            InputStreamReader inputStream = new InputStreamReader(fileStream);
+            buffer = new BufferedReader(inputStream);
+        } catch (IOException ex) {
+            System.out.println("File not found.");
+        }
+
+        if(buffer != null) {
+            try {
+                String line = buffer.readLine();
+                line = buffer.readLine();
+                line = buffer.readLine();
+                String[] brokenLine = line.split(",");
+                searchID = new String(brokenLine[4] + id);
+                buffer.close();
+            } catch (IOException ex) {
+                System.out.println("Problem with reading buffer.");
+            }
+        }
+
+        URL searchPage = null;
+
+        // Now use the read-in address with the protein sequence as an
+        // extension as the URL of a webpage.
+
+        try{
+            searchPage = new URL( searchID );
 	}catch( MalformedURLException e ){
-	    // if an error occurs, display it to the user
 	    System.err.println( "The error was " + e );
 	}
-	
-	//if no errors occured, open the search page
-	if( searchPage != null ){
+
+        if( searchPage != null ){
 	    try{
-                BrowserLauncher.openURL( searchID );
-	    }catch(IOException e ){System.err.println( e.getMessage() );}
+	    BrowserLauncher.openURL( searchID );
+	    }catch(IOException e){System.err.println( e.getMessage());}
 	}
-	
     }
 
    /**
@@ -543,26 +537,49 @@ public class Electro2D extends JPanel implements ActionListener {
      * sequence provided
      */
     public void showBlastSearchPage( String seq ){
-	URL searchPage = null;
-	String searchID = "http\u003A\u002F\u002Fus.expasy.org/cgi-bin/blast."+
-	    "pl?sequence=" + seq;  //the URL address of the 
-	                                            //search page
 
-	try{
-	    //try to assign the search id to searchPage
-	    searchPage = new URL( searchID );
+        BufferedReader buffer = null;
+        String searchID = new String();
+
+        // Read in the address of Blast search from the Search Addresses csv file
+        // in the HTML files folder. It is on the second line in the csv file.
+
+        try {
+            FileInputStream fileStream = new FileInputStream("HTML Files/Search Addresses.csv");
+            InputStreamReader inputStream = new InputStreamReader(fileStream);
+            buffer = new BufferedReader(inputStream);
+        } catch (IOException ex) {
+            System.out.println("File not found.");
+        }
+
+        if(buffer != null) {
+            try {
+                String line = buffer.readLine();
+                line = buffer.readLine();
+                String[] brokenLine = line.split(",");
+                searchID = new String(brokenLine[4] + seq);
+                buffer.close();
+            } catch (IOException ex) {
+                System.out.println("Problem with reading buffer.");
+            }
+        }
+
+        URL searchPage = null;
+
+        // Now use the read-in address with the protein sequence as an
+        // extension as the URL of a webpage.
+
+        try{
+            searchPage = new URL( searchID );
 	}catch( MalformedURLException e ){
-	    // if an error occurs, display it to the user
 	    System.err.println( "The error was " + e );
 	}
-	
-	//if no errors occured, open the search page
-	if( searchPage != null ){
+
+        if( searchPage != null ){
 	    try{
 	    BrowserLauncher.openURL( searchID );
 	    }catch(IOException e){System.err.println( e.getMessage());}
 	}
-	
     }
 
     /**
@@ -570,7 +587,69 @@ public class Electro2D extends JPanel implements ActionListener {
      * id provided
      */
     public void showSearchPage( String id ){
-	
+
+        BufferedReader buffer = null;
+        String searchID = new String();
+
+        // Read in the address of GenBank search from the Search Addresses csv file
+        // in the HTML files folder. It is on the fifth line in the csv file.
+
+        try {
+            FileInputStream fileStream = new FileInputStream("HTML Files/Search Addresses.csv");
+            InputStreamReader inputStream = new InputStreamReader(fileStream);
+            buffer = new BufferedReader(inputStream);
+        } catch (IOException ex) {
+            System.out.println("File not found.");
+        }
+
+        if(buffer != null) {
+            try {
+                String line = buffer.readLine();
+                line = buffer.readLine();
+                line = buffer.readLine();
+                line = buffer.readLine();
+                line = buffer.readLine();
+                String[] brokenLine = line.split(",");
+
+                //get the name of the loaded file and figure out the extention
+                String filename = getLastFileLoaded();
+                String extention = filename.substring( filename.indexOf( "." ) + 1 );
+
+                // if the extention is .pdb, create the proper search string for the
+                // URL by searching for the name of the pdb file.
+                if(extention.equals("pdb")) {
+        	    id = filename.substring( 0, filename.indexOf( "." ) );
+                    searchID = new String(brokenLine[4]+ id);
+                }
+                else{
+        	    // otherwise, use the id passed to the method as the name for
+                    // the search.
+                    searchID = new String(brokenLine[5]+ id);
+                }
+                buffer.close();
+            } catch (IOException ex) {
+                System.out.println("Problem with reading buffer.");
+            }
+        }
+
+        URL searchPage = null;
+
+        // Now use the read-in address with the protein sequence as an
+        // extension as the URL of a webpage.
+
+        try{
+            searchPage = new URL( searchID );
+	}catch( MalformedURLException e ){
+	    System.err.println( "The error was " + e );
+	}
+
+        if( searchPage != null ){
+	    try{
+	    BrowserLauncher.openURL( searchID );
+	    }catch(IOException e){System.err.println( e.getMessage());}
+	}
+
+	/**
 	//create a URL object
 	URL searchPage = null;
 	String searchId = "";  //the name used in the search
@@ -611,6 +690,7 @@ public class Electro2D extends JPanel implements ActionListener {
 	    BrowserLauncher.openURL( searchId );
 	    }catch(IOException e ){System.err.println( e.getMessage() );}
 	}
+    **/
     }
 
     /**

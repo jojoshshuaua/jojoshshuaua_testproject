@@ -26,11 +26,18 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JCheckBox;
 import java.text.DecimalFormat;
+import javax.swing.JTextField;
+import javax.swing.JOptionPane;
 
 public class MainPanelGUI extends JPanel {
 
-    private String[] proteaseChoices = {"Trypsin", "Chymotrypsin"};
+    private String[] proteaseChoices = {"Trypsin", "Chymotrypsin", "Proteinase K",
+        "Thermolysin"};
+    private HelpButtonSwingVersion help;
+    private AboutButtonSwingVersion about;
     private static JTextArea inputArea; // static so ProteinFrame can interact with it.
+    private JTextField lowerRange;
+    private JTextField upperRange;
     private JComboBox proteaseBox;
     private TandemGraphGUI tandemGraph;
     private JLabel massDisplay;
@@ -50,65 +57,97 @@ public class MainPanelGUI extends JPanel {
         GridBagLayout grid = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
         setLayout(grid);
-        constraints.insets = new Insets(5, 5, 5, 5);
+        constraints.insets = new Insets(1, 5, 1, 5);
 
-        JLabel inputLabel = new JLabel("Input protein sequence to be analyzed: ");
+        JPanel infoButtonsPanel = new JPanel();
+        help = new HelpButtonSwingVersion();
+        about = new AboutButtonSwingVersion();
+        infoButtonsPanel.add(help);
+        infoButtonsPanel.add(about);
         constraints.gridx = 0;
         constraints.gridy = 0;
+        grid.setConstraints(infoButtonsPanel, constraints);
+        add(infoButtonsPanel);
+
+        JLabel inputLabel = new JLabel("Input protein sequence to be analyzed: ");
+        constraints.gridy = 1;
         grid.setConstraints(inputLabel, constraints);
         add(inputLabel);
 
         inputArea = new JTextArea(7, 20);
         inputArea.setLineWrap(true);
         JScrollPane scrollPane = new JScrollPane(inputArea);
-        constraints.gridy = 1;
+        constraints.gridy = 2;
         grid.setConstraints(scrollPane, constraints);
         add(scrollPane);
 
         JLabel orLabel = new JLabel("OR");
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         grid.setConstraints(orLabel, constraints);
         add(orLabel);
 
         LoadButton loadButton = new LoadButton();
-        constraints.gridy = 3;
+        constraints.gridy = 4;
         grid.setConstraints(loadButton, constraints);
         add(loadButton);
 
         JLabel proteaseLabel = new JLabel("Select protease: ");
-        constraints.gridy = 4;
+        constraints.gridy = 5;
         grid.setConstraints(proteaseLabel, constraints);
         add(proteaseLabel);
 
         proteaseBox = new JComboBox(proteaseChoices);
-        constraints.gridy = 5;
+        constraints.gridy = 6;
         grid.setConstraints(proteaseBox, constraints);
         add(proteaseBox);
 
+        JLabel selectRangeLabel = new JLabel("Enter m/e range: ");
+        constraints.gridy = 7;
+        grid.setConstraints(selectRangeLabel, constraints);
+        add(selectRangeLabel);
+
+        JPanel rangeSelectionUpperPanel = new JPanel();
+        lowerRange = new JTextField("0", 5);
+        JLabel lowerRangeLabel = new JLabel("Lower Limit: ");
+        rangeSelectionUpperPanel.add(lowerRangeLabel);
+        rangeSelectionUpperPanel.add(lowerRange);
+        constraints.gridy = 8;
+        grid.setConstraints(rangeSelectionUpperPanel, constraints);
+        add(rangeSelectionUpperPanel);
+
+        JPanel rangeSelectionLowerPanel = new JPanel();
+        upperRange = new JTextField("3000", 5);
+        JLabel upperRangeLabel = new JLabel("Upper Limit: ");
+        rangeSelectionLowerPanel.add(upperRangeLabel);
+        rangeSelectionLowerPanel.add(upperRange);
+        constraints.gridy = 9;
+        grid.setConstraints(rangeSelectionLowerPanel, constraints);
+        add(rangeSelectionLowerPanel);
+
         RunButton runButton = new RunButton();
-        constraints.gridy = 6;
+        constraints.gridy = 10;
         grid.setConstraints(runButton, constraints);
         add(runButton);
 
         massDisplay = new JLabel("<html> Mass: N/A <P>");
-        constraints.gridy = 7;
+        constraints.gridy = 11;
         grid.setConstraints(massDisplay, constraints);
         add(massDisplay);
 
         blueBs = new ToggleFragmentButton("B fragments", true);
-        constraints.gridy = 8;
+        constraints.gridy = 12;
         grid.setConstraints(blueBs, constraints);
         add(blueBs);
 
         redYs = new ToggleFragmentButton("Y fragments", true);
-        constraints.gridy = 9;
+        constraints.gridy = 13;
         grid.setConstraints(redYs, constraints);
         add(redYs);
 
         tandemGraph = new TandemGraphGUI();
         constraints.gridy = 0;
         constraints.gridx = 1;
-        constraints.gridheight = 7;
+        constraints.gridheight = 8;
         constraints.weighty = 1.0;
         constraints.weightx = 1.0;
         constraints.fill = GridBagConstraints.BOTH;
@@ -116,8 +155,8 @@ public class MainPanelGUI extends JPanel {
         add(tandemGraph);
 
         outputGraph = new OutputGraphGUI(this);
-        constraints.gridy = 7;
-        constraints.gridheight = 3;
+        constraints.gridy = 8;
+        constraints.gridheight = 6;
         grid.setConstraints(outputGraph, constraints);
         add(outputGraph);
 
@@ -252,5 +291,84 @@ public class MainPanelGUI extends JPanel {
      */
     public static JTextArea getInputArea() {
         return inputArea;
+    }
+
+    /**
+     * Called by OutputGraphGUI's setPeaks method to sort out which ion peaks to
+     * display based on the user specified m/e range.
+     * 
+     * @return The lower limit of the user selected range.
+     */
+    public double getLowerLimit() {
+        double lower;
+        if(lowerRange.getText().contains(",")) {
+            String noComma = lowerRange.getText();
+            int index = noComma.indexOf(",");
+            noComma = noComma.substring(0, index) +
+                        noComma.substring(index+1, noComma.length());
+            try {
+                lower = Double.valueOf(noComma);
+            } catch(NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Did not recognize Lower Limit as a number. Using default lower limit of 0.");
+                lowerRange.setText("0");
+                return 0;
+            }
+        } else {
+            try {
+                lower = Double.valueOf(lowerRange.getText());
+            } catch(NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Did not recognize Lower Limit as a number. Using default lower limit of 0.");
+                lowerRange.setText("0");
+                return 0;
+            }
+        }
+        if(lower < 0 || lower > 20000) {
+            lower = 0;
+            JOptionPane.showMessageDialog(null, "Lower Limit out of bounds (0 to 20,000). Set to default of 0.");
+            lowerRange.setText("0");
+        }
+        if(lower > getUpperLimit()) {
+            lower = 0;
+            JOptionPane.showMessageDialog(null, "Lower Limit is higher than Upper Limit. Set to default of 0.");
+            lowerRange.setText("0");
+        }
+        return lower;
+    }
+
+    /**
+     * Called by OutputGraphGUI's setPeaks method to sort out which ion peaks to
+     * display based on the user specified m/e range.
+     *
+     * @return The upper limit of the user selected range.
+     */
+    public double getUpperLimit() {
+        double upper;
+        if(upperRange.getText().contains(",")) {
+            String noComma = upperRange.getText();
+            int index = noComma.indexOf(",");
+            noComma = noComma.substring(0, index) +
+                        noComma.substring(index+1, noComma.length());
+            try {
+                upper = Double.valueOf(noComma);
+            } catch(NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Did not recognize Upper Limit as a number. Using default upper limit of 3000.");
+                upperRange.setText("3000");
+                return 0;
+            }
+        } else {
+            try {
+                upper = Double.valueOf(upperRange.getText());
+            } catch(NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Did not recognize Upper Limit as a number. Using default upper limit of 3000.");
+                upperRange.setText("3000");
+                return 3000;
+            }
+        }
+        if(upper < 0 || upper > 20000) {
+            upper = 3000;
+            JOptionPane.showMessageDialog(null, "Upper Limit out of bounds (0 to 20,000). Set to default of 3000.");
+            upperRange.setText("3000");
+        }
+        return upper;
     }
 }

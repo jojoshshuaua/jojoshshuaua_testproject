@@ -46,7 +46,8 @@ public class OutputGraphGUI extends JPanel implements MouseListener {
 
     /**
      * setPeaks is called by the Spectrometer class to tell OutputGraphGUI where
-     * to draw the lines that represent ion peaks.
+     * to draw the lines that represent ion peaks. setPeaks also uses the range
+     * entered by the user to select which peaks are displayed.
      *
      * @param pL ArrayList of two element double arrays where each array's first
      * entry is the peak's mass charge ratio, and the second entry is the peak's
@@ -55,9 +56,25 @@ public class OutputGraphGUI extends JPanel implements MouseListener {
      * ion occuring so intensity of each peak can be calculated.
      */
     public void setPeaks(ArrayList<Ion> pL, double mH) {
-        peakLines = pL;
-        mostHits = mH;
-        resizeXAxis();
+        double lowerLimit = mainPanel.getLowerLimit();
+        double upperLimit = mainPanel.getUpperLimit();
+
+        peakLines = new ArrayList<Ion>();
+
+        for(Ion ion : pL) {
+            if(ion.getMassChargeRatio() >= lowerLimit &&
+                    ion.getMassChargeRatio() <= upperLimit) {
+                peakLines.add(ion);
+            }
+        }
+
+        if(peakLines.isEmpty()) {
+            numericalDifference = (int)((upperLimit - lowerLimit)/15.00) + 1;
+            startingPoint = (int)lowerLimit;
+        } else {
+            mostHits = mH;
+            resizeXAxis();
+        }
         repaint();
     }
 

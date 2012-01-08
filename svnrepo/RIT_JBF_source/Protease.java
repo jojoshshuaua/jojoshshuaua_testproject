@@ -3,7 +3,6 @@
  * cutting a protein's sequence at specific points. Only method they are required
  * to have is cut.
  *
- * version 2
  */
 
 /**

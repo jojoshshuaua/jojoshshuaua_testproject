@@ -1,8 +1,7 @@
 /*
- * Chymotrypsin cuts a protein sequence at Tyrosin(Y), Tryptophan(W), or
+ * Chymotrypsin cuts a peptide sequence at Tyrosin(Y), Tryptophan(W), or
  * Phenylalanine(F).
  *
- * version 3
  */
 
 /**

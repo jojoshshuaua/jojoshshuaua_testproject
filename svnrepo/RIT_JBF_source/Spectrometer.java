@@ -44,6 +44,10 @@ public class Spectrometer {
                 protease = new Trypsin();
             } else if (proteaseChoice.equals("Chymotrypsin")) {
                 protease = new Chymotrypsin();
+            } else if (proteaseChoice.equals("Proteinase K")) {
+                protease = new ProteinaseK();
+            } else if (proteaseChoice.equals("Thermolysin")) {
+                protease = new Thermolysin();
             } else {
                 System.err.println("Did not recognize protease choice.");
                 System.err.println("Defaulting to Trypsin selection.");
@@ -58,7 +62,9 @@ public class Spectrometer {
                 for (String ion : ionStrings) {
                     Ion newIon = Converter.convert(ion);
                     newIon.setCharge(1);
-                    ions.add(newIon);
+                    if(newIon.getMass() != 0) {
+                        ions.add(newIon);
+                    }
                 }
             } catch(ProteaseException ex) {
                 System.out.println(ex.getMessage());
@@ -80,7 +86,7 @@ public class Spectrometer {
                 }
             }
 
-            //Have outputGraph draw the peaks.
+            // Have outputGraph draw the peaks.
             outputGraph.setPeaks(ions, mostHits);
             
         }
