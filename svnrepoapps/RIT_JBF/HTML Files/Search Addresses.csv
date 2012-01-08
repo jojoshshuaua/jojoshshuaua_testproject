@@ -1,0 +1,13 @@
+Site Name:,,Text on Button:,,Search Address:,
+Blast,,Blast Search,,http://us.expasy.org/cgi-bin/blast.pl?sequence=,
+Swiss,,Swiss Search,,http://www.uniprot.org/uniprot/?query=,
+,,,,PDB:,Other:
+GenBank,,GenBank Search,,http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=structure&cmd=search&term=,http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=protein&cmd=search&term=
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,http://us.expasy.org/cgi-bin/sprotsearch-ful?makeWild=&SEARCH=,
