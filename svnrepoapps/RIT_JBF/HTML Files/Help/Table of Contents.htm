@@ -1,22 +1,29 @@
 <html>
 
-<head><title>Table of Contents</title></head>
+<head>
+
+<title>Table of Contents</title>
+<SCRIPT LANGUAGE="JavaScript">
+function doSrch(){
+  parent.test="b";
+  parent.bodyframe.location.href="site-search-display.html"
+}
+</SCRIPT>
+
+</head>
 
 <body>
 
-<form action="http://www.google.com/cse" id="cse-search-box" target=bodyframe>
-  <div>
-    <input type="hidden" name="cx" value="partner-pub-3744574135711352:1463638204" />
-    <input type="hidden" name="ie" value="UTF-8" />
-    <input type="text" name="q" size="16" />
-    <input type="submit" name="sa" value="Search" />
-  </div>
-</form>
+<FORM NAME="searcher" onSubmit="doSrch();return false">
+<TR>
+<TD ALIGN=CENTER><B>Search Our Site For Topic Words</B>
+<P>Type Search Word Here: <INPUT TYPE="text" NAME="findword" VALUE="" SIZE=20>
+<INPUT TYPE="button" NAME="button" VALUE=" Search " onClick="doSrch();"></TD>
+</TR>
+</TABLE>
+</FORM>
 
-<script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script>
-
-
-<h4>Contents</h4>
+<h2>Contents</h2>
 
 <table>
 <tr>
