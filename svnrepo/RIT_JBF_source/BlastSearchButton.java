@@ -20,8 +20,8 @@ public class BlastSearchButton extends JButton implements ActionListener {
      * @param e - a reference to Electro2D
      * @param id - the string being searched for
      */
-    public BlastSearchButton( Electro2D e, String seq ) {
-        super("Blast Search");
+    public BlastSearchButton( Electro2D e, String seq, String text) {
+        super(text);
 	electro2D = e;
 	pro_sequence = seq;
 	this.addActionListener(this);

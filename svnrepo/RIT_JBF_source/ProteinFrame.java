@@ -17,6 +17,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.*;
 
 public class ProteinFrame extends JFrame {
 
@@ -69,11 +70,43 @@ public class ProteinFrame extends JFrame {
 	proteinFunction = electro2D.getFunctionbyTitle( proteinTitle );
 	proteinFunction = proteinFunction.trim();
 	
-	
+	// Create the text to be put on the search buttons by reading the csv
+        // file "SearchAddresses.csv".
+        String oneText = "";
+        String twoText = "";
+        String threeText = "";
+        BufferedReader buffer = null;
+        try {
+            FileInputStream fileStream = new FileInputStream("HTML Files/Search Addresses.csv");
+            InputStreamReader inputStream = new InputStreamReader(fileStream);
+            buffer = new BufferedReader(inputStream);
+        } catch (IOException ex) {
+            System.out.println("File not found.");
+        }
+
+        if(buffer != null) {
+            try {
+                String line = buffer.readLine();
+                line = buffer.readLine();
+                String[] brokenLine = line.split(",");
+                oneText = brokenLine[2];
+                line = buffer.readLine();
+                brokenLine = line.split(",");
+                twoText = brokenLine[2];
+                line = buffer.readLine();
+                line = buffer.readLine();
+                brokenLine = line.split(",");
+                threeText = brokenLine[2];
+                buffer.close();
+            } catch (IOException ex) {
+                System.out.println("Problem with reading buffer.");
+            }
+        }
+
 	// create a new BlastSearchButton based on the sequence of the protein
 	// whose name was provided
 	sequenceString = electro2D.getSequencebyTitle( proteinTitle );
-	blstSearch = new BlastSearchButton( electro2D, sequenceString );
+	blstSearch = new BlastSearchButton( electro2D, sequenceString, oneText);
 	
 	String fileName = electro2D.getLastFileLoaded();
 
@@ -93,7 +126,7 @@ public class ProteinFrame extends JFrame {
 		if( index != -1 ){
 			searchID = searchID.substring( index + 1 );
 		}
-	    search = new SearchProteinButton( electro2D, searchID );
+	    search = new SearchProteinButton( electro2D, searchID, twoText);
 	}
 	else if( index == -1 ){
 	    //if the protein is not from a fasta file...
@@ -103,13 +136,13 @@ public class ProteinFrame extends JFrame {
 		//...but from a protein databank file, the id is the protein
 		// title with the semicolon truncated
 		searchID = proteinTitle.substring( 0, index );
-		search = new SearchProteinButton( electro2D, searchID );
+		search = new SearchProteinButton( electro2D, searchID, twoText);
 	    }
 	    else {
 		//...or from a protein databank file, the id is the protein 
 		// title.
 		searchID = proteinTitle;
-		search = new SearchProteinButton( electro2D, searchID );
+		search = new SearchProteinButton( electro2D, searchID, twoText);
 	    }
 	}
 
@@ -118,14 +151,14 @@ public class ProteinFrame extends JFrame {
 	
 	if( proteinTitle.indexOf( "|" ) < 0 ){
 	    swsSearchID = proteinTitle;
-	    swsSearch = new SwissProtSearchButton( electro2D, swsSearchID );
+	    swsSearch = new SwissProtSearchButton( electro2D, swsSearchID, threeText);
 	}
 	else {
 	    swsSearchID = proteinTitle.substring( 4,
 				    proteinTitle.lastIndexOf( "|" ));
 	    swsSearchID = swsSearchID.substring(
 				    swsSearchID.lastIndexOf( "|" ) + 1 );
-	    swsSearch = new SwissProtSearchButton( electro2D, swsSearchID );
+	    swsSearch = new SwissProtSearchButton( electro2D, swsSearchID, threeText);
 	}
 
 

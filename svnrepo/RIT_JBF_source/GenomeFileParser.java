@@ -53,13 +53,19 @@ public class GenomeFileParser {
                 // Determine appropriate pK value for current AA
                 // If AA not acid or base, set to neutral
                 // and give default pK of 0
+
+                // pK values were obtained from Bjellqvist, B., Basse, B., Olsen, E.,
+                // Celis, J., Reference points for comparisons of two-dimensional
+                // maps of proteins from different human cell types defined in a
+                // pH scale where isoelectric points correlate with polypeptide
+                // compositions, Electrophoresis 1994, 15, 529-539.
                 switch ( pro.charAt( a ) ) {
                 case 'R': type = 'b'; pK = 12; break;
-                case 'D': type = 'a';pK=4.0; break;// pK = 4.05; break;
+                case 'D': type = 'a';pK=4.05; break;
                 case 'C': type = 'a'; pK = 9; break;
-                case 'E': type = 'a'; pK = 4.5; break;//pK = 4.45; break;
-                case 'H': type = 'b'; pK=6.4;break;//pK = 5.98; break;
-                case 'K': type = 'b'; pK=10.4;break;//pK = 10; break;
+                case 'E': type = 'a'; pK = 4.75; break;//pK = 4.45; break;
+                case 'H': type = 'b'; pK = 5.98; break;
+                case 'K': type = 'b'; pK= 10;break;
                 case 'Y': type = 'a'; pK = 10; break;
                 default : type = 'n'; pK = 0; break;
                 }

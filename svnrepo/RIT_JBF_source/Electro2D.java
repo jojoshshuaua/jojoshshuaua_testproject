@@ -23,7 +23,7 @@ import java.awt.Font;
 public class Electro2D extends JPanel implements ActionListener {
 
     private FileFrame fileFrame;          //pop up for loading file data
-    private ProteinListFrame proteinListFrame;       //pop up for displaying protein lists
+    private SingleProteinListFrame proteinListFrame;       //pop up for displaying protein lists
     private ProteinListButtonSwingVersion proteinListButton;
     
     /** components of the main applet **/
@@ -94,7 +94,7 @@ public class Electro2D extends JPanel implements ActionListener {
      */
     public Electro2D() {	
 
-	proteinListFrame = new ProteinListFrame( "Protein Lists", this);
+	proteinListFrame = new SingleProteinListFrame( "Protein Lists", this);
 	fileFrame = new FileFrame(this, 1);  //init frame
 	fileFrame2 = new FileFrame(this, 2);
 	fileFrame.setResizable(false);    //don't allow user to change size
@@ -140,7 +140,7 @@ public class Electro2D extends JPanel implements ActionListener {
 	piValues = new Vector();
         sequencesReady = false;
 
-	proteinListFrame = new ProteinListFrame( "Protein Lists", this);
+	proteinListFrame = new SingleProteinListFrame( "Protein Lists", this);
 	proteinListButton = new ProteinListButtonSwingVersion( this );
 
        /*
@@ -205,8 +205,11 @@ public class Electro2D extends JPanel implements ActionListener {
 
        JPanel thirdPanel = new JPanel();
        thirdPanel.setLayout(new GridLayout(1, 1, 0, 0));
-       thirdPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), "Choose Animation", TitledBorder.CENTER, TitledBorder.TOP));
-       thirdPanel.add(animationChooser);
+       JPanel innerPanel = new JPanel();
+       innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
+       thirdPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), "Current Animation", TitledBorder.CENTER, TitledBorder.TOP));
+       innerPanel.add(animationChooser);
+       thirdPanel.add(innerPanel);
        leftPanel.add(thirdPanel);
 
        JPanel fourthPanel = new JPanel();
@@ -219,7 +222,7 @@ public class Electro2D extends JPanel implements ActionListener {
 
        JPanel fifthPanel = new JPanel();
        fifthPanel.setLayout(new GridLayout(1, 1, 0, 0));
-       fifthPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), "Choose PH", TitledBorder.CENTER, TitledBorder.TOP));
+       fifthPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), "Choose pH", TitledBorder.CENTER, TitledBorder.TOP));
        fifthPanel.add(rangeChooser);
        leftPanel.add(fifthPanel);
 
@@ -241,7 +244,7 @@ public class Electro2D extends JPanel implements ActionListener {
 
        JPanel ninthPanel = new JPanel();
        ninthPanel.add(secondProt);
-       leftPanel.add(ninthPanel);
+       //leftPanel.add(ninthPanel); Removed compare protein functionality until it is useful.
 
        JPanel tenthPanel = new JPanel();
        tenthPanel.add(searchButton);
@@ -403,7 +406,7 @@ public class Electro2D extends JPanel implements ActionListener {
     public void setSDS(){
 
 	//chose the SDS-PAGE value in animationChooser
-	animationChooser.setSelectedItem( "SDS-PAGE" );
+	animationChooser.setText( "SDS-PAGE" );
     }
 
     /**
@@ -412,7 +415,7 @@ public class Electro2D extends JPanel implements ActionListener {
      */
     public void setIEF(){
 	//choose the IEF value in animationChooser
-	animationChooser.setSelectedItem( "IEF" );
+	animationChooser.setText( "IEF" );
     }
 
     /**
@@ -974,7 +977,7 @@ public class Electro2D extends JPanel implements ActionListener {
      * @return a string
      */
     public String getAnimationChoice(){
-	return (String) animationChooser.getSelectedItem();
+	return (String) animationChooser.getText();
     }
 
     /**
@@ -1191,7 +1194,10 @@ public class Electro2D extends JPanel implements ActionListener {
             sequenceTitles.clear();
             if(positionsOne.get(0) > -1) {
                 for(int x = 0; x < positionsOne.size(); x++) {
-                    sequenceTitles.add(copySequenceTitles.get(positionsOne.get(x)));
+                    Integer temp = positionsOne.get(x);
+                    Object next = copySequenceTitles.get(temp);
+                    sequenceTitles.add(next);
+                    //sequenceTitles.add(copySequenceTitles.get(positionsOne.get(x)));
                 }
             }
         }

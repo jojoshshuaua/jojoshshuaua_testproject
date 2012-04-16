@@ -5,13 +5,11 @@
  */
 import javax.swing.*;
 
-public class AnimationChooserSwingVersion extends JComboBox {
+public class AnimationChooserSwingVersion extends JLabel {
 
     public AnimationChooserSwingVersion() {
 
-        super();
-        addItem("IEF");
-	addItem("SDS-PAGE");
+        super("IEF");
 
     }
 

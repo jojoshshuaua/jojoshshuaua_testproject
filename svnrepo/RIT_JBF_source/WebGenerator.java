@@ -23,7 +23,7 @@ public class WebGenerator{
     private String maxPi;
     private String minPi;
     private static int searchVal = 0;
-    private final String bgColor = "\"36648B\"";
+    private final String bgColor = "\"FCFCFC\"";
     private final String openTab = "\u003C";
     private final String closeTab = "\u003E";
     private final String openTD = "\u003CTD\u003E";
