@@ -20,11 +20,11 @@ public class AboutButtonSwingVersion extends JButton implements ActionListener {
         // open a new window and display the about page
 	File f = new File( "HTML Files" + File.separator + "about.html" );
 	try{
-            BrowserLauncher.openURL(f.toURL().toString());
+            BrowserLauncher.openHTMLFile(f);
 	}catch(IOException i){
             System.err.println(i.getMessage());
             i.printStackTrace();
         }
     }
-
+//10.6.8
 }

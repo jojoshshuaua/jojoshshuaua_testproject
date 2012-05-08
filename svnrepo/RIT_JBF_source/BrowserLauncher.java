@@ -19,4 +19,18 @@ public class BrowserLauncher {
                 System.out.println(e.getMessage());
             }
 	}
+
+        /**
+         * Handles opening the Help and About files.
+         *
+         * @param file Usually the help.html file or the about.html file.
+         * @throws IOException
+         */
+        public static void openHTMLFile(java.io.File file) throws IOException {
+            try {
+                java.awt.Desktop.getDesktop().open(file);
+            } catch(Exception ex) {
+                System.out.println(ex);
+            }
+        }
 }
